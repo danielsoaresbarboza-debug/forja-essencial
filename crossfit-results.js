@@ -1,0 +1,9 @@
+(function(root,factory){const api=factory(root);if(typeof module==='object'&&module.exports)module.exports=api;root.ForjaCrossfitResults=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+ 'use strict';const fold=s=>String(s||'').toLowerCase().trim().replace(/\s+/g,' ');
+ function seconds(value){const m=String(value||'').match(/^(\d+):([0-5]\d)$/);return m?Number(m[1])*60+Number(m[2]):null;}
+ function normalize(entry={}){const type=entry.resultType||entry.result_type||'notes';let score={notes:entry.result||entry.notes||''};if(type==='time')score={seconds:seconds(entry.time||entry.result)};if(type==='rounds-reps')score={rounds:Math.max(0,Number(entry.rounds)||0),reps:Math.max(0,Number(entry.reps)||0)};if(type==='load')score={loadKg:Math.max(0,Number(entry.loadKg)||0)};if(type==='calories')score={calories:Math.max(0,Number(entry.calories)||0)};return{...entry,resultType:type,scale:fold(entry.scale||'não informado'),score};}
+ function signature(entry={}){return JSON.stringify({format:fold(entry.format||entry.wod_formato),scale:fold(entry.scale||'não informado'),movements:(entry.movements||entry.exercicios||[]).map(m=>({name:fold(m.name||m.nome),loadKg:Number(m.loadKg??m.carga_kg??0),unit:fold(m.unit||m.unidade)}))});}
+ function comparable(a,b){return signature(a)===signature(b);}
+ function best(entries=[]){if(!entries.length)return null;const rows=entries.map(normalize),type=rows[0].resultType;if(type==='time')return rows.filter(x=>x.score.seconds!=null).sort((a,b)=>a.score.seconds-b.score.seconds)[0]||null;if(type==='rounds-reps')return rows.sort((a,b)=>(b.score.rounds*10000+b.score.reps)-(a.score.rounds*10000+a.score.reps))[0];if(type==='load')return rows.sort((a,b)=>b.score.loadKg-a.score.loadKg)[0];if(type==='calories')return rows.sort((a,b)=>b.score.calories-a.score.calories)[0];return rows[0];}
+ return{normalize,signature,comparable,best};
+});

@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forja.Essencial</title>
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAFH0lEQVR4nO3dQW7bRhiG4ZGRlQo0W/cOWaeH6Hl7Ca99CG9doN66i0IGI1ESKZHizHzPs0vayMTkfzVDi3B2pTKfzz8/t74G1rN7e9ltfQ1Dm16MYaeUbaN4+Bc29Fzy6Bge9sWmDv7+/XXtS2FDH99/TPr/HhXC6l/k2uAb+GzXglg7hNVe/NLgG3rGXIphrRAWf9Fzg2/omeNcDEuHsOiLjQ2/weceYyEsGcEiL2TwWdtaITzd+wKGn0cYm6klvqV+V0HHF2DweYTj3eCeneDmHcDws5XjWbtnJ7gpAMPP1paKYPbWMfxCBp8aDI9Ec49Ds3YAw0+NhrM4dyeYHIDhp2a3RjApAE9w0pqpM3s1ADe8tOKWG+NZ9wCGn9rNndGLATj306I59wNnA3DupxeXZnnSEci7P62ZOrOjATj60IMpR6G7nwaFlp0E4N2fnlzbBewARPslAO/+9OjSLmAHINpXAL7vT4rhrI/uAI4/9ObcTDsCEe2pFMcf8hxm/mQHcPyhV2Oz7QhENAEQTQBE2/n0lzTDH6NiByCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaN+2voCphv+owRT+sY9l9br+TewAcxf/8Gdu+XOc6nn9qw/g3kVs4S+hZr2vf9UBLLV4tf8l1Cph/asOANYmAKIJgGgCIJoAiCYAogmAaAIgWjPPAh37+5+3k9/76/fnDa4kUy/r3+QOMLb4l36fZfW0/s0FcG2RW/xLaElv699cALAkARBNAEQTANEEQDQBEE0ARBMA0Zp9FGKuj49/t76E9vzx59ZXsDo7ANEEQDQBEE0ARBMA0QRANAEQTQBEi/kgbL//betLaE7NP9R2KXYAogmAaAIgmgCIJgCiCYBoAiCaAIjWXADXfgBriz+gtSW9rX9zAZRyfpFbW/xW9bT+zT4K0eJi96SX9W9yB4ClCIBoAiCaAIgmAKIJgGgCIFrVAezfX6t6nTQJ6191ALC26gO4992j5nefFvS+/tUHUMpti7h/f61+8VvR8/o38yxQC4vZs17Xv4kdANYiAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaE+7t5fd4Rcf339seS2wuuGM795ednYAogmAaAIg2kkA7gPo1dhsP5Xy/83Aw68GNnSYeUcgoo0G4BhEb87N9FcAjkGkGM66IxDRfgnAp8L06PjT3+F/swMQ7SQAuwA9ufTuX4odgHCjAdgF6MG1d/9SJu4AIqA1U2f2bAA+F6AXl2b54g7gKESLphx9DmbdBIuA2s2d0asBHBckAmp1PJtTjvGTdgD3A7Rm6sxOPgK5H6Bmc879Q7PuAURAjW4d/lJKuelo8/n883P46/376y0vA3e55cx/7KZHIdwYs7Ulhr+UO54FEgFbWWr4S7nxCDR0fBwqxZGIdYy9yd77Hcq7nwYduwC7AUtbY/hLWWAHGLIbsLS1Bv/rtZZ6oYOxCEoRAvOcO0Us/aHsap/wnguhFDEw7tLRea2nEVZ/xOFSCKWIId21+8W1H8N52DM+10I4EETfpn6D5FHPnz38IbepIZDp0Q9ebvqUpxgoZdunjat7zFkUfavt0fr/APcuqJ3MpaZ8AAAAAElFTkSuQmCC">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAEmElEQVR4nO3cTW7bRhzG4ZHRlQs0W/cOWaeH6Hl7Ca99CG9doN66i0CGrJDiNznz6nl28QdFDH76Z0IyOpUKfDz9+Dj6HFju9Pp8OvwcjnhRAd+HIwLf7QVFfN/2invTFxkb8ePby5anwU7ev30f9XNbxr3JgYdCFvB9GAp8i7BXP2BfzCK+b31xrx31agcTMmNsHfYqB+mKWcjc0hX2GlEvOoCQWWrtsB/m/qKYWUNXM0su8c56J1y/oJBZw/W0njOpJ09oMbOV65bmTOpJQYuZrS2NenTQYmYvS6IeFbSY2dvcqAeDFjNHmRP1pD20mNnb1OZuBn35jhAzR7lsb2hK9wbt+WVqdavNUVsO05mjjW2wM2hbDWo0ZuvxS9C2GrSiq9WbWw7TmdoMNfklaNOZ1lw32zuhTWdqdavN2c9DQ40+g3Zlg5b0XfEwoYkiaKI8lGK7QZu6th0mNFEETRRBE+Vk/0zrLj/+wIQmiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKL8dvQJDLn87N8hPt96vpR1rnpCT1nkOT/PT0nrXG3Qcxet5sWuUdo6Vxn00sWqdbFrk7jOVQYNcwmaKIImiqCJImiiCJoogiZK9be+z/7597X3e3//8bTjmWRrfZ2bmNC3FnnM9xknYZ2bCBrGEjRRBE0UQRNF0EQRNFEETRRBE6WZO4VTvb//d/Qp1O/Pv44+g9WZ0EQRNFEETRRBE0XQRBE0UQRNFEETJfbGyuPj70efQvVq/CivpUxoogiaKIImiqCJImiiCJoogiZKRNAtfERVghbWuYmgby1kC4vcioR1buZOYSsL2rrW17mJCQ1jCZoogiaKoIkiaKIImiiCJkqVQT++vRz6+/cicZ2rDLqU+YtV4yLXLG2dqw26lOmLVusi1y5pnau/9V3z4iVJWeeqJzRMJWiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKI8nF6fT+c/vH/7fuS5wGSXzZ5en08mNFEETRRBE+WhlJ97j/MX7KNpxfX+uRQTmjCCJspn0LYdtKRru1GKCU2Y3qBNaWp1q80vQV+ObmjBdbM3txymNLUZavKXoE1pWtHVaueEdsWDGvVd2bg06iqHqDna2AZ7g7b1oFa32rw5oW09qMGYrcbZpBsromZvU5sbDPr6HSFq9nLd2pht8KgJLWr2NifmUiZsOUTNXubGXMrEPbSo2dqSmEuZ8bSdqNnK0phLKWX2teaPpx8f1197fHuZezjuWNdQnHsfZPbz0F0vaFoz1Zoxl7JgQl8yrZlq7ZA/j7H0AGddUZcibL7q+1t8rUctVn9eQ9h02Trkz+OtebCzvqjPxH0fhv5NtcUDcJs+UTcU9pnAM4y9KLDlk5y7PSI6Nm4y7fU48iHPPIv7PhzxTH0VD/ELPEMN/ynkfwT2gWnYWXkPAAAAAElFTkSuQmCC">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#09090a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Forja.Essencial">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="forja3.css">
+
+<script src="tesseract.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="local-db.js"></script><script src="nutrition.js"></script></head>
+<body data-forja-variant="essencial">
+
+<header>
+  <div class="brand-row">
+    <h1>FORJA<span class="dot">.</span>TREINO</h1>
+    <div class="streak-chip">🔥 <span id="streak-num">0</span> dias</div>
+  </div>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab tab-main active" data-tab="inicio">Início</button>
+    <button class="tab" data-tab="corrida">🏃 Corrida</button>
+    <button class="tab" data-tab="natacao">🏊 Natação</button>
+    <button class="tab" data-tab="crossfit">🔥 CrossFit</button>
+    <button class="tab" data-tab="academia">🏋️ Academia</button>
+    <button class="tab" data-tab="biblioteca">📚 Biblioteca</button>
+    <button class="tab" data-tab="recompensas">🪙 Recompensas</button>
+    <button class="tab" data-tab="relatorios">📊 Relatórios</button>
+    <button class="tab" data-tab="progresso">📅 Progresso</button>
+    <button class="tab" data-tab="corpo">⚖️ Corpo</button>
+    <button class="tab" data-tab="agua">💧 Água</button>
+    <button class="tab" data-tab="dieta">🍽 Dieta</button>
+    <button class="tab" data-tab="cardapio">📋 Cardápio</button>
+    <button class="tab" data-tab="importar">📤 Importar</button>
+    <button class="tab" data-tab="mais">Mais</button>
+  </div>
+  <div class="section-bar" id="section-bar"><button type="button" class="sb-home" aria-label="Voltar ao Início" onclick="switchTab('inicio')">⌂</button><span class="sb-nome" id="sb-nome">Academia</span><button type="button" class="sb-trocar" id="sb-trocar" aria-expanded="false" onclick="Forja3.toggleTabs()">Trocar ▾</button></div>
+
+  <!-- INÍCIO / DASHBOARD TAB -->
+  <div id="tab-inicio">
+    <section class="home-hero" id="home-hero" aria-label="Resumo de hoje"></section>
+
+    <section class="card" id="first-run-guide" hidden>
+      <div class="card-head"><h2>👋 Comece do seu jeito</h2></div>
+      <p>Seus registros começam vazios. Você pode usar treino, dieta e cartões sem conectar contas. Em <strong>Mais</strong>, escolha se quer configurar seu próprio Strava, autorizar Garmin ou cadastrar um cardápio.</p>
+      <div class="row"><button type="button" class="primary" id="first-run-open-settings">Ver opções em Mais</button><button type="button" id="first-run-dismiss">Entendi</button></div>
+    </section>
+
+    <div class="quote-card" id="quote-card">
+      <div class="quote-text" id="quote-text"></div>
+    </div>
+
+    <section class="card creatine-week-card" id="creatine-week-card" data-home-card="creatina" aria-labelledby="creatine-week-title">
+      <div class="card-head creatine-week-head">
+        <div>
+          <h2 id="creatine-week-title">⚡ Creatina da semana</h2>
+          <p id="creatine-week-message">Carregando seus registros…</p>
+        </div>
+        <strong id="creatine-week-progress">0 de 7 dias</strong>
+      </div>
+      <div class="creatine-week-days" id="creatine-week-days" aria-label="Registro semanal de creatina"></div>
+      <p class="creatine-week-note">A semana vai de segunda a domingo. Na segunda-feira, um novo painel começa automaticamente.</p>
+    </section>
+    <div id="custom-week-cards" data-home-card="custom-week-cards"></div>
+
+    <div id="home-small-indicators" data-home-block="indicadores">
+    <div class="dash-stat-grid">
+      <div class="dash-stat" data-home-card="sequencia">
+        <div class="dash-stat-num" id="dash-streak">0</div>
+        <div class="dash-stat-lbl">🔥 dias seguidos (água + saldo + treino ou descanso)</div>
+      </div>
+      <div class="dash-stat" data-home-card="agua-sequencia">
+        <div class="dash-stat-num" id="dash-water-streak">0</div>
+        <div class="dash-stat-lbl">💧 dias seguidos (água)</div>
+      </div>
+      <div class="dash-stat dash-stat-water" data-home-card="agua">
+        <div id="water-bottle-dash" title="Arraste para ajustar a água de hoje"></div>
+        <div>
+          <div class="dash-stat-num" id="water-bottle-dash-label">0ml</div>
+          <div class="dash-stat-lbl">💧 água hoje · arraste ↕</div>
+        </div>
+      </div>
+      <div class="dash-stat" data-home-card="peso">
+        <div class="dash-stat-num" id="dash-weight">–</div>
+        <div class="dash-stat-lbl">⚖️ último peso</div>
+      </div>
+      <div class="dash-stat" data-home-card="treinos">
+        <div class="dash-stat-num" id="dash-workouts-month">0</div>
+        <div class="dash-stat-lbl">📅 treinos no mês</div>
+      </div>
+      <div class="dash-stat" data-home-card="saldo">
+        <div class="dash-stat-num" id="dash-cal-balance">–</div>
+        <div class="dash-stat-lbl">🍽 saldo calórico</div>
+      </div>
+      <div class="dash-stat" data-home-card="gasto-ativo">
+        <div class="dash-stat-num" id="dash-cal-exercise">–</div>
+        <div class="dash-stat-lbl">🔥 gasto em exercício</div>
+      </div>
+      <div class="dash-stat" data-home-card="ingestao"><div class="dash-stat-num" id="dash-intake">–</div><div class="dash-stat-lbl">🍴 ingestão hoje</div></div>
+      <div class="dash-stat" data-home-card="repouso"><div class="dash-stat-num" id="dash-resting">–</div><div class="dash-stat-lbl">🫀 calorias de repouso</div></div>
+      <div class="dash-stat" data-home-card="passos">
+        <div class="dash-stat-num" id="dash-steps">–</div>
+        <div class="dash-stat-lbl">👟 passos hoje</div>
+      </div>
+      <div class="dash-stat" data-home-card="gasto-total">
+        <div class="dash-stat-num" id="dash-garmin-total">–</div>
+        <div class="dash-stat-lbl">⌚ gasto Garmin + CrossFit avulso</div>
+      </div>
+      <div class="dash-stat" data-home-card="dieta-dias">
+        <div class="dash-stat-num" id="dash-deficit-streak">0</div>
+        <div class="dash-stat-lbl">🥗 dias com dieta concluída</div>
+      </div>
+    </div>
+    <p id="home-streak-criteria" class="calc-formula-note" aria-live="polite"></p>
+    <p id="home-energy-sources" class="calc-formula-note" aria-live="polite"></p>
+    </div>
+
+    <div class="card" id="weekly-goal-card" data-home-card="meta-semanal" data-module-card="weekly-goal-card">
+      <div class="card-head"><h2>🎯 Meta semanal</h2></div>
+      <div class="goal-progress-line" id="goal-progress-line"></div>
+      <div class="goal-compensation-note" id="goal-compensation-note"></div>
+      <div class="home-progress-row" id="home-goal-progress">
+        <div class="progress-bar-label"><span id="home-goal-progress-label">0 / 0 treinos</span></div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" id="home-goal-progress-fill"></div></div>
+        <p class="calc-formula-note" id="home-goal-progress-remain"></p>
+      </div>
+      <div class="home-progress-row" id="home-deficit-progress">
+        <div class="home-progress-title">🥗 Déficit calórico da semana</div>
+        <div class="progress-bar-label"><span id="home-deficit-progress-label">Calculando…</span></div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" id="home-deficit-progress-fill"></div></div>
+      </div>
+      <div class="home-rewards-mini" id="home-rewards-mini">
+        <div><div class="calc-formula-note" style="margin:0;">🪙 Fichas de recompensa</div><div class="hr-balance" id="home-rewards-balance">0</div></div>
+        <div class="hr-next" id="home-rewards-next"></div>
+      </div>
+      <label style="margin-top:14px;">Meta base (treinos por semana)</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustWeeklyGoal(-1)">−1</button>
+        <div class="custom-amount" id="weekly-goal-display">3</div>
+        <button class="step-btn plus" onclick="adjustWeeklyGoal(1)">+1</button>
+      </div>
+      <label for="weekly-rest-day">Dia de descanso planejado nesta semana</label>
+      <select id="weekly-rest-day" onchange="setWeeklyRestDay(this.value)">
+        <option value="0">Domingo</option><option value="1">Segunda-feira</option><option value="2">Terça-feira</option><option value="3">Quarta-feira</option><option value="4">Quinta-feira</option><option value="5">Sexta-feira</option><option value="6">Sábado</option>
+      </select>
+      <p class="calc-formula-note">Se trocar o descanso para sábado, o domingo passa a exigir treino para a sequência. Um treino feito no dia de descanso também conta normalmente.</p>
+    </div>
+    <div class="card" data-home-card="atalhos"><div class="card-title">Atalhos do dia</div><div class="home-actions">
+<button type="button" onclick="ForjaEnhancements.openTab('dieta')">🍽 Registrar refeição</button>
+<button type="button" onclick="quickAddWater(200,todayKey())">💧 200 ml</button>
+<button type="button" onclick="quickAddWater(500,todayKey())">💧 500 ml</button>
+<button type="button" onclick="ForjaEnhancements.openTab('agua')">💧 Mais água / por goles</button>
+<button type="button" onclick="ForjaEnhancements.openTab('crossfit');startCrossfitManualEntry()">🏋 Registrar WOD</button></div><p id="home-health-status" class="calc-formula-note"></p></div>
+<div class="card weekly-calorie-card" id="weekly-calorie-card" data-home-card="resumo-semanal" data-tone="empty">
+      <div class="card-head"><h2>🥗 Balanço calórico da semana</h2></div>
+      <div class="weekly-calorie-value" id="weekly-calorie-value">Calculando…</div>
+      <p class="calc-formula-note" id="weekly-calorie-detail" role="status" aria-live="polite"></p>
+      <p id="weekly-range" class="calc-formula-note"></p><p id="weekly-goal" class="calc-formula-note"></p><details><summary>Ver dias e entender o saldo</summary><div id="weekly-days"></div><p class="calc-formula-note">Saldo energético = gasto total do Garmin + CrossFit registrado à parte − consumo registrado. Só entram dias concluídos com gasto disponível. Atividades já ligadas ao Garmin ou Strava não são somadas novamente.</p><p class="weekly-calorie-legend">Verde: saldo positivo · Laranja: perto de zero ou saldo muito elevado para revisar · Vermelho: consumo acima do gasto. As cores descrevem o saldo, não são uma recomendação para comer menos.</p></details>
+    </div>
+    <div class="card" id="weekly-report-card" data-home-card="comparacao-semanal" data-module-card="weekly-report-card"><div class="card-head"><h2>📊 Comparação semanal</h2></div><div id="weekly-report-content">O relatório será preenchido conforme seus registros e sincronizações.</div></div>
+    <div data-home-card="atualizar"><button type="button" class="primary" id="home-refresh" onclick="ForjaSyncCenter.refreshAll()">Atualizar</button>
+    <p id="home-refresh-status" class="calc-formula-note" role="status" aria-live="polite"></p></div>
+  </div>
+
+  <!-- CORRIDA TAB -->
+  <div id="tab-corrida" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>🏃 Corrida</h2></div>
+      <div class="corrida-status-row" id="corrida-status-line"></div>
+      <p class="calc-formula-note" id="corrida-strava-status"></p>
+    </div>
+    <div class="card">
+      <div class="row" style="gap:8px;">
+        <label for="corrida-print-file" class="photo-btn" style="flex:1;text-align:center;">📷 Enviar print</label>
+        <button type="button" class="photo-btn" style="flex:1;" onclick="startCorridaManualEntry()">✍️ Registro manual</button>
+      </div>
+      <input type="file" id="corrida-print-file" accept="image/*" style="display:none" onchange="handleCorridaPrintFile(event)">
+      <div id="corrida-print-note"></div>
+      <div id="corrida-print-status"></div>
+      <div id="corrida-print-review"></div>
+    </div>
+    <div id="corrida-history-list"></div>
+    <div id="corrida-charts" style="display:none">
+      <div class="card" id="corrida-volume-chart"></div>
+      <div class="calc-formula-note" id="corrida-volume-caption" style="margin:6px 0 14px;"></div>
+      <div class="card" id="corrida-pace-chart"></div>
+      <div class="calc-formula-note" id="corrida-pace-caption" style="margin:6px 0 14px;"></div>
+    </div>
+  </div>
+
+  <!-- NATAÇÃO TAB -->
+  <div id="tab-natacao" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>🏊 Natação</h2></div>
+      <div class="corrida-status-row" id="natacao-status-line"></div>
+      <p class="calc-formula-note" id="natacao-strava-status"></p>
+    </div>
+    <div class="card">
+      <div class="row" style="gap:8px;">
+        <label for="natacao-print-file" class="photo-btn" style="flex:1;text-align:center;">📷 Enviar print</label>
+        <button type="button" class="photo-btn" style="flex:1;" onclick="startNatacaoManualEntry()">✍️ Registro manual</button>
+      </div>
+      <input type="file" id="natacao-print-file" accept="image/*" style="display:none" onchange="handleNatacaoPrintFile(event)">
+      <div id="natacao-print-note"></div>
+      <div id="natacao-print-status"></div>
+      <div id="natacao-print-review"></div>
+    </div>
+    <div id="natacao-history-list"></div>
+    <div id="natacao-charts" style="display:none">
+      <div class="card" id="natacao-volume-chart"></div>
+      <div class="calc-formula-note" id="natacao-volume-caption" style="margin:6px 0 14px;"></div>
+      <div class="card" id="natacao-pace-chart"></div>
+      <div class="calc-formula-note" id="natacao-pace-caption" style="margin:6px 0 14px;"></div>
+    </div>
+  </div>
+
+  <!-- CROSSFIT TAB -->
+  <div id="tab-crossfit" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>🔥 CrossFit</h2></div>
+      <div class="corrida-status-row" id="crossfit-status-line"></div>
+    </div>
+    <div class="card" id="wod-library-card"><div class="card-title">Meus WODs</div><p class="calc-formula-note">Reutilize a prescrição e registre seu resultado de hoje.</p><div id="wod-library-list"></div><details><summary>Comparar registros</summary><div id="wod-comparison"></div></details></div><div class="card" id="crossfit-print-card">
+      <div class="row" style="gap:8px;">
+        <label for="crossfit-print-file" class="photo-btn" style="flex:1;text-align:center;" id="crossfit-print-label">📷 Enviar print</label>
+        <button type="button" class="photo-btn" style="flex:1;" onclick="startCrossfitManualEntry()">✍️ Registro manual</button>
+      </div>
+      <input type="file" id="crossfit-print-file" accept="image/*" style="display:none" onchange="handleCrossfitPrintFile(event)">
+      <div id="crossfit-print-note"></div>
+      <div id="crossfit-print-status"></div>
+      <div id="crossfit-print-review"></div>
+    </div>
+    <div id="crossfit-history-list"></div>
+    <div id="crossfit-charts" style="display:none">
+      <div class="card" id="crossfit-freq-chart"></div>
+      <div class="calc-formula-note" id="crossfit-freq-caption" style="margin:6px 0 14px;"></div>
+      <div class="card" id="crossfit-duracao-chart"></div>
+      <div class="calc-formula-note" id="crossfit-duracao-caption" style="margin:6px 0 14px;"></div>
+    </div>
+    <div class="card" id="crossfit-science-card">
+      <div class="card-head"><h2>📚 Ciência do CrossFit</h2></div>
+      <div id="crossfit-science-list"></div>
+    </div>
+  </div>
+
+  <!-- ACADEMIA -->
+  <div id="tab-academia" style="display:none">
+
+    <span id="academia-streak" hidden>0</span>
+    <div id="ac-hoje" class="ac-hoje"></div>
+    <p class="calc-formula-note gym-suggestion-note" id="gym-suggestion-note" style="display:none;"></p>
+    <div class="session-box" id="session-box">
+      <div class="session-idle" id="session-idle"></div>
+      <div class="session-running" id="session-running" style="display:none">
+        <div class="tr-l1"><span class="tr-nm" id="tr-nome">Treino livre</span><span class="session-timer" id="session-timer">00:00</span><button type="button" class="session-end-btn" onclick="ForjaGymUI.endWorkoutSession()">Finalizar</button></div>
+        <div class="tr-prog"><i id="tr-prog-fill"></i></div>
+        <div class="tr-l3"><span id="session-live"></span><span id="tr-vol"></span></div>
+      </div>
+    </div>
+
+    <div class="card body-collapsed" id="muscle-overview-card" style="display:none">
+      <button type="button" class="body-toggle-head" onclick="ForjaGymUI.toggleBodyCard()"><span>🧍 Mapa muscular de hoje</span><span class="body-toggle-arrow" id="body-toggle-arrow">▸ Ver</span></button>
+      <div class="body-figure-wrap">
+        <div class="body-view-toggle"><button id="view-front-btn" class="active" onclick="toggleBodyView('front')">Frente</button><button id="view-back-btn" onclick="toggleBodyView('back')">Costas</button></div>
+        <div id="body-fig-front" class="body-figure-photo">
+          <svg viewBox="0 0 200 350" xmlns="http://www.w3.org/2000/svg">
+            <ellipse class="body-static" cx="100" cy="26" rx="19" ry="22"/>
+            <rect class="body-static" x="90" y="44" width="20" height="14" rx="6"/>
+            <ellipse class="muscle-zone-img" data-zone="shoulder" cx="54" cy="70" rx="19" ry="14"/>
+            <ellipse class="muscle-zone-img" data-zone="shoulder" cx="146" cy="70" rx="19" ry="14"/>
+            <rect class="muscle-zone-img" data-zone="chest" x="70" y="60" width="60" height="46" rx="18"/>
+            <rect class="muscle-zone-img" data-zone="abs" x="80" y="108" width="40" height="48" rx="10"/>
+            <rect class="muscle-zone-img" data-zone="arm_front" x="27" y="76" width="23" height="58" rx="11"/>
+            <rect class="muscle-zone-img" data-zone="arm_front" x="150" y="76" width="23" height="58" rx="11"/>
+            <rect class="body-static" x="25" y="132" width="20" height="52" rx="10"/>
+            <rect class="body-static" x="155" y="132" width="20" height="52" rx="10"/>
+            <ellipse class="body-static" cx="35" cy="190" rx="10" ry="12"/>
+            <ellipse class="body-static" cx="165" cy="190" rx="10" ry="12"/>
+            <rect class="body-static" x="74" y="154" width="52" height="30" rx="14"/>
+            <rect class="muscle-zone-img" data-zone="legs" x="66" y="182" width="30" height="150" rx="15"/>
+            <rect class="muscle-zone-img" data-zone="legs" x="104" y="182" width="30" height="150" rx="15"/>
+            <ellipse class="body-static" cx="81" cy="336" rx="14" ry="8"/>
+            <ellipse class="body-static" cx="119" cy="336" rx="14" ry="8"/>
+          </svg>
+        </div>
+        <div id="body-fig-back" class="body-figure-photo" style="display:none">
+          <svg viewBox="0 0 200 350" xmlns="http://www.w3.org/2000/svg">
+            <ellipse class="body-static" cx="100" cy="26" rx="19" ry="22"/>
+            <rect class="body-static" x="90" y="44" width="20" height="14" rx="6"/>
+            <ellipse class="muscle-zone-img" data-zone="shoulder" cx="54" cy="70" rx="19" ry="14"/>
+            <ellipse class="muscle-zone-img" data-zone="shoulder" cx="146" cy="70" rx="19" ry="14"/>
+            <rect class="muscle-zone-img" data-zone="back" x="68" y="60" width="64" height="68" rx="20"/>
+            <rect class="muscle-zone-img" data-zone="arm_back" x="27" y="76" width="23" height="58" rx="11"/>
+            <rect class="muscle-zone-img" data-zone="arm_back" x="150" y="76" width="23" height="58" rx="11"/>
+            <rect class="body-static" x="25" y="132" width="20" height="52" rx="10"/>
+            <rect class="body-static" x="155" y="132" width="20" height="52" rx="10"/>
+            <ellipse class="body-static" cx="35" cy="190" rx="10" ry="12"/>
+            <ellipse class="body-static" cx="165" cy="190" rx="10" ry="12"/>
+            <rect class="muscle-zone-img" data-zone="glute" x="72" y="154" width="56" height="34" rx="16"/>
+            <rect class="muscle-zone-img" data-zone="legs" x="66" y="188" width="30" height="78" rx="14"/>
+            <rect class="muscle-zone-img" data-zone="legs" x="104" y="188" width="30" height="78" rx="14"/>
+            <rect class="muscle-zone-img" data-zone="calf" x="66" y="266" width="30" height="66" rx="12"/>
+            <rect class="muscle-zone-img" data-zone="calf" x="104" y="266" width="30" height="66" rx="12"/>
+            <ellipse class="body-static" cx="81" cy="336" rx="14" ry="8"/>
+            <ellipse class="body-static" cx="119" cy="336" rx="14" ry="8"/>
+          </svg>
+        </div>
+        <div class="muscle-legend"><span><i class="dot primary"></i> Trabalhado</span></div>
+      </div>
+    </div>
+
+    <div class="ex-sheet-dim" id="ex-sheet-dim" onclick="ForjaGymUI.closeExSheet()"></div>
+    <div id="session-stack"></div>
+    <button class="primary" id="add-exercise-btn" onclick="ForjaGymUI.openPickerForAdd()" style="display:none">+ Adicionar exercício</button>
+
+    <div class="card" id="picker-card" style="display:none">
+      <div class="card-head"><h2>Escolher exercício</h2><button class="switch-btn" id="picker-close-btn" onclick="ForjaGymUI.closePicker()" style="display:none">Fechar</button></div>
+      <input id="gym-catalog-search" class="picker-search" placeholder="🔍 Buscar entre 900+ exercícios (português ou inglês)…" oninput="ForjaGymUI.searchCatalog()">
+      <div class="filter-chip-row">
+        <button class="filter-chip active" data-filter="Todos" onclick="ForjaGymUI.selectPickerFilter(this)">Todos</button>
+        <button class="filter-chip" data-filter="Peito" onclick="ForjaGymUI.selectPickerFilter(this)">Peito</button>
+        <button class="filter-chip" data-filter="Costas" onclick="ForjaGymUI.selectPickerFilter(this)">Costas</button>
+        <button class="filter-chip" data-filter="Ombro" onclick="ForjaGymUI.selectPickerFilter(this)">Ombro</button>
+        <button class="filter-chip" data-filter="Bíceps" onclick="ForjaGymUI.selectPickerFilter(this)">Bíceps</button>
+        <button class="filter-chip" data-filter="Tríceps" onclick="ForjaGymUI.selectPickerFilter(this)">Tríceps</button>
+        <button class="filter-chip" data-filter="Abdômen" onclick="ForjaGymUI.selectPickerFilter(this)">Abdômen</button>
+        <button class="filter-chip" data-filter="Perna" onclick="ForjaGymUI.selectPickerFilter(this)">Perna</button>
+        <button class="filter-chip" data-filter="Glúteo" onclick="ForjaGymUI.selectPickerFilter(this)">Glúteo</button>
+        <button class="filter-chip" data-filter="Panturrilha" onclick="ForjaGymUI.selectPickerFilter(this)">Panturrilha</button>
+        <button class="filter-chip" data-filter="Cardio" onclick="ForjaGymUI.selectPickerFilter(this)">🚴 Cardio</button>
+      </div>
+      <div class="ex-chip-grid" id="picker-list"></div>
+<div class="ex-chip-grid" id="picker-catalog-list"></div>
+      <button class="primary secondary-btn" onclick="ForjaGymUI.showNewExerciseForm()">+ Novo exercício</button>
+      <div id="new-ex-form" style="display:none; margin-top:10px;">
+        <label>Nome do exercício</label><input id="new-ex-name" placeholder="Ex.: Supino reto" oninput="ForjaGymUI.suggestMuscleFromName(this.value)">
+        <label style="margin-top:8px;">Ou identifique por foto</label>
+        <input type="file" id="new-ex-photo-input" accept="image/*" capture="environment" style="display:none" onchange="ForjaGeminiVision.handleExercisePhoto(event)">
+        <button class="secondary-btn" style="margin-top:4px;" onclick="document.getElementById('new-ex-photo-input').click()">📷 Identificar por foto (Gemini)</button>
+        <div id="new-ex-photo-status" class="calc-formula-note" style="min-height:14px;"></div>
+        <label style="margin-top:8px;">Grupo muscular <span id="muscle-suggested-tag" style="display:none;color:var(--muted);font-weight:400;">(sugerido automaticamente — ajuste se precisar)</span></label>
+        <div class="muscle-chip-row">
+          <button class="muscle-chip active" data-muscle="Peito" onclick="ForjaGymUI.selectMuscle(this)">Peito</button>
+          <button class="muscle-chip" data-muscle="Costas" onclick="ForjaGymUI.selectMuscle(this)">Costas</button>
+          <button class="muscle-chip" data-muscle="Ombro" onclick="ForjaGymUI.selectMuscle(this)">Ombro</button>
+          <button class="muscle-chip" data-muscle="Bíceps" onclick="ForjaGymUI.selectMuscle(this)">Bíceps</button>
+          <button class="muscle-chip" data-muscle="Tríceps" onclick="ForjaGymUI.selectMuscle(this)">Tríceps</button>
+          <button class="muscle-chip" data-muscle="Abdômen" onclick="ForjaGymUI.selectMuscle(this)">Abdômen</button>
+          <button class="muscle-chip" data-muscle="Perna" onclick="ForjaGymUI.selectMuscle(this)">Perna</button>
+          <button class="muscle-chip" data-muscle="Glúteo" onclick="ForjaGymUI.selectMuscle(this)">Glúteo</button>
+          <button class="muscle-chip" data-muscle="Panturrilha" onclick="ForjaGymUI.selectMuscle(this)">Panturrilha</button>
+        </div>
+        <button class="primary" onclick="ForjaGymUI.createNewExercise()" style="margin-top:8px;">Criar e usar</button>
+      </div>
+    </div>
+
+    <div class="card"><div class="card-head"><h2>Treino de hoje</h2></div><div id="today-list"></div></div>
+
+    <div class="card" id="gym-sessions-chart-card">
+      <div class="card-head"><h2>📈 Evolução dos treinos</h2></div>
+      <div class="chart-tabs"><button type="button" data-m="kcal" class="on" onclick="ForjaGymUI.setSessionsMetric('kcal')">Calorias</button><button type="button" data-m="durationMin" onclick="ForjaGymUI.setSessionsMetric('durationMin')">Duração</button><button type="button" data-m="volume" onclick="ForjaGymUI.setSessionsMetric('volume')">Volume</button></div>
+      <div class="hbars" id="sessions-chart"></div>
+    </div>
+
+    <div class="card" id="gym-weekly-goal-card" data-module-card="gym-weekly-goal-card">
+      <div class="card-head"><h2>🎯 Meta semanal</h2></div>
+      <div class="session-ring-wrap">
+        <div class="session-ring" id="goal-ring">
+          <div class="session-ring-inner">
+            <span class="session-ring-num" id="goal-ring-num">0</span>
+            <span class="session-ring-lbl">treinos</span>
+          </div>
+        </div>
+        <div class="session-ring-legend">
+          <div class="session-ring-legend-row"><span class="dot" style="background:var(--blue)"></span><span id="gym-goal-progress-line"></span></div>
+        </div>
+      </div>
+      <div class="goal-compensation-note" id="gym-goal-compensation-note"></div>
+      <label>Meta base (treinos por semana)</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="ForjaGymUI.adjustWeeklyGoal(-1)">−1</button>
+        <div class="custom-amount" id="weekly-goal-display">3</div>
+        <button class="step-btn plus" onclick="ForjaGymUI.adjustWeeklyGoal(1)">+1</button>
+      </div>
+    </div>
+
+    <div class="card" id="ready-workouts-card" data-module-card="ready-workouts-card">
+      <div class="card-head"><h2>✨ Treinos prontos</h2></div>
+      <div class="calc-formula-note">Modelos de treino por objetivo. Toque em "Usar esse treino" pra criar os grupos automaticamente — depois você pode editar, renomear ou apagar como qualquer grupo seu.</div>
+      <div id="ready-workouts-list"></div>
+    </div>
+
+    <div class="card" id="workout-groups-card" data-module-card="workout-groups-card">
+      <div class="card-head"><h2>📋 Meus treinos</h2><button class="switch-btn" onclick="ForjaGymUI.showNewGroupForm()">+ Novo treino</button></div>
+      <div class="calc-formula-note">Seus treinos A, B, C… O painel do topo sugere o próximo da sequência. Toque num treino para começar por ele.</div>
+      <div id="workout-groups-list"></div>
+      <div id="group-form" style="display:none; margin-top:10px;">
+        <label>Nome do treino</label><input id="group-name-input" placeholder="Ex.: Treino A">
+        <label style="margin-top:8px;">Exercícios do treino</label>
+        <div class="ex-chip-grid" id="group-exercise-checklist"></div>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="primary" style="flex:1;" onclick="ForjaGymUI.saveWorkoutGroup()">Salvar treino</button>
+          <button class="secondary-btn" onclick="ForjaGymUI.closeGroupForm()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIBLIOTECA DE EXERCÍCIOS -->
+  <div id="tab-biblioteca" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>📚 Biblioteca de exercícios</h2></div>
+      <p class="calc-formula-note">Todos os exercícios num só lugar: os seus (com a foto que você tirou e a última carga registrada) e os da biblioteca completa (762+ exercícios). Toque numa categoria ou busque pelo nome.</p>
+    </div>
+
+    <div class="card">
+      <label for="lib-search-input">Buscar exercício</label>
+      <input id="lib-search-input" placeholder="Ex.: supino, agachamento, remada..." oninput="ForjaExerciseLibraryTab.onSearch(this.value)">
+      <div class="filter-chip-row" style="margin-top:10px;">
+        <button class="filter-chip" data-lib-filter="Favoritos" onclick="ForjaExerciseLibraryTab.selectFilter(this)">⭐ Favoritos</button>
+        <button class="filter-chip active" data-lib-filter="Todos" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Todos</button>
+        <button class="filter-chip" data-lib-filter="Cardio" onclick="ForjaExerciseLibraryTab.selectFilter(this)">🚴 Cardio</button>
+      </div>
+      <div class="filter-chip-row">
+        <button class="filter-chip" data-lib-filter="Peito" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Peito</button>
+        <button class="filter-chip" data-lib-filter="Costas" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Costas</button>
+        <button class="filter-chip" data-lib-filter="Ombro" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Ombro</button>
+        <button class="filter-chip" data-lib-filter="Bíceps" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Bíceps</button>
+        <button class="filter-chip" data-lib-filter="Tríceps" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Tríceps</button>
+        <button class="filter-chip" data-lib-filter="Abdômen" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Abdômen</button>
+        <button class="filter-chip" data-lib-filter="Perna" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Perna</button>
+        <button class="filter-chip" data-lib-filter="Glúteo" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Glúteo</button>
+        <button class="filter-chip" data-lib-filter="Panturrilha" onclick="ForjaExerciseLibraryTab.selectFilter(this)">Panturrilha</button>
+      </div>
+    </div>
+
+    <div class="card" id="lib-detail-card" style="display:none"></div>
+
+    <div class="card">
+      <div class="card-head"><h2>📸 Meus exercícios</h2></div>
+      <div class="ex-chip-grid" id="lib-mine-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>🏋️ Biblioteca completa</h2></div>
+      <p id="lib-catalog-hint" class="calc-formula-note"></p>
+      <div class="ex-chip-grid" id="lib-catalog-list"></div>
+      <button type="button" class="primary secondary-btn" id="lib-load-more-btn" style="display:none" onclick="ForjaExerciseLibraryTab.loadMore()">Carregar mais</button>
+    </div>
+  </div>
+
+  <!-- RECOMPENSAS -->
+  <div id="tab-recompensas" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>🪙 Recompensas</h2></div>
+    </div>
+    <div class="card" id="gym-rewards-card" data-module-card="gym-rewards-card">
+      <div class="calorie-result-card" style="margin-bottom:10px;">
+        <div class="lbl">Saldo de fichas</div><div class="val" id="reward-balance">0</div>
+      </div>
+      <div class="goal-grid" style="margin-bottom:12px;">
+        <div class="goal-cell"><div class="glbl">Dias perfeitos</div><div class="gval" id="reward-perfect-days">0</div></div>
+        <div class="goal-cell"><div class="glbl">Total ganho</div><div class="gval" id="reward-total-earned">0</div></div>
+      </div>
+      <label>Cartela da semana</label>
+      <div class="weekly-card-row" id="weekly-card-row"></div>
+      <label style="margin-top:12px;">Loja de recompensas</label>
+      <div id="reward-shop-list"></div>
+      <div class="stepper-row" style="margin-top:10px;">
+        <input id="new-reward-name" placeholder="Nome da recompensa" style="flex:2;">
+        <input id="new-reward-cost" type="number" min="1" placeholder="Fichas" style="flex:1;">
+      </div>
+      <button class="primary secondary-btn" onclick="ForjaGymUI.addRewardFromUI()" style="margin-top:8px;">+ Adicionar recompensa</button>
+      <label style="margin-top:14px;">Histórico de resgates</label>
+      <div id="reward-history-list"></div>
+    </div>
+  </div>
+
+  <!-- RELATÓRIOS -->
+  <div id="tab-relatorios" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>📊 Relatórios</h2></div>
+    </div>
+    <div class="card" id="gym-calendar-card" data-module-card="gym-calendar-card">
+      <div class="card-head"><h2>📅 Calendário</h2></div>
+      <div class="cal-header"><button onclick="ForjaGymUI.calShiftMonth(-1)">‹</button><span id="cal-label"></span><button onclick="ForjaGymUI.calShiftMonth(1)">›</button></div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <span><i class="dot" style="background:var(--blue)"></i> Academia</span>
+        <span><i class="dot" style="background:#0a8f6f"></i> Cardio</span>
+        <span><i class="dot" style="background:linear-gradient(135deg, var(--blue) 50%, #0a8f6f 50%)"></i> Os dois</span>
+      </div>
+      <div class="cal-legend" style="margin-top:4px;">
+        <span>📷 Foto</span><span>⌚ Relógio</span><span>💧 Meta de água</span><span>📉 Déficit calórico</span>
+      </div>
+    </div>
+
+    <div class="card" id="gym-records-card" data-module-card="gym-records-card"><div class="card-head"><h2>Recordes (1RM estimado)</h2></div><div id="pr-list"></div></div>
+    <div class="card" id="gym-volume-card" data-module-card="gym-volume-card"><div class="card-head"><h2>📊 Volume total levantado</h2></div><div class="chart-wrap" id="volume-chart"></div></div>
+    <div class="card" id="gym-duration-card" data-module-card="gym-duration-card">
+      <div class="card-head"><h2>⏱ Duração dos treinos</h2></div>
+      <div class="dash-stat-grid" id="duration-stats"></div>
+      <div class="chart-wrap" id="duration-chart"></div>
+    </div>
+  </div>
+
+  <!-- POST-WORKOUT RPE MODAL -->
+  <div id="rpe-modal-overlay" class="rpe-modal-overlay" style="display:none">
+    <div class="rpe-sheet">
+      <div class="completion-phrase" id="completion-phrase"></div>
+      <h2>Avalie seu esforço</h2>
+      <div class="sub">Quão difícil foi esse treino, de 1 a 10?</div>
+      <div class="rpe-scale-row" id="rpe-scale-row"></div>
+      <div class="rpe-label-row" id="rpe-label-row"></div>
+      <button class="primary" onclick="ForjaGymUI.saveSessionRpe()">Salvar</button>
+      <button class="rpe-skip-btn" onclick="ForjaGymUI.skipSessionRpe()">Pular</button>
+    </div>
+  </div>
+
+  <!-- REST TIMER POPUP -->
+  <!-- DESCANSO (montado pelo gym-ui) -->
+  <div id="rest-modal-overlay" class="rest-overlay" style="display:none"></div>
+
+  <div id="tab-progresso" style="display:none">
+    <div class="card"><div class="card-head"><h2>📅 Progresso</h2></div>
+      <p class="calc-formula-note">Toque em um dia para ver o que foi registrado e o que já foi concluído. Ponto claro: em andamento; ponto preenchido: meta cumprida. Os gastos do Garmin aparecem somente quando esse dado foi sincronizado.</p>
+      <div class="progress-month-nav"><button type="button" id="progress-prev-month" aria-label="Mês anterior">‹</button><strong id="progress-month"></strong><button type="button" id="progress-next-month" aria-label="Próximo mês">›</button></div>
+      <p id="progress-month-summary" class="calc-formula-note"></p>
+      <div id="progress-calendar-grid" class="progress-calendar-grid" aria-label="Calendário de registros"></div>
+      <div class="progress-legend"><span><i class="training"></i> Treino</span><span><i class="diet"></i> Dieta</span><span><i class="water"></i> Água</span><span><i class="creatine"></i> Creatina</span><span>◯ Em andamento · ● Concluído</span></div>
+      <div id="progress-day-summary" class="progress-day-summary" role="status"></div>
+    </div>
+    <div class="card" id="progress-muscle-card">
+      <div class="card-head"><h2>💪 Músculos do dia</h2></div>
+      <p class="calc-formula-note">Toque em um dia no calendário acima. O mapa estima os grupos mais envolvidos com base nas corridas, natações, movimentos de CrossFit e séries de academia daquele dia — é uma estimativa, não mede ativação muscular de verdade.</p>
+      <button type="button" class="dica-add-btn" onclick="ForjaMuscleDayMap.showExample()">Ver exemplo colorido</button>
+      <div id="progress-muscle-map" role="status"></div>
+    </div>
+  </div>
+
+  <!-- MAIS TAB — tools & settings used occasionally, kept off the daily-glance Início -->
+  <div id="tab-mais" style="display:none">
+
+  <div class="card" id="install-app-card">
+    <div class="card-head"><h2>📲 Instalar o app</h2></div>
+    <p class="calc-formula-note" id="install-app-status"></p>
+    <button type="button" class="primary" id="install-app-btn" style="display:none" onclick="ForjaInstallApp.install()">Instalar na tela inicial</button>
+    <div id="install-app-help" style="display:none"></div>
+  </div>
+
+  <div class="card" id="sheet-sync-card">
+    <div class="card-head"><h2>☁️ Planilha Google e backup</h2></div>
+    <p id="sheet-sync-status" class="calc-formula-note sheet-sync-status" role="status" data-kind="init">Ainda não conectado.</p>
+    <div id="gsync-box" class="gsync-box"></div>
+    <label class="sheet-sync-check"><input type="checkbox" id="sheet-sync-auto" checked onchange="ForjaSheetSync.setAuto(this.checked)"> Sincronizar automaticamente</label>
+    <label class="sheet-sync-check"><input type="checkbox" id="sheet-sync-photos" onchange="ForjaSheetSync.setPhotos(this.checked)"> Incluir fotos de progresso (pesado)</label>
+    <button type="button" class="secondary" id="sheet-sync-disconnect" style="display:none" onclick="ForjaSheetSync.disconnect()">Desconectar</button>
+    <details class="routine-panel gs-avancado"><summary>Modo avançado: planilha com Apps Script (computador)</summary>
+    <label class="calc-formula-note" for="sheet-sync-url">Endereço do app da Web (termina em /exec)</label>
+    <input type="url" id="sheet-sync-url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <label class="calc-formula-note" for="sheet-sync-token">Senha do script</label>
+    <input type="password" id="sheet-sync-token" placeholder="a senha que você pôs no script" autocomplete="off">
+    <button type="button" class="primary" onclick="ForjaSheetSync.connect()">Conectar e testar</button>
+    <button type="button" class="secondary" onclick="ForjaSheetSync.syncNow()">Sincronizar agora</button>
+    <details class="routine-panel"><summary>Como criar a planilha (faça no computador)</summary>
+      <ol class="calc-formula-note">
+        <li>Crie uma planilha nova em sheets.google.com.</li>
+        <li>Extensões &gt; Apps Script. Apague o que houver e cole o script (botão abaixo).</li>
+        <li>Troque <b>TROQUE-ESTA-SENHA</b> no topo por uma senha sua.</li>
+        <li>Implantar &gt; Nova implantação &gt; App da Web &gt; Executar como: Eu &gt; Acesso: Qualquer pessoa. Autorize.</li>
+        <li>Copie o endereço /exec, cole acima com a senha e toque em Conectar e testar.</li>
+        <li>Nos outros aparelhos, instale o app e repita só este passo.</li>
+      </ol>
+      <button type="button" class="secondary" onclick="ForjaSheetSync.copyScript()">📋 Copiar script</button>
+      <textarea id="sheet-sync-script-box" hidden readonly rows="6"></textarea>
+      <p class="calc-formula-note">Este aparelho: <b id="sheet-sync-device"></b></p>
+    </details>
+    </details>
+  </div>
+
+  <div class="section-block" data-section-id="mais-integracoes" data-default-collapsed="true">
+    <div class="import-section-header integracoes" onclick="toggleSection('mais-integracoes')">🔗 INTEGRAÇÕES E CONEXÕES <span class="section-chevron">▾</span></div>
+    <div class="section-body">
+    <div class="card" id="sync-center-card" data-module-card="sync-center-card">
+      <div class="card-head"><h2>🔄 Central de sincronização</h2></div>
+      <p class="calc-formula-note">Atualiza as fontes autorizadas e preserva os últimos dados se algum serviço estiver indisponível.</p>
+      <p id="sync-center-status" class="calc-formula-note" role="status">Ainda não houve sincronização neste aparelho.</p>
+      <button type="button" class="primary" onclick="ForjaSyncCenter.refreshAll()">Atualizar Garmin e Strava</button>
+    </div>
+    <div class="card" id="strava-card" data-module-card="strava-card">
+      <div class="card-head"><h2>🔗 Conectar ao Strava</h2></div>
+      <p class="calc-formula-note">Importe corridas, natação e CrossFit ao abrir o aplicativo. A primeira importação busca os últimos 90 dias. A conexão depende de um cadastro Strava e de um serviço publicado em uma conta sua.</p>
+      <details class="routine-panel"><summary>Como conectar minha conta?</summary>
+        <ol><li>Tenha uma conta Strava e crie um aplicativo em Configurações → Minha API no site do Strava.</li>
+        <li>Peça o pacote do serviço Forja.Treino a quem lhe enviou este APK. Publique esse serviço e crie o banco D1 na sua própria conta Cloudflare, conforme as instruções do pacote.</li>
+        <li>Cadastre no seu serviço o ID e segredo da sua aplicação Strava, seu ID de atleta, o endereço HTTPS do serviço e as chaves privadas. Não informe esses segredos aqui no aplicativo nem os envie a outra pessoa.</li>
+        <li>Depois que a página <code>/health</code> do seu serviço mostrar <code>ready:true</code>, cole abaixo a URL HTTPS do serviço, salve e toque em Conectar ao Strava. Autorize no navegador e volte ao Forja.</li></ol>
+        <p>É opcional. Sem esse serviço, os registros manuais, a dieta e os cartões continuam funcionando. A análise de fotos com IA também depende dessa conexão.</p>
+      </details>
+      <label for="strava-service-url">Endereço do serviço de conexão</label>
+      <input type="url" id="strava-service-url" placeholder="https://forja-strava.seu-subdominio.workers.dev" autocomplete="off" spellcheck="false">
+      <button type="button" class="primary secondary-btn" id="strava-save">Salvar configuração</button>
+      <p id="strava-privacy" class="calc-formula-note"></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" class="primary" id="strava-connect" disabled>Conectar ao Strava</button>
+        <button type="button" class="primary secondary-btn" id="strava-sync" disabled>Sincronizar agora</button>
+        <button type="button" class="primary secondary-btn" id="strava-disconnect" disabled>Desconectar</button>
+      </div>
+      <p id="strava-status" role="status" aria-live="polite" class="calc-formula-note">Aguardando configuração.</p>
+      <p class="calc-formula-note">Treinos manuais são mantidos. Calorias podem não estar disponíveis na importação; nesse caso, confira e preencha manualmente.</p>
+    </div>
+    <div class="card" id="health-connect-card" data-module-card="health-connect-card">
+      <div class="card-head"><h2>⌚ Garmin pelo Health Connect</h2></div>
+      <p id="health-connect-status" role="status" class="calc-formula-note">Verificando compatibilidade…</p>
+      <details class="routine-panel"><summary>Conexão e dados do Garmin</summary>
+      <p class="calc-formula-note">Leia passos e calorias ativas enviados pelo Garmin Connect. Os dados permanecem neste aparelho e não são enviados ao nosso serviço.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" class="primary" id="health-connect-connect" onclick="ForjaHealthConnect.connect()">Autorizar acesso</button>
+        <button type="button" class="primary secondary-btn" id="health-connect-sync" onclick="ForjaHealthConnect.sync()">Sincronizar</button>
+      </div>
+      <div id="health-connect-days"></div>
+      </details>
+    </div>
+    <div class="card" id="dash-gym-card" data-module-card="dash-gym-card">
+      <div class="card-head"><h2>💳 Pagamento do CrossFit</h2></div>
+      <label>Vencimento (dia do mês)</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustGymDueDay(-1)">−1</button>
+        <div class="custom-amount" id="gym-due-day-display">5</div>
+        <button class="step-btn plus" onclick="adjustGymDueDay(1)">+1</button>
+      </div>
+      <div class="gym-status" id="gym-status"></div>
+      <button class="primary" onclick="markGymPaid()">✓ Marcar CrossFit como pago este mês</button>
+      <button class="primary secondary-btn" id="gym-notif-btn" onclick="enableGymReminders()" style="margin-top:10px;">🔔 Ativar lembrete de pagamento</button>
+    </div>
+
+    <div class="card" id="gemini-key-card" data-module-card="gemini-key-card">
+      <div class="card-head"><h2>✨ Chave do Gemini (foto da comida/exercício)</h2></div>
+      <p class="calc-formula-note">Pega grátis em <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> (sem cartão de crédito). Fica salva só neste aparelho.</p>
+      <label>Chave da API</label>
+      <input id="gemini-api-key-input" type="password" placeholder="AIzaSy...">
+      <button class="primary secondary-btn" onclick="ForjaGeminiVision.saveKeyFromUI()">Salvar chave</button>
+      <p id="gemini-key-status" class="calc-formula-note" style="margin-top:8px;">Nenhuma chave configurada ainda.</p>
+    </div>
+
+    <div class="card" id="exdb-key-card" data-module-card="exdb-key-card">
+      <div class="card-head"><h2>🏋️ Biblioteca de exercícios (fotos/GIFs)</h2></div>
+      <p class="calc-formula-note">A biblioteca já vem com fotos estáticas da <a href="https://wger.de" target="_blank" rel="noopener">wger.de</a> (grátis, sem chave). Pra ver GIFs animados também, crie uma conta grátis em <a href="https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb" target="_blank" rel="noopener">rapidapi.com/.../exercisedb</a> e cole sua chave abaixo. Fica salva só neste aparelho.</p>
+      <label>Chave da RapidAPI (ExerciseDB)</label>
+      <input id="exdb-api-key-input" type="password" placeholder="Cole sua chave aqui...">
+      <button class="primary secondary-btn" onclick="ForjaExerciseLibrary.saveKeyFromUI()">Salvar chave</button>
+      <p id="exdb-key-status" class="calc-formula-note" style="margin-top:8px;">Nenhuma chave configurada ainda — sem ela, a biblioteca usa só as fotos estáticas da wger.</p>
+    </div>
+
+    <div class="card" id="remap-history-card" data-module-card="remap-history-card">
+      <div class="card-head"><h2>🔄 Remapear histórico de exercícios</h2></div>
+      <p class="calc-formula-note">Pega os exercícios que você já registrou antes e tenta achar músculo, equipamento, fotos e passo a passo pra cada um na biblioteca nova (wger + free-exercise-db). Útil pra atualizar exercícios antigos que ficaram sem essas informações.</p>
+      <button class="primary secondary-btn" onclick="ForjaGymUI.runRemapHistory()">Remapear meu histórico agora</button>
+      <p id="remap-history-status" class="calc-formula-note" style="margin-top:8px;"></p>
+    </div>
+    </div>
+  </div>
+
+  <div class="section-block" data-section-id="mais-config" data-default-collapsed="true">
+    <div class="import-section-header settings" onclick="toggleSection('mais-config')">⚙️ CONFIGURAÇÕES E PREFERÊNCIAS <span class="section-chevron">▾</span></div>
+    <div class="section-body">
+    <div class="card">
+      <label>Abas visíveis</label>
+      <p class="calc-formula-note">Escolha o que aparece na navegação. Início e Mais permanecem sempre disponíveis.</p>
+      <div id="visible-tabs-list" class="visible-tabs-list"></div>
+
+      <label style="margin-top:16px;">Cartões da tela inicial</label>
+      <p class="calc-formula-note">Escolha o que aparece. Mova o bloco inteiro de indicadores pequenos entre os cartões maiores e ações; os indicadores também podem ser ordenados dentro do bloco.</p>
+      <div id="dashboard-layout-list"></div>
+
+      <details class="routine-panel" style="margin-top:16px"><summary>Começar a usar o Forja</summary>
+        <p>Você pode usar registros de treino, dieta e hábitos neste aparelho sem conectar contas. As opções abaixo são independentes.</p>
+        <p><strong>Strava e foto com IA:</strong> se quiser, crie sua aplicação Strava e seu serviço Cloudflare; informe o endereço do seu serviço na área Strava abaixo e autorize sua própria conta. Nunca use o serviço de outra pessoa.</p>
+        <p><strong>Garmin:</strong> se quiser, sincronize o relógio no Garmin Connect e permita compartilhar passos e calorias com o Health Connect deste celular. Depois autorize o Forja na área Garmin abaixo.</p>
+        <p><strong>Cardápio:</strong> preencha o seu na seção Meu cardápio ou importe um arquivo de cardápio. É opcional; a aba Dieta funciona sem ele.</p>
+      </details>
+
+      <details class="routine-panel" style="margin-top:12px"><summary>Meu cardápio (opcional)</summary>
+        <p>Escreva um alimento por linha: <strong>Alimento | Quantidade</strong>. Exemplo: Pão francês | 50g. O cardápio serve de atalho; você ainda pode registrar qualquer refeição.</p>
+        <div id="plan-editor">
+          <label for="plan-cafe">Café da manhã</label><textarea id="plan-cafe" rows="3"></textarea>
+          <label for="plan-almoco">Almoço</label><textarea id="plan-almoco" rows="3"></textarea>
+          <label for="plan-lanche">Lanche</label><textarea id="plan-lanche" rows="3"></textarea>
+          <label for="plan-janta">Jantar</label><textarea id="plan-janta" rows="3"></textarea>
+          <label for="plan-ceia">Ceia</label><textarea id="plan-ceia" rows="3"></textarea>
+        </div>
+        <button type="button" class="primary" id="plan-save">Salvar meu cardápio</button>
+        <label for="plan-import-file">Ou importar arquivo de cardápio do Forja (.json)</label><input id="plan-import-file" type="file" accept=".json,application/json">
+        <p id="plan-status" role="status"></p>
+      </details>
+
+      <label style="margin-top:16px;">Meus cartões semanais</label>
+      <p class="calc-formula-note">Crie cartões para marcar hábitos de segunda a domingo. A semana nova começa vazia e o histórico fica salvo neste aparelho.</p>
+      <form id="custom-card-form" class="custom-card-form">
+        <input type="hidden" id="custom-card-id">
+        <label for="custom-card-title">Título</label>
+        <input id="custom-card-title" maxlength="80" required placeholder="Ex.: Tomei água hoje">
+        <label for="custom-card-description">Descrição (opcional)</label>
+        <input id="custom-card-description" maxlength="240" placeholder="Ex.: cumprir minha meta diária">
+        <div class="row custom-card-actions"><button type="submit" class="primary">Salvar cartão</button><button type="button" id="custom-card-cancel" class="primary">Cancelar edição</button></div>
+        <p id="custom-card-status" role="status"></p>
+      </form>
+      <div id="custom-week-cards-settings"></div>
+
+      <label style="margin-top:16px;">Aparência</label>
+      <div class="theme-toggle-row">
+        <button class="theme-btn active" id="theme-dark-btn" onclick="setTheme('dark')">🌙 Escuro</button>
+        <button class="theme-btn" id="theme-light-btn" onclick="setTheme('light')">☀️ Claro</button>
+      </div>
+
+      <label style="margin-top:16px;">Backup</label>
+      <p id="backup-last-confirmed" class="calc-formula-note" role="status">Verificando...</p>
+      <button class="primary" onclick="copyBackupDirect()">📋 Copiar backup (um toque)</button>
+      <div class="settings-btn-row" style="margin-top:8px;">
+        <button class="settings-btn" onclick="exportBackup()">⬇ Exportar</button>
+        <button class="settings-btn" onclick="triggerImportPicker()">⬆ Importar</button>
+      </div>
+      <input type="file" id="backup-import-file" accept="application/json" style="display:none">
+
+      <div id="backup-text-panel" style="display:none; margin-top:12px;">
+        <label>Não copiou automático? Copie o texto abaixo manualmente:</label>
+        <textarea id="backup-text-area" readonly rows="5" style="width:100%; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:8px; padding:10px; font-size:11px; font-family:monospace;"></textarea>
+        <button class="primary secondary-btn" onclick="copyBackupText()" style="margin-top:8px;">📋 Copiar texto</button>
+      </div>
+
+      <label style="margin-top:14px;">Importar backup</label>
+      <button class="primary" onclick="pasteBackupDirect()">📥 Colar backup (um toque)</button>
+      <textarea id="backup-paste-area" rows="4" placeholder="Ou cole aqui manualmente..." style="width:100%; margin-top:8px; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:8px; padding:10px; font-size:11px; font-family:monospace;"></textarea>
+      <button class="primary secondary-btn" onclick="importBackupFromText()" style="margin-top:8px;">Importar deste texto</button>
+    </div>
+
+    <div class="card" id="gdrive-card" data-module-card="gdrive-card">
+      <div class="card-head"><h2>☁️ Backup automático no Google Drive</h2></div>
+      <div class="gdrive-status" id="gdrive-status">Cole seu Client ID do Google abaixo pra ativar.</div>
+      <details style="margin:8px 0;">
+        <summary>Como conseguir um Client ID (uma vez só)</summary>
+        <p class="calc-formula-note">Isso usa a sua própria conta Google — o app nunca vê sua senha. Em console.cloud.google.com, crie um projeto (ou use um existente) → "Credenciais" → "Criar credenciais" → "ID do cliente OAuth" → tipo "Aplicativo da Web" → em "Origens JavaScript autorizadas" adicione o endereço exato onde você publicou este app (ex: https://seu-app.netlify.app). Copie o Client ID gerado e cole abaixo.</p>
+      </details>
+      <label>Client ID do Google</label>
+      <input id="gdrive-client-id-input" placeholder="algo.apps.googleusercontent.com">
+      <button class="primary secondary-btn" onclick="saveGDriveClientId()">Salvar Client ID</button>
+      <button class="primary" id="gdrive-connect-btn" onclick="connectGoogleDrive()" style="margin-top:10px; display:none;">🔗 Conectar Google Drive</button>
+      <button class="primary secondary-btn" id="gdrive-sync-now-btn" onclick="syncGDriveNow()" style="margin-top:10px; display:none;">☁️ Enviar backup agora</button>
+      <div class="water-action-row" id="gdrive-auto-row" style="display:none; margin-top:10px;">
+        <button class="primary secondary-btn" id="gdrive-auto-toggle-btn" onclick="toggleGDriveAutoSync()">⬜ Ativar backup automático diário</button>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="section-block" data-section-id="mais-recursos" data-default-collapsed="true">
+    <div class="import-section-header recursos" onclick="toggleSection('mais-recursos')">🎛️ PERSONALIZAR RECURSOS <span class="section-chevron">▾</span></div>
+    <div class="section-body">
+    <div class="card">
+      <p class="calc-formula-note">Desative cartões que você não usa (ex: integrações do CrossFit, Strava, Garmin). Eles somem das abas, mas os dados continuam salvos — é só reativar aqui se mudar de ideia.</p>
+      <div id="module-toggle-list"></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="section-block" data-section-id="mais-privacidade" data-default-collapsed="true">
+    <div class="import-section-header privacy" onclick="toggleSection('mais-privacidade')">🔒 PRIVACIDADE E DADOS <span class="section-chevron">▾</span></div>
+    <div class="section-body">
+    <div class="card" id="privacy-card">
+      <div class="card-head"><h2>🔒 Privacidade e acesso</h2></div>
+      <p class="calc-formula-note">Seus registros ficam no aparelho. Strava usa o serviço Cloudflare configurado; Garmin é lido pelo Health Connect. Tokens e sessões não entram no backup.</p>
+      <p id="privacy-lock-status" class="calc-formula-note">Verificando bloqueio…</p>
+      <label for="privacy-new-pin">PIN de 4 a 8 números</label><input id="privacy-new-pin" type="password" inputmode="numeric" maxlength="8" autocomplete="new-password">
+      <div class="settings-btn-row"><button type="button" class="settings-btn" onclick="ForjaPrivacyLock.configureFromUI()">Ativar ou trocar PIN</button><button type="button" class="settings-btn" onclick="ForjaPrivacyLock.disableFromUI()">Desativar PIN</button></div>
+      <button type="button" class="primary secondary-btn" style="margin-top:8px" onclick="ForjaPrivacyLock.lock()">Bloquear agora</button>
+      <p class="calc-formula-note">Nesta versão, o PIN protege o acesso ao aplicativo. A biometria poderá ser ativada em uma atualização futura com suporte nativo compatível.</p>
+    </div>
+
+    <div class="card" id="checkpoint-card">
+      <div class="card-head"><h2>💾 Salvar tudo</h2></div>
+      <div class="calc-formula-note">Salva um ponto de restauração com tudo que está preenchido agora (peso, água, dieta, fotos de evolução, metas). Se algo der errado depois — reset por engano, bug — dá pra voltar pra esse ponto.</div>
+      <div id="checkpoint-status" style="font-size:12px; color:var(--muted); margin:8px 0;">Carregando...</div>
+      <div id="checkpoint-default">
+        <button type="button" class="dica-add-btn" style="width:100%;" onclick="saveCheckpoint()">💾 Salvar tudo</button>
+        <button type="button" class="dica-add-btn" style="width:100%;margin-top:8px;" onclick="toggleRestoreCheckpointConfirm(true)">♻️ Restaurar último salvamento</button>
+      </div>
+      <div id="checkpoint-restore-confirm" style="display:none; gap:8px;">
+        <div class="calc-formula-note" style="color:var(--red);">Tem certeza? Isso vai substituir peso, água, dieta e fotos atuais pelo que estava salvo — não tem como desfazer.</div>
+        <button type="button" class="dica-add-btn" style="width:100%;border-color:#5a2030;color:var(--red);margin-bottom:8px;" onclick="executeRestoreCheckpoint()">Sim, restaurar</button>
+        <button type="button" class="dica-add-btn" style="width:100%;" onclick="toggleRestoreCheckpointConfirm(false)">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="card" id="reset-dados-card">
+      <div class="card-head"><h2>🗑️ Zerar dados anteriores</h2></div>
+      <div class="calc-formula-note">Apaga peso, água, fotos de evolução e dieta registrados até agora. Corrida, natação e CrossFit não são afetados. Ação sem volta — use uma vez pra começar do zero.</div>
+      <div id="reset-dados-default">
+        <button type="button" class="dica-add-btn" style="width:100%;border-color:#5a2030;color:var(--red);" onclick="toggleResetDadosConfirm(true)">🗑️ Zerar dados anteriores</button>
+      </div>
+      <div id="reset-dados-confirm" style="display:none; gap:8px;">
+        <div class="calc-formula-note" style="color:var(--red);">Tem certeza? Peso, água, fotos de evolução e dieta serão apagados — não tem como desfazer.</div>
+        <button type="button" class="dica-add-btn" style="width:100%;border-color:#5a2030;color:var(--red);margin-bottom:8px;" onclick="executeResetDados()">Sim, apagar tudo</button>
+        <button type="button" class="dica-add-btn" style="width:100%;" onclick="toggleResetDadosConfirm(false)">Cancelar</button>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div class="section-block" data-section-id="mais-sobre" data-default-collapsed="true">
+    <div class="import-section-header sobre" onclick="toggleSection('mais-sobre')">ℹ️ SOBRE O APP <span class="section-chevron">▾</span></div>
+    <div class="section-body">
+    <div class="card" id="changelog-card">
+      <div class="card-head"><h2>📋 Versão do app</h2><span class="count">v<span id="changelog-current-version">–</span></span></div>
+      <p class="calc-formula-note">Tudo que já foi implementado até agora, versão por versão.</p>
+      <div id="changelog-list"></div>
+    </div>
+
+    <div class="card" id="offline-status-card">
+      <div class="card-head"><h2>📴 Modo offline</h2></div>
+      <p class="calc-formula-note" id="offline-status-note">Preparando cache para uso sem internet…</p>
+    </div>
+
+    <div class="card" id="update-card">
+      <div class="card-head"><h2>⬆ Atualizações</h2></div>
+      <p id="update-check-status" class="calc-formula-note">Verificação local ativa.</p>
+      <label for="update-manifest-url">Endereço público de versões (opcional)</label><input id="update-manifest-url" type="url" placeholder="https://seu-site/forja-version.json">
+      <button type="button" class="primary secondary-btn" onclick="ForjaUpdateCheck.saveFromUI()">Salvar verificação</button>
+      <p class="calc-formula-note">Antes de instalar outra versão, exporte um backup. O aplicativo nunca instala APK silenciosamente.</p>
+    </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- IMPORTAR TAB — every "send a screenshot" feature lives here, in one place -->
+  <div id="tab-importar" style="display:none">
+    <div class="import-section-header treino">🏋️ TREINO / CARDIO — print do relógio</div>
+    <div class="card" id="watch-ocr-card" data-module-card="watch-ocr-card">
+      <p class="calc-formula-note">Manda o print da tela de detalhe do treino no Zepp — o app lê duração, frequência cardíaca, zonas, efeito e RPE automaticamente. Confira antes de salvar, a leitura pode errar.</p>
+      <label>Associar a qual treino?</label>
+      <select id="watch-ocr-session-select" style="width:100%; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:11px 12px; font-size:14px; margin-bottom:10px;"></select>
+      <label for="watch-ocr-file" class="photo-btn" style="display:block; margin-bottom:10px;">📷 Escolher print do treino</label>
+      <input type="file" id="watch-ocr-file" accept="image/*" style="display:none" onchange="ForjaGymUI.handleWatchOcrFile(event)">
+      <div id="watch-ocr-status"></div>
+      <div id="watch-ocr-review"></div>
+      <div id="watch-ocr-history" style="margin-top:14px;"></div>
+    </div>
+
+    <div class="import-section-header corpo">⚖️ BALANÇA — bioimpedância (OKOK)</div>
+    <div class="card" id="scale-import-card" data-module-card="scale-import-card">
+      <p class="calc-formula-note">Manda o print da tela "Detalhes" do app OKOK — lê peso, % gordura, massa muscular, água, gordura visceral, metabolismo e mais.</p>
+      <label for="scale-import-file" class="photo-btn" style="display:block; margin-bottom:10px;">📷 Escolher print da balança</label>
+      <input type="file" id="scale-import-file" accept="image/*" style="display:none" onchange="ForjaGymUI.handleScaleOcrFile(event)">
+      <div id="scale-import-status"></div>
+      <div id="scale-import-review"></div>
+      <div id="scale-import-history" style="margin-top:14px;"></div>
+    </div>
+
+    <div class="import-section-header corpo">📸 CORPO — foto de evolução física</div>
+    
+
+    <div class="card" id="progress-photo-card">
+      <div class="card-head"><h2>Evolução do corpo</h2><span class="count" id="progress-count"></span></div>
+      <div id="photo-reminder-banner"></div>
+      <label>Ângulo da foto</label>
+      <div class="angle-row">
+        <button class="angle-btn active" data-angle="Frente" onclick="selectAngle(this)">Frente</button>
+        <button class="angle-btn" data-angle="Lado" onclick="selectAngle(this)">Lado</button>
+        <button class="angle-btn" data-angle="Costas" onclick="selectAngle(this)">Costas</button>
+      </div>
+      <label for="progress-photo-file" class="photo-btn" id="progress-photo-label" style="display:block; margin-top:10px;">📸 Tirar / adicionar foto de progresso</label>
+      <input type="file" id="progress-photo-file" accept="image/*">
+      <button class="primary secondary-btn" id="photo-hide-toggle" onclick="togglePhotosHidden()" style="margin-top:10px;">🙈 Ocultar fotos</button>
+      <div class="progress-grid" id="progress-grid"></div>
+    </div>
+
+    <div class="card" id="photo-compare-card" style="display:none" data-module-card="photo-compare-card">
+      <div class="card-head"><h2>🔄 Comparar evolução</h2></div>
+      <label>Ângulo</label>
+      <div class="angle-row" id="compare-angle-row"></div>
+      <div class="compare-slider-wrap" id="compare-slider-wrap"></div>
+      <div class="compare-dates-row" id="compare-dates-row"></div>
+    </div>
+  </div>
+
+  <!-- DIETA TAB -->
+  <div id="tab-dieta" style="display:none">
+    <div class="card">
+      <div class="stepper-row">
+        <button class="step-btn" onclick="shiftDietDate(-1)">‹ Anterior</button>
+        <input type="date" id="diet-date-input" onchange="setDietDate(this.value)" style="flex:2; text-align:center; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:10px;">
+        <button class="step-btn plus" onclick="shiftDietDate(1)">Próximo ›</button>
+      </div>
+    </div>
+
+    <div class="import-section-header comida">🍽️ DIETA DE HOJE</div>
+    <div class="card" id="diet-summary-card">
+      <div class="card-head"><h2 id="diet-summary-title">🍽 Hoje</h2></div>
+      <div id="diet-rings"></div>
+      <div id="diet-goal-compare"></div>
+      <div id="deficit-streak-label" class="water-streak-label"></div>
+    </div>
+
+    <div class="import-section-header comida">⚡ LANÇAMENTO RÁPIDO</div>
+    <div class="card" id="quick-diet-card">
+      <div id="quick-shortcuts"></div>
+
+      <label style="margin-top:12px;">📋 Colar o texto do Gemini</label>
+      <textarea id="quick-diet-text" rows="5" placeholder="Cole aqui o texto do Gemini (calorias, proteína, carbo e gordura) e toque em Lançar..."></textarea>
+      <button class="primary" onclick="ForjaQuickDiet.launchText()" style="margin-top:8px;">✓ Lançar no dia de hoje</button>
+      <div id="quick-diet-result"></div>
+
+      <label style="margin-top:16px;">📷 Ou foto da refeição (analisada aqui mesmo)</label>
+      <input type="file" id="quick-diet-photo-file" accept="image/jpeg,image/png,image/webp" capture="environment" style="display:none" onchange="ForjaGeminiVision.handleQuickPhotoSelect(event)">
+      <button class="secondary-btn" style="margin-top:4px;" onclick="document.getElementById('quick-diet-photo-file').click()">📷 Tirar ou escolher foto</button>
+      <img id="quick-diet-photo-preview" alt="Foto da refeição" hidden style="width:100%;max-height:280px;object-fit:contain;border-radius:12px;margin:10px 0">
+      <div id="quick-diet-photo-note-wrap" hidden style="margin-top:8px;">
+        <label for="quick-diet-photo-note">Quer contar algo que a foto não mostra? (opcional)</label>
+        <textarea id="quick-diet-photo-note" rows="2" placeholder="Ex: é um salgado de frango, a versão light do Rap10..."></textarea>
+        <div class="row" style="gap:8px; margin-top:6px;">
+          <button type="button" class="secondary-btn" id="quick-diet-note-mic" style="flex:1;" onclick="ForjaGeminiVision.toggleQuickNoteDictation()">🎤 Ditar</button>
+          <button type="button" class="primary" style="flex:2;" onclick="ForjaGeminiVision.analyzeQuickPhoto()">🔍 Analisar foto</button>
+        </div>
+      </div>
+      <div id="quick-diet-photo-status" class="calc-formula-note" style="min-height:14px;"></div>
+      <div id="quick-diet-photo-result"></div>
+
+      <details class="quick-more" style="margin-top:14px;">
+        <summary>Outras formas (print do Zepp)</summary>
+        <input type="file" id="diet-zepp-ocr-file" accept="image/*" style="display:none" onchange="ForjaQuickDiet.handleZeppPhoto(event)">
+        <button class="secondary-btn" style="margin-top:8px;" onclick="document.getElementById('diet-zepp-ocr-file').click()">📷 Escolher print do Zepp</button>
+        <div id="quick-diet-zepp-status" class="calc-formula-note" style="min-height:14px;"></div>
+      </details>
+
+      <p class="calc-formula-note" id="quick-diet-gemini-key-hint" style="margin-top:14px;"></p>
+    </div>
+
+    <div class="section-block" data-section-id="dieta-avancado" data-default-collapsed="true">
+    <div class="import-section-header comida" onclick="toggleSection('dieta-avancado')">🔧 LANÇAMENTO DETALHADO (AVANÇADO, RARAMENTE NECESSÁRIO) <span class="section-chevron">▾</span></div>
+    <div class="section-body">
+    <div class="card">
+      <div class="card-head"><h2>➕ Adicionar refeição</h2></div>
+      <div class="calc-formula-note">Escolha a refeição e use uma das formas abaixo. Café, almoço, lanche, jantar e livre aceitam qualquer alimento.</div>
+
+      <label>Tipo de refeição</label>
+      <div class="meal-type-grid" id="diet-meal-type-grid"></div>
+      <section id="diet-simple" aria-label="Lançar refeição">
+        <p class="diet-step">Escolha como lançar</p>
+        <div class="diet-method-choices" role="group" aria-label="Forma de lançamento">
+          <button type="button" class="active" aria-pressed="true" data-diet-method="text" onclick="ForjaDietFlow.showMethod('text')">📋 Colar texto</button>
+          <button type="button" aria-pressed="false" data-diet-method="food" onclick="ForjaDietFlow.showMethod('food')">✍️ Digitar alimentos</button>
+          <button type="button" aria-pressed="false" data-diet-method="barcode" onclick="ForjaDietFlow.showMethod('barcode')">▥ Código de barras</button>
+          <button type="button" aria-pressed="false" data-diet-method="photo" onclick="ForjaDietFlow.showMethod('photo')">📷 Foto</button>
+        </div>
+        <p class="diet-step">1 · Informe o que consumiu</p><p id="draft-state" class="calc-formula-note" role="status">Seu lançamento fica em rascunho até salvar.</p>
+        <button id="draft-resume" hidden type="button" class="dica-add-btn" onclick="ForjaRoutineDiet.resumeDraft()">Retomar último rascunho</button>
+        <details id="quick-entry" class="routine-panel" open><summary>📋 Colar texto pronto ou preencher manualmente</summary>
+          <p>Cole o resultado do ChatGPT ou preencha os campos. Os valores confirmados aqui não serão trocados pelos do catálogo.</p>
+          <label for="quick-paste">Texto com os totais da refeição</label><textarea id="quick-paste" rows="3" placeholder="Barrinha marca A — 190 kcal, 15 g proteína, 20 g carboidratos, 6 g gorduras"></textarea>
+          <button type="button" class="dica-add-btn" onclick="ForjaRoutineDiet.parseQuick()">Interpretar texto</button>
+          <div id="quick-review">
+            <p class="diet-step">Confirmação curta</p>
+            <label for="quick-description">Descrição da refeição</label><input id="quick-description" placeholder="Ex.: pão com queijo e café">
+            <label for="quick-kcal">Calorias consumidas (obrigatório)</label><input id="quick-kcal" type="number" min="0" step="any" inputmode="decimal">
+            <div class="nutrient-fields"><label>Proteínas (g)<input id="quick-protein_g" type="number" min="0" step="any" placeholder="Não informado"></label><label>Carboidratos (g)<input id="quick-carbs_g" type="number" min="0" step="any" placeholder="Não informado"></label><label>Gorduras (g)<input id="quick-fat_g" type="number" min="0" step="any" placeholder="Não informado"></label></div>
+            <p class="calc-formula-note">Deixar em branco significa “não informado”. Zero significa que o alimento não tem esse nutriente.</p>
+            <button type="button" class="primary diet-save" onclick="ForjaRoutineDiet.saveQuick()">Confirmar e salvar refeição</button>
+          </div>
+        </details>
+        <details id="barcode-panel" class="routine-panel"><summary>▥ Buscar por código de barras</summary>
+          <button type="button" class="dica-add-btn" onclick="ForjaBarcode.scan()">Ler código com a câmera</button>
+          <label for="barcode-number">Ou digite o código da embalagem</label><input id="barcode-number" inputmode="numeric" maxlength="14">
+          <button id="barcode-lookup" type="button" class="dica-add-btn" onclick="ForjaBarcode.lookup()">Buscar produto</button><button id="barcode-refresh" hidden type="button" class="dica-add-btn" onclick="ForjaBarcode.refresh()">Atualizar da internet</button><p id="barcode-status" role="status"></p>
+          <div id="barcode-review" hidden><label>Produto<input id="barcode-name"></label><p>Confira os nutrientes por 100 g ou 100 ml no rótulo.</p>
+            <label>Calorias / 100<input id="barcode-kcal" type="number" min="0" step="any"></label>
+            <div class="nutrient-fields"><label>Proteínas / 100<input id="barcode-protein_g" type="number" min="0" step="any"></label><label>Carboidratos / 100<input id="barcode-carbs_g" type="number" min="0" step="any"></label><label>Gorduras / 100<input id="barcode-fat_g" type="number" min="0" step="any"></label></div>
+            <div class="row"><label>Quantidade consumida<input id="barcode-quantity" type="number" min="0.1" step="any"></label><label>Unidade do rótulo<select id="barcode-unit"><option value="g" selected>Gramas</option><option value="ml">Mililitros</option></select></label></div>
+            <button type="button" class="dica-add-btn" onclick="ForjaBarcode.add()">Adicionar produto à refeição</button>
+          </div>
+          <p class="calc-formula-note">Consulta gratuita em <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL</a>. Produtos consultados ficam neste aparelho. Confira a embalagem: a base pode estar incompleta ou desatualizada.</p>
+          <button type="button" class="dica-add-btn" onclick="ForjaDietFlow.openCustom()">Não encontrei: informar rótulo</button>
+        </details>
+        <details id="diet-plan-panel" class="routine-panel"><summary>🍽 Usar opção do meu cardápio</summary><p>O cardápio é apenas um atalho. Você poderá alterar, retirar ou adicionar qualquer alimento.</p><div class="row"><button class="dica-add-btn" onclick="ForjaRoutineDiet.usePlan()">Carregar meu cardápio</button><button class="dica-add-btn" onclick="ForjaDietFlow.startEmpty()">Limpar refeição</button></div><label for="diet-simple-option" id="diet-simple-option-label" hidden>Opções do cardápio</label><select id="diet-simple-option" hidden></select></details>
+        <div id="diet-simple-manual">
+          <details id="diet-table-panel" class="routine-panel"><summary>🔎 Montar com alimentos da tabela</summary>
+            <textarea id="diet-simple-text" rows="3" placeholder="Ex: arroz 200g, frango 120g, banana 75g"></textarea>
+            <button id="diet-simple-parse" type="button" class="dica-add-btn">Montar refeição pelo texto</button>
+            <p class="calc-formula-note">O catálogo apenas sugere referências. Confira preparação, quantidade e calorias antes de salvar.</p>
+          <details id="diet-add-panel"><summary>Adicionar ou cadastrar alimento</summary>
+            <label for="diet-simple-search">Buscar alimento ou produto</label><input id="diet-simple-search" type="search" placeholder="Ex: arroz, frango">
+            <label><input id="diet-simple-all" type="checkbox"> Mostrar lista completa (a busca inclui todos)</label>
+            <select id="diet-simple-food" aria-label="Meus alimentos"></select>
+            <button id="diet-simple-add" type="button" class="dica-add-btn">Adicionar à refeição</button>
+            <p id="diet-search-message" role="status"></p><button type="button" class="dica-add-btn" onclick="ForjaDietFlow.openCustom()">Não encontrei / cadastrar produto</button><details id="diet-custom-panel"><summary>Dados do produto ou rótulo</summary>
+              <label for="diet-custom-name">Alimento, marca e sabor</label><input id="diet-custom-name" type="text">
+              <label for="diet-custom-unit">Unidade da porção</label><select id="diet-custom-unit"><option value="g">Gramas (g)</option><option value="ml">Mililitros (ml)</option></select>
+              <p>Copie os nutrientes da porção do rótulo. Exemplo: uma barrinha de 40 g.</p><label for="diet-custom-basis">Tamanho da porção do rótulo (g ou ml)</label><input id="diet-custom-basis" type="number" min="0.1" step="any" value="100"><label for="diet-custom-quantity">Quantidade que você comeu (g ou ml)</label><input id="diet-custom-quantity" type="number" min="0.1" step="any">
+              <label for="diet-custom-kcal">Calorias</label><input id="diet-custom-kcal" type="number" min="0" step="any">
+              <label for="diet-custom-carbs_g">Carboidratos (g)</label><input id="diet-custom-carbs_g" type="number" min="0" step="any">
+              <label for="diet-custom-protein_g">Proteínas (g)</label><input id="diet-custom-protein_g" type="number" min="0" step="any">
+              <label for="diet-custom-fat_g">Gorduras (g)</label><input id="diet-custom-fat_g" type="number" min="0" step="any">
+              <button id="diet-custom-save" type="button" class="dica-add-btn">Adicionar produto à refeição</button>
+            </details>
+          </details></details>
+        </div>
+        <details id="diet-photo-method" class="routine-panel"><summary>📷 Analisar foto no Forja</summary><div id="diet-simple-photo-panel"><button type="button" class="dica-add-btn" onclick="ForjaRoutineDiet.retryPhoto()">Analisar novamente a foto escolhida</button>
+<p class="calc-formula-note">Built with Llama · IA hospedada na Cloudflare.</p>
+          <p id="diet-ai-status" class="calc-formula-note" role="status">Se a análise já funcionou neste aparelho, escolha a foto diretamente. A ativação só é necessária na primeira vez.</p>
+          <details id="diet-ai-setup"><summary>Ativar IA pela primeira vez</summary>
+            <p class="calc-formula-note">É necessário estar conectado ao serviço na área Strava. O modelo exige o aceite da <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/LICENSE" target="_blank" rel="noopener">licença Meta</a> e da <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/USE_POLICY.md" target="_blank" rel="noopener">política de uso</a>.</p>
+            <label><input type="checkbox" id="diet-ai-license"> Li e aceito os termos do modelo Llama.</label>
+            <button type="button" id="diet-ai-activate" class="primary secondary-btn" onclick="ForjaDietFlow.activateAI()">Ativar modelo de fotos</button>
+          </details>
+          <p class="calc-formula-note">A foto será enviada à Cloudflare para sugerir alimentos e porções. Confira tudo antes de salvar. A análise depende da ativação da IA no seu serviço e da cota gratuita; o lançamento manual funciona sem internet.</p>
+          <label for="diet-simple-photo" class="photo-btn">Escolher ou tirar foto</label><input id="diet-simple-photo" type="file" accept="image/jpeg,image/png,image/webp" style="display:none">
+          <img id="diet-simple-photo-preview" alt="Foto escolhida para analisar a refeição" hidden style="width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin:12px 0">
+          <button id="diet-simple-photo-remove" type="button" class="dica-add-btn" hidden>Remover foto</button>
+        </div></details>
+        <details class="routine-panel"><summary>✨ Analisar foto com Gemini (sua própria chave)</summary><div id="gemini-photo-panel">
+          <p class="calc-formula-note">Usa a API do Gemini direto do seu navegador, com a sua chave — sem depender de serviço de terceiros. Configure a chave na aba Mais primeiro.</p>
+          <label for="gemini-photo-file" class="photo-btn">Escolher ou tirar foto</label><input id="gemini-photo-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="ForjaGeminiVision.handlePhoto(event)">
+          <img id="gemini-photo-preview" alt="Foto escolhida para o Gemini analisar" hidden style="width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin:12px 0">
+          <p id="gemini-photo-status" role="status" class="calc-formula-note"></p>
+          <div id="gemini-photo-result"></div>
+        </div></details>
+        <p id="diet-simple-status" role="status" class="calc-formula-note">Escolha a refeição para carregar as porções.</p>
+        <p class="diet-step" id="diet-detailed-review-title">2 · Confira os alimentos adicionados</p><div id="diet-simple-items"></div>
+        <p id="diet-simple-total" aria-live="polite"></p>
+        <button id="diet-simple-save" type="button" class="primary diet-save" disabled>Salvar refeição</button>
+        <p class="calc-formula-note">Composição de referência: TACO, NEPA/UNICAMP, 4ª edição. Preparação e marca podem alterar os valores.</p>
+      </section>
+      <details hidden style="margin:14px 0">
+        <summary>Estimar pelos alimentos e quantidades</summary>
+        <p class="calc-formula-note">Escolha cada alimento e informe o peso consumido em gramas. Confira se a preparação corresponde: cru, cozido, grelhado ou frito. Inclua separadamente o óleo ou outros ingredientes usados.</p>
+        <label for="food-search">Buscar alimento</label>
+        <input id="food-search" type="search" placeholder="Ex: arroz cozido, peito frango grelhado" autocomplete="off">
+        <label for="food-select">Alimento / preparação</label>
+        <select id="food-select"></select>
+        <label for="food-grams">Quantidade consumida (g)</label>
+        <input id="food-grams" type="number" min="0.1" step="any" placeholder="Ex: 200">
+        <button id="food-add" type="button" class="dica-add-btn">Adicionar alimento à refeição</button>
+        <p id="food-message" role="status" class="calc-formula-note">Carregando tabelas locais…</p>
+        <div id="food-draft"></div>
+        <button id="food-review" type="button" class="primary secondary-btn">Revisar calorias e nutrientes da refeição</button>
+        <details style="margin-top:12px">
+          <summary>Cadastrar alimento pelo rótulo</summary>
+          <p class="calc-formula-note">Informe os valores por 100 g. Se o rótulo trouxer outra porção, converta os valores antes de cadastrar.</p>
+          <label for="custom-food-name">Nome do alimento</label><input id="custom-food-name" type="text">
+          <label for="custom-food-kcal">Calorias por 100 g (kcal)</label><input id="custom-food-kcal" type="number" min="0" step="any">
+          <label for="custom-food-carbs_g">Carboidratos por 100 g (g)</label><input id="custom-food-carbs_g" type="number" min="0" step="any">
+          <label for="custom-food-protein_g">Proteínas por 100 g (g)</label><input id="custom-food-protein_g" type="number" min="0" step="any">
+          <label for="custom-food-fat_g">Gorduras por 100 g (g)</label><input id="custom-food-fat_g" type="number" min="0" step="any">
+          <button id="food-custom-save" type="button" class="dica-add-btn">Salvar alimento no aparelho</button>
+        </details>
+        <p class="calc-formula-note">Fonte: NEPA/UNICAMP, TACO, 4ª edição (2011). Dados de referência por 100 g de parte comestível, consultados sem internet. Preparação e marca podem alterar os valores.</p>
+      </details>
+
+      <div class="row" style="gap:8px;">
+        <label for="diet-photo-file" class="photo-btn" id="diet-photo-label" style="flex:1; text-align:center;" onclick="return handleDietPhotoLabelClick(event)">📷 Foto da refeição</label>
+        <label for="diet-label-file" class="photo-btn" id="diet-label-label" style="flex:1; text-align:center;" onclick="return handleDietLabelClickGuard(event)">🏷️ Rótulo nutricional</label>
+      </div>
+      <input type="file" id="diet-photo-file" accept="image/*" style="display:none" onchange="handleDietPhotoFile(event)">
+      <input type="file" id="diet-label-file" accept="image/*" style="display:none" onchange="handleDietLabelFile(event)">
+      <div id="diet-photo-note"></div>
+      <div id="diet-photo-preview"></div>
+      <div id="diet-photo-status"></div>
+      <div id="diet-photo-result"></div>
+      <div id="diet-label-preview"></div>
+      <div id="diet-label-status"></div>
+      <div id="diet-label-result"></div>
+
+      <label style="margin-top:16px;">Cole a estimativa do chat ou informe os valores</label>
+      <textarea id="diet-input" rows="3" placeholder="Ex: 150g de arroz, um filé de frango grelhado (150g), salada com azeite" style="width:100%; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:8px; padding:10px; font-size:13px; font-family:inherit;"></textarea>
+      <button class="primary secondary-btn" onclick="estimateDietCalories()" style="margin-top:10px;">🤖 Estimar calorias com IA</button>
+      <div id="diet-estimate-status"></div>
+      <div id="diet-estimate-result"></div>
+    </div>
+    </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2 id="diet-list-title">Refeições de hoje</h2></div>
+      <div id="diet-day-close" class="day-close"></div><div id="diet-today-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Histórico</h2></div>
+      <div id="diet-history-list"></div>
+    </div>
+  </div>
+
+  <!-- CARDÁPIO TAB -->
+  <div id="tab-cardapio" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>📋 Cardápio da semana</h2></div>
+      <div class="calc-formula-note">Plano alimentar com porções e opções de substituição. Use os botões para alternar as opções de lanche e jantar.</div>
+    </div>
+    <div id="cardapio-days-list"></div>
+
+    
+
+    <div class="card" id="shopping-list-card" data-module-card="shopping-list-card">
+      <div class="card-head"><h2>🛒 Lista de compras da semana</h2></div>
+      <div class="calc-formula-note">Pra comprar no fim de semana e render a semana inteira.</div>
+      <div id="shopping-list"></div>
+    </div>
+  </div>
+
+  <!-- CORPO TAB -->
+  <div id="tab-corpo" style="display:none">
+
+    <div class="card">
+      <div class="card-head"><h2>Peso corporal</h2><span class="count" id="weight-current"></span></div>
+      <label>Peso a registrar (toque pra digitar, ou use os botões)</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustWeightPending(-0.4)">−400g</button>
+        <button class="step-btn" onclick="adjustWeightPending(-0.1)">−100g</button>
+        <input type="text" inputmode="decimal" class="custom-amount-input" id="weight-pending-display" placeholder="Seu peso" oninput="setWeightPendingFromInput()">
+        <button class="step-btn plus" onclick="adjustWeightPending(0.1)">+100g</button>
+        <button class="step-btn plus" onclick="adjustWeightPending(0.4)">+400g</button>
+      </div>
+      <label>Turno</label>
+      <select id="body-period">
+        <option value="manhã">Manhã</option>
+        <option value="tarde">Tarde</option>
+        <option value="noite">Noite</option>
+      </select>
+      <button class="primary" onclick="addWeight()" style="margin-top:10px;">Registrar peso</button>
+      <div class="chart-wrap" id="weight-chart"></div>
+    </div>
+
+    <div class="card" id="calorie-calc-card" data-module-card="calorie-calc-card">
+      <div class="card-head"><h2>🔥 Calculadora de calorias (TMB/TDEE)</h2></div>
+      <div class="calc-formula-note" id="calc-formula-note"></div>
+
+      <label>Sexo</label>
+      <div class="sex-toggle-row">
+        <button class="sex-btn active" id="sex-btn-m" onclick="setCalcSex('M')">Masculino</button>
+        <button class="sex-btn" id="sex-btn-f" onclick="setCalcSex('F')">Feminino</button>
+      </div>
+
+      <label>Idade</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustCalcField('age',-1)">−1</button>
+        <div class="custom-amount" id="calc-age-display">30 anos</div>
+        <button class="step-btn plus" onclick="adjustCalcField('age',1)">+1</button>
+      </div>
+
+      <label>Altura</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustCalcField('height',-1)">−1</button>
+        <div class="custom-amount" id="calc-height-display">170cm</div>
+        <button class="step-btn plus" onclick="adjustCalcField('height',1)">+1</button>
+      </div>
+
+      <label>Peso <span id="calc-weight-source"></span></label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustCalcField('weight',-0.5)">−0,5</button>
+        <div class="custom-amount" id="calc-weight-display">70kg</div>
+        <button class="step-btn plus" onclick="adjustCalcField('weight',0.5)">+0,5</button>
+      </div>
+
+      <label>% de gordura corporal <span id="calc-bf-source"></span> (opcional, deixe 0 se não souber)</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustCalcField('bodyfat',-1)">−1</button>
+        <div class="custom-amount" id="calc-bf-display">0%</div>
+        <button class="step-btn plus" onclick="adjustCalcField('bodyfat',1)">+1</button>
+      </div>
+
+      <label>Nível de atividade</label>
+      <div class="activity-select" id="activity-select"></div>
+
+      <div id="calc-lock-status" style="margin:14px 0 4px;"></div>
+
+      <div id="calorie-results"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Últimos registros</h2></div>
+      <div id="body-list"></div>
+    </div>
+  </div>
+
+  <!-- ÁGUA TAB -->
+  <div id="tab-agua" style="display:none">
+    <div class="card">
+      <div class="card-head"><h2>💧 Água</h2></div>
+
+      <div class="stepper-row">
+        <button class="step-btn" onclick="shiftWaterDate(-1)">‹ Anterior</button>
+        <input type="date" id="water-date-input" onchange="setWaterDate(this.value)" style="flex:2; text-align:center; background:var(--panel-2); border:1px solid var(--line); color:var(--text); border-radius:10px; padding:10px;">
+        <button class="step-btn plus" onclick="shiftWaterDate(1)">Próximo ›</button>
+      </div>
+
+      <div class="water-bottle-wrap">
+        <div id="water-bottle-main"></div>
+        <div class="water-bottle-main-label" id="water-bottle-main-label"></div>
+        <p class="calc-formula-note bottle-drag-hint">↕ Arraste a garrafa para encher ou esvaziar na hora</p>
+      </div>
+
+      <label>Meta diária (ml)</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustWaterGoal(-100)">−100</button>
+        <input type="text" inputmode="numeric" class="custom-amount-input" id="water-goal-display" value="2000" oninput="setWaterGoalFromInput()">
+        <button class="step-btn plus" onclick="adjustWaterGoal(100)">+100</button>
+      </div>
+
+      <label>Adicionar rápido</label>
+      <div class="quick-row">
+        <button class="quick-btn" onclick="quickAddWater(200)">200ml</button>
+        <button class="quick-btn" onclick="quickAddWater(300)">300ml</button>
+        <button class="quick-btn" onclick="quickAddWater(500)">500ml</button>
+        <button class="quick-btn" onclick="quickAddWater(700)">700ml</button>
+      </div>
+
+      <label>Ajuste rápido (soma ou tira na hora, sem confirmar)</label>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="commitBottleDelta(-50)">− 50ml</button>
+        <button class="step-btn plus" onclick="commitBottleDelta(50)">+ 50ml</button>
+      </div>
+
+      <label style="margin-top:14px;">Por goles 🥤</label>
+      <p class="calc-formula-note">Tomou água de um bebedouro ou garrafa e não sabe quantos ml foram? Conte os goles que você deu e a gente estima o total pra você, considerando o seu peso.</p>
+      <div class="stepper-row">
+        <button class="step-btn" onclick="adjustSipCount(-1)">−1</button>
+        <input type="number" inputmode="numeric" id="sip-count-display" class="custom-amount-input" value="10" oninput="setSipCountFromInput()">
+        <button class="step-btn plus" onclick="adjustSipCount(1)">+1</button>
+      </div>
+      <p class="calc-formula-note" id="sip-estimate-note" role="status"></p>
+      <button class="primary" onclick="commitSipWater()">🥤 Adicionar goles ao total</button>
+
+      <button class="primary secondary-btn" id="reset-water-btn" onclick="zerarAguaHoje()" style="margin-top:10px;">🗑 Zerar água do dia</button>
+
+      <div class="notif-row">
+        <button class="notif-btn" id="notif-btn" onclick="enableReminders()">🔔 Ativar lembretes (a cada 2h se estiver atrasado)</button>
+        <p class="calc-formula-note">Funciona garantido enquanto o app estiver aberto. Se instalar o app na tela inicial e abrir com frequência, alguns celulares (principalmente Android/Chrome) também avisam com o app fechado — o iPhone não permite isso.</p>
+      </div>
+
+      <div class="chart-wrap" id="water-chart"></div>
+
+      <label style="margin-top:14px;">Histórico de lançamentos</label>
+      <div id="water-history-list"></div>
+    </div>
+  </div>
+
+  <!-- Progress photo full-screen viewer -->
+  <div id="progress-viewer" class="viewer-overlay" style="display:none">
+    <div class="viewer-top">
+      <div id="viewer-date" class="viewer-date"></div>
+      <button class="viewer-close" onclick="closeViewer()">✕</button>
+    </div>
+    <img id="viewer-img" class="viewer-img">
+    <div class="viewer-nav">
+      <button onclick="viewerShift(-1)">‹ Anterior</button>
+      <button class="viewer-del" onclick="deleteViewerPhoto()">🗑 Excluir</button>
+      <button onclick="viewerShift(1)">Próxima ›</button>
+    </div>
+  </div>
+
+  <div class="fab-note">Dados e fotos salvos neste aparelho. Faça backups regularmente.</div>
+</main>
+
+<div id="privacy-lock-overlay" class="privacy-lock-overlay" hidden>
+  <div class="privacy-lock-box"><h2>🔒 Forja.Treino bloqueado</h2><p>Digite seu PIN para continuar.</p><input id="privacy-unlock-pin" type="password" inputmode="numeric" maxlength="8" autocomplete="current-password"><button type="button" class="primary" onclick="ForjaPrivacyLock.unlockFromUI()">Desbloquear</button><p id="privacy-unlock-status" role="status"></p></div>
+</div>
+
+<script src="data-foundation.js"></script>
+<script src="sync-center.js"></script>
+<script src="privacy-lock.js"></script>
+<script src="nutrition-memory.js"></script>
+<script src="dashboard-layout.js"></script>
+<script src="feature-toggle.js"></script>
+<script src="weekly-report.js"></script>
+<script src="crossfit-results.js"></script>
+<script src="gym-catalog.js"></script>
+<script src="wger-library.js"></script>
+<script src="free-exercise-library.js"></script>
+<script src="free-exercise-pt.js"></script>
+<script src="gym-pt-synonyms.js"></script>
+<script src="exercise-names-pt.js"></script>
+<script src="exercise-names.js"></script>
+<script src="ready-workouts.js"></script>
+<script src="exercise-library.js"></script>
+<script src="muscle-anatomy-data.js"></script>
+<script src="muscle-anatomy-render.js"></script>
+<script src="muscle-day-map.js"></script>
+<script src="gym-training.js"></script>
+<script src="gym-ui.js"></script>
+<script src="gym-suggest.js"></script>
+<script src="exercise-library-tab.js"></script>
+<script src="exercise-longpress.js"></script>
+<script src="changelog.js"></script>
+<script src="gemini-vision.js"></script>
+<script src="quick-diet.js"></script>
+<script src="ui-sections.js"></script>
+<script src="ui-collapsible.js"></script>
+<script src="install-app.js"></script>
+<script src="home-hero.js"></script>
+<script src="google-config.js"></script>
+<script src="google-direct.js"></script>
+<script src="sheet-sync-script.js"></script>
+<script src="sheet-sync.js"></script>
+<script src="backup-status.js"></script>
+<script src="progress-calendar.js"></script>
+<script src="update-check.js"></script>
+<script src="creatine-tracker.js"></script>
+<script src="custom-week-cards.js"></script>
+<script src="onboarding.js"></script>
+<script src="app.js"></script>
+<script src="personalization.js"></script>
+<script src="crossfit-reading.js"></script>
+
+<script src="standalone-ui.js"></script>
+<script src="food-data.js"></script>
+<script src="activity-data.js"></script>
+<script src="reference-db.js"></script>
+<script src="estimates.js"></script>
+<script src="estimates-ui.js"></script>
+<script src="strava-core.js"></script>
+<script src="strava-ui.js"></script>
+<script src="health-connect.js"></script>
+<script src="diet-core.js"></script>
+<script src="diet-flow.js"></script>
+<script src="routine-diet.js"></script>
+<script src="barcode-food.js"></script>
+<script src="wod-library.js"></script>
+<script src="app-enhancements.js"></script>
+<script src="forja3.js"></script>
+<script src="forja-tour.js"></script>
+<script>forjaInitialization.then(()=>ForjaStravaUI.init()).then(()=>ForjaStravaUI.sync()).catch(e=>console.error('Strava:',e));</script>
+<script>forjaInitialization.then(()=>ForjaEstimateUI.init()).catch(e=>console.error('Referências:',e));</script>
+<script>forjaInitialization.then(()=>ForjaPersonalization.init()).then(()=>ForjaDietFlow.init()).then(()=>ForjaRoutineDiet.init()).catch(e=>console.error('Dieta:',e));</script>
+<script>forjaInitialization.then(()=>ForjaWodLibrary.init()).catch(e=>console.error('WODs:',e));</script>
+<script>forjaInitialization.then(()=>ForjaHealthConnect.init()).catch(e=>console.error('Health Connect:',e));</script>
+<script>forjaInitialization.then(()=>ForjaEnhancements.init()).catch(e=>console.error('Aprimoramentos:',e));</script>
+<script>forjaInitialization.then(()=>ForjaDataFoundation.migrate()).then(()=>Promise.all([ForjaSyncCenter.render(),ForjaDashboardLayout.apply(),ForjaDashboardLayout.renderSettings(),ForjaFeatureToggle.apply(),ForjaFeatureToggle.renderSettings(),ForjaWeeklyReport.render(),ForjaGymTraining.init().then(()=>ForjaGymUI.init()),ForjaPrivacyLock.init(),ForjaUpdateCheck.render(),ForjaCustomWeekCards.init()])).then(()=>ForjaSheetSync.init()).then(()=>ForjaHomeHero.init()).then(()=>ForjaCollapsible.enhanceTabs()).then(()=>ForjaUiSections.applyCollapsedState()).then(()=>ForjaBackupStatus.render()).catch(e=>console.error('Modernização:',e));</script>
+<script>forjaInitialization.then(()=>ForjaOnboarding.init()).catch(e=>console.error('Primeiros passos:',e));</script>
+<script>forjaInitialization.then(()=>ForjaMuscleAnatomyRender.mount()).catch(e=>console.error('Boneco muscular:',e));</script>
+</body>
+</html>
+
+
+

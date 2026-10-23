@@ -1,0 +1,6 @@
+Free Exercise DB
+Source: https://github.com/yuhonas/free-exercise-db
+License: Unlicense (public domain dedication)
+License text: https://github.com/yuhonas/free-exercise-db/blob/main/LICENSE.md
+
+Exercise names, muscle metadata, instructions, and remote demonstration image paths are used in the Academia exercise guide. Images are requested from the source only when a user opens a guide and are not included in this app package.
