@@ -20,7 +20,8 @@ function appName(){return root.document?.body?.dataset?.forjaVariant==='essencia
 function sheetTitle(){return `${appName()} — dados`;}
 async function clientId(){
   if(root.FORJA_GOOGLE_CLIENT_ID)return root.FORJA_GOOGLE_CLIENT_ID;
-  try{const r=await store().get('gdrive-client-id');return r&&r.value?String(r.value).trim():'';}catch{return '';}
+  const PADRAO='593347618330-cq521tq56qr5d74mb12oj0l9s4lt1bkf.apps.googleusercontent.com'; // DZ Apps
+  try{const r=await store().get('gdrive-client-id');return r&&r.value?String(r.value).trim():PADRAO;}catch{return PADRAO;}
 }
 function gisReady(){return !!(root.google&&root.google.accounts&&root.google.accounts.oauth2);}
 async function waitGis(ms=6000){const t0=Date.now();while(!gisReady()&&Date.now()-t0<ms)await new Promise(r=>setTimeout(r,150));return gisReady();}
