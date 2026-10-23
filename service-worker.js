@@ -112,7 +112,7 @@ const SHELL_FILES = [
   'barcode-food.js',
   'wod-library.js',
   'app-enhancements.js',
-  'forja3.js',
+  'forja3.js', 'forja-meta.js',
   'forja-tour.js',
 ];
 

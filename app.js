@@ -110,7 +110,7 @@ async function flushWrite(key){
 }
 
 // ---------- BACKUP EXPORT / IMPORT ----------
-const BACKUP_KEYS = ['body-log','progress-photos','measurements','diet-log','diet-closed-days','water-daily-goal','calorie-calc-lock','shopping-list-checked','shopping-list-removed','shopping-list-custom','visible-tabs-v1','creatine-days-v1','training-goal','rest-day-weekly','gym-plans-v1','gym-sessions-v1','gym-custom-exercises-v1','gym-active-workout-v1','quick-diet-shortcuts-v1','f3-metas','f3-activities','f3-dados','f3-supl','f3-supl-log','gym-last-group','gym-rest-seconds','exercise-weight-mode','workout-groups-v1'];
+const BACKUP_KEYS = ['body-log','progress-photos','measurements','diet-log','diet-closed-days','water-daily-goal','calorie-calc-lock','shopping-list-checked','shopping-list-removed','shopping-list-custom','visible-tabs-v1','creatine-days-v1','training-goal','rest-day-weekly','gym-plans-v1','gym-sessions-v1','gym-custom-exercises-v1','gym-active-workout-v1','quick-diet-shortcuts-v1','f3-metas','f3-objetivo','f3-activities','f3-dados','f3-supl','f3-supl-log','gym-last-group','gym-rest-seconds','exercise-weight-mode','workout-groups-v1'];
 async function buildBackupJson(){
   const data = {};
   for(const key of BACKUP_KEYS){
@@ -1989,7 +1989,7 @@ async function computeDietDaySummary(dateStr){
   const f3Activity = await (window.Forja3?.activityKcal?.(dateStr) ?? 0);
   const exercicio = (garmin?.activeKcal != null ? garmin.activeKcal+crossfitExtra : (sportCalorias>0 ? sportCalorias : zeppExercise)) + f3Activity;
   const importGoal = [...dayEntries].reverse().find(e=>e.goalKcal)?.goalKcal;
-  const dynGoal = await (window.Forja3?.dynamicGoal?.(dateStr, f3Activity) ?? null);
+  const dynGoal = await (window.Forja3?.dynamicGoal?.(dateStr, exercicio) ?? null);
   const goal = importGoal || dynGoal || computeDeficitGoal() || null;
   return {comido, exercicio, goal, entryCount:dayEntries.length, garminSyncedAt:garmin?.syncedAt??null, garminTotal:garmin?.totalKcal!=null?garmin.totalKcal+crossfitExtra:null, garminSteps:garmin?.steps??null, garminActive:garmin?.activeKcal??null, crossfitExtra, crossfitEstimated:crossfit.estimated, exerciseSource:garmin?.activeKcal!=null?'Garmin':sportCalorias>0?'treinos registrados':'lançamento manual'};
 }

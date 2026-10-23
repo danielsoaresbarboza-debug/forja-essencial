@@ -1,8 +1,9 @@
 (function(root,factory){const api=factory(root);if(typeof module==='object'&&module.exports)module.exports=api;root.ForjaChangelog=api;})(typeof globalThis!=='undefined'?globalThis:this,function(root){
 'use strict';
-const CURRENT_VERSION='3.0.1';
+const CURRENT_VERSION='3.1.0';
 
 const HISTORY=[
+  {v:'3.1.0',date:'2026-10-23',items:['Nova tela Meta de peso: quanto quer pesar, no seu ritmo ou até uma data','Mostra quando você chega, quanto comer e quanto gastar por dia, com etapas mês a mês','Compara seu peso real com o plano e calcula o ritmo das últimas 4 semanas','A meta de comida do dia passa a seguir o plano e as atividades lançadas']},
   {v:'3.0.1',date:'2026-10-23',items:['Liga o "Entrar com Google" (planilha e backup no seu Drive) e atualiza os arquivos guardados no celular']},
   {v:'3.0.0',date:'2026-10-23',items:[
     'Academia nova: o topo mostra "Hoje: Treino X", o próximo da sua sequência, com o resumo da última vez e um botão só para começar. Os outros treinos ficam em "Trocar"',

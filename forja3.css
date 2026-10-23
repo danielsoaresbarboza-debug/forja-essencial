@@ -451,7 +451,7 @@ body.f3 #body-period{display:none}
 /* =====================================================================
    VARIANTE ESSENCIAL (Pietra)
    ===================================================================== */
-body[data-forja-variant="essencial"] .tabs .tab:not([data-tab="inicio"]):not([data-tab="dieta"]):not([data-tab="agua"]):not([data-tab="atividade"]):not([data-tab="corpo"]):not([data-tab="dados"]):not([data-tab="mais"]){display:none!important}
+body[data-forja-variant="essencial"] .tabs .tab:not([data-tab="inicio"]):not([data-tab="dieta"]):not([data-tab="agua"]):not([data-tab="atividade"]):not([data-tab="corpo"]):not([data-tab="dados"]):not([data-tab="meta"]):not([data-tab="mais"]){display:none!important}
 body[data-forja-variant="essencial"] #weekly-goal-card,body[data-forja-variant="essencial"] #weekly-report-card,body[data-forja-variant="essencial"] #custom-week-cards{display:none!important}
 body[data-forja-variant="essencial"] .tabs{grid-template-columns:repeat(3,1fr)!important}
 body[data-forja-variant="essencial"] .tabs .tab[data-tab="inicio"]{grid-column:1/-1}
@@ -528,3 +528,65 @@ body[data-forja-variant="essencial"] #strava-card,body[data-forja-variant="essen
 #sheet-sync-card .sheet-sync-check input{width:24px;height:24px;min-height:0;margin:0;flex:none;accent-color:var(--f3-ok)}
 #sheet-sync-card #sheet-sync-disconnect{width:100%;min-height:44px;margin-top:6px;border-radius:12px;border:1px solid var(--f3-borda);background:transparent;color:var(--f3-tx-3);font-family:var(--f3-ui);font-weight:700;font-size:15px}
 #sheet-sync-card .sheet-sync-status{font-size:14px}
+
+/* ===== 3.1 Meta de peso ===== */
+.mt-home{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;color:var(--f3-tx);cursor:pointer}
+.mt-home .ic{font-size:26px;flex:none}
+.mt-home .tx,.mt-home>span:not(.ic){flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.mt-home b{font-family:var(--f3-num);font-size:17px}
+.mt-home small{color:var(--f3-tx-2);font-size:14px}
+.mt-home>i{font-style:normal;font-size:24px;color:var(--f3-tx-3)}
+.mt-home.vazio b{font-family:var(--f3-ui);font-size:17px}
+.mt-bar{display:block;height:8px;border-radius:99px;background:var(--f3-vidro-2);overflow:hidden;margin-top:4px}
+.mt-bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--f3-corpo),var(--f3-comida))}
+.mt-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin:6px 0 10px}
+.mt-trio small{display:block;color:var(--f3-tx-3);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.mt-trio b{font-family:var(--f3-num);font-size:22px}
+.mt-trio .agora b{color:var(--f3-corpo);font-size:28px}
+.mt-frase{margin:8px 0 2px;color:var(--f3-tx-2)}
+.mt-frase b{color:var(--f3-tx)}
+.mt-peso,#mt-peso{width:4.2em;background:transparent;border:0;color:inherit;font:inherit;text-align:center;padding:0}
+#mt-peso:focus{outline:2px solid var(--f3-corpo);border-radius:6px}
+.mt-seg{margin:6px 0 10px}
+.mt-ritmos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mt-ritmos button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:58px;padding:8px 2px;border-radius:14px;border:1px solid var(--f3-borda);background:var(--f3-vidro);color:var(--f3-tx);font:inherit;cursor:pointer}
+.mt-ritmos button b{font-family:var(--f3-num);font-size:15px}
+.mt-ritmos button small{font-size:12px;color:var(--f3-tx-2)}
+.mt-ritmos button.on{border-color:var(--f3-corpo);background:color-mix(in srgb,var(--f3-corpo) 18%,transparent)}
+.mt-data{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.mt-data input{background:var(--f3-vidro);border:1px solid var(--f3-borda);border-radius:12px;color:var(--f3-tx);font:inherit;padding:10px 12px;min-height:44px}
+.mt-quando{text-align:center;padding:6px 0 12px}
+.mt-quando small{display:block;color:var(--f3-tx-2)}
+.mt-quando b{display:block;font-family:var(--f3-disp);font-size:40px;letter-spacing:.02em;line-height:1.1;color:var(--f3-corpo)}
+.mt-quando span{color:var(--f3-tx-2);font-size:14px}
+.mt-conta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mt-conta div{background:var(--f3-vidro);border:1px solid var(--f3-borda);border-radius:14px;padding:10px 12px}
+.mt-conta small{display:block;color:var(--f3-tx-3);font-size:13px}
+.mt-conta b{font-family:var(--f3-num);font-size:22px}
+.mt-conta em{font-style:normal;font-size:12px;color:var(--f3-tx-3);margin-left:4px}
+.mt-conta .neg b{color:var(--f3-treino)}
+.mt-conta .pos b{color:var(--f3-supl)}
+.mt-conta .dest{border-color:var(--f3-comida);background:color-mix(in srgb,var(--f3-comida) 14%,transparent)}
+.mt-conta .dest b{color:var(--f3-comida)}
+.mt-aviso{margin:10px 0 0;padding:10px 12px;border-radius:12px;font-size:15px;line-height:1.4;background:color-mix(in srgb,var(--f3-supl) 14%,transparent);border:1px solid color-mix(in srgb,var(--f3-supl) 40%,transparent)}
+.mt-aviso.ok{background:var(--f3-vidro);border-color:var(--f3-borda)}
+.mt-etapas{display:flex;flex-direction:column;border:1px solid var(--f3-borda);border-radius:14px;overflow:hidden}
+.mt-etapas div{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:9px 12px;border-top:1px solid var(--f3-borda)}
+.mt-etapas div:first-child{border-top:0}
+.mt-etapas small{color:var(--f3-tx-3);font-size:13px}
+.mt-etapas b{font-family:var(--f3-num)}
+.mt-etapas .fim{background:color-mix(in srgb,var(--f3-corpo) 14%,transparent)}
+.mt-res .f3-cta{margin-top:14px;width:100%}
+.mt-graf{width:100%;height:auto;margin-top:10px}
+.mt-graf .plano{stroke:var(--f3-tx-3);stroke-width:1.5;stroke-dasharray:5 4}
+.mt-graf .hoje{stroke:var(--f3-borda);stroke-width:1}
+.mt-graf polyline.real{fill:none;stroke:var(--f3-corpo);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.mt-graf circle.real{fill:var(--f3-corpo)}
+.mt-leg{display:flex;gap:14px;font-size:13px;color:var(--f3-tx-3)}
+.mt-leg span:last-child{margin-left:auto}
+.mt-leg .pl::before{content:'';display:inline-block;width:14px;border-top:2px dashed var(--f3-tx-3);vertical-align:middle;margin-right:5px}
+.mt-leg .re::before{content:'';display:inline-block;width:14px;border-top:3px solid var(--f3-corpo);vertical-align:middle;margin-right:5px}
+#tab-meta .f3-lbl{margin-top:14px}
+.mt-seg{display:grid!important;grid-template-columns:1fr 1fr;width:100%}
+.mt-seg button{white-space:nowrap}
+.mt-ajustar{width:100%;margin:0 0 12px}

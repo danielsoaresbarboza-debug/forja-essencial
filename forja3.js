@@ -19,9 +19,9 @@ function diaRel(key){const h=tk();if(key===h)return 'Hoje';const o=tk(new Date(D
 function toast(msg,action){root.showToast?.(msg,action);}
 
 // ===================== navegação =====================
-const NOMES={inicio:'Início',corrida:'Corrida',natacao:'Natação',crossfit:'CrossFit',academia:'Academia',biblioteca:'Exercícios',recompensas:'Recompensas',relatorios:'Relatórios',progresso:'Progresso',corpo:'Peso e corpo',agua:'Água',dieta:'Comida',cardapio:'Cardápio',importar:'Importar',mais:'Mais',dados:'Meus dados',atividade:'Atividade'};
-const EXTRA_TABS=['dados','atividade'];
-const ESS_TABS=['inicio','dieta','agua','atividade','corpo','dados','mais'];
+const NOMES={meta:'Minha meta',inicio:'Início',corrida:'Corrida',natacao:'Natação',crossfit:'CrossFit',academia:'Academia',biblioteca:'Exercícios',recompensas:'Recompensas',relatorios:'Relatórios',progresso:'Progresso',corpo:'Peso e corpo',agua:'Água',dieta:'Comida',cardapio:'Cardápio',importar:'Importar',mais:'Mais',dados:'Meus dados',atividade:'Atividade'};
+const EXTRA_TABS=['dados','atividade','meta'];
+const ESS_TABS=['inicio','dieta','agua','atividade','corpo','meta','dados','mais'];
 function onSwitch(tab){
   if(isEss()&&!ESS_TABS.includes(tab))tab='inicio';
   doc.body.classList.toggle('in-section',tab!=='inicio');
@@ -32,6 +32,7 @@ function onSwitch(tab){
   doc.querySelectorAll('.tab[data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));
   if(tab==='dados')renderDados();
   if(tab==='atividade')renderAtividade();
+  if(tab==='meta')root.ForjaMeta?.render?.();
   if(tab==='mais')renderMetasCard();
   try{root.scrollTo({top:0});}catch{}
 }
@@ -180,8 +181,9 @@ async function renderHome(){
   const act=await activityKcal(h);
   const falta=Math.max(0,goal-comido);
   const treinou=await trainedToday();
+  const atvMeta=await (root.ForjaMeta?.ativMeta?.()??0);
   const rings=ess
-    ?ring(w/goalW*100,'agua',(w/1000).toFixed(1).replace('.',',')+' L','Água')+ring(goal?comido/goal*100:0,'comida',nf(comido),'kcal comidas')+ring(Math.min(100,act/300*100),'ativ',nf(act),'kcal gastas')
+    ?ring(w/goalW*100,'agua',(w/1000).toFixed(1).replace('.',',')+' L','Água')+ring(goal?comido/goal*100:0,'comida',nf(comido),'kcal comidas')+ring(Math.min(100,act/(atvMeta||300)*100),'ativ',nf(act),'kcal gastas')
     :ring(treinou?100:0,'treino',treinou?'✓':'0/1','Treino')+ring(w/goalW*100,'agua',(w/1000).toFixed(1).replace('.',',')+' L','Água')+ring(goal?comido/goal*100:0,'comida',nf(comido),'kcal');
   const frases=[];
   if(!ess&&!treinou){try{const ng=await root.ForjaGymUI?.nextGroup?.();frases.push(ng?`${esc(ng.g.name)} te espera`:'Dia de treinar?');}catch{frases.push('Dia de treinar?');}}
@@ -194,6 +196,7 @@ async function renderHome(){
     :[['🍽','Refeição',"Forja3.go('dieta')",''],['💧','+250 ml','Forja3.addWater(250)','az'],['🏋️','Treinar',"Forja3.go('academia')",'vm'],['💊','Suplem.',"document.getElementById('supl3')?.scrollIntoView({behavior:'smooth',block:'center'})",'am']];
   let html=`<div class="hoje3-p"><div class="hd3">${dataLonga(h)}</div><div class="ht3">${saud}${nome?', '+esc(nome):''}</div><div class="aneis3">${rings}</div><div class="frase3">${frase}</div></div>
     <div class="bento4">${bento.map(([ic,l,fn,c])=>`<button type="button" class="${c}" onclick="${fn}"><span class="ic">${ic}</span><b>${l}</b></button>`).join('')}</div>`;
+  try{html+=await root.ForjaMeta.homeCard();}catch{}
   // calorias do dia (essencial: em destaque)
   const parts=await goalParts(h);
   if(ess||parts){
@@ -365,18 +368,19 @@ async function renderDados(){
       <div class="meta3"><span>Para emagrecer, tirar por dia</span><div class="mini-step"><button type="button" onclick="Forja3.metaStep('deficit',-50)">−</button><b>${nf(m.deficit)} kcal</b><button type="button" onclick="Forja3.metaStep('deficit',50)">+</button></div></div>
       <div class="meta3"><span>Água por dia</span><div class="mini-step"><button type="button" onclick="Forja3.metaStep('water',-100)">−</button><b>${((m.water||2000)/1000).toFixed(1).replace('.',',')} L</b><button type="button" onclick="Forja3.metaStep('water',100)">+</button></div></div>
       <div class="meta3"><span>Proteína por dia</span><div class="mini-step"><button type="button" onclick="Forja3.metaStep('protein_g',-5)">−</button><b>${nf(m.protein_g||0)} g</b><button type="button" onclick="Forja3.metaStep('protein_g',5)">+</button></div></div>
-      <p class="f3-nota">Ponto de partida calculado pelo app a partir do exame. Se uma nutricionista passar outra meta, troque aqui.</p></div>
+      <p class="f3-nota">Ponto de partida calculado pelo app a partir do exame. Se uma nutricionista passar outra meta, troque aqui.</p>
+      <button type="button" class="f3-cta sec" onclick="Forja3.go('meta')">🎯 Meta de peso e prazo</button></div>
     ${CAMPOS.map(([g,fs])=>`<div class="f3-card"><div class="f3-t">${g}</div><div class="campos3">${fs.map(([k,l,u])=>`<label class="c3"><span>${l}</span><span class="c3v"><input id="d3-${k}" inputmode="decimal" value="${d[k]!=null?String(d[k]).replace('.',','):''}" placeholder="—" onchange="Forja3.salvarCampo('${k}',this.value)"><em>${u}</em></span></label>`).join('')}</div></div>`).join('')}
     <div class="f3-card"><div class="f3-t">Importar exame</div><p class="f3-nota">Escolha o arquivo <b>.json</b> do exame. No iPhone ele fica em Arquivos (salve do WhatsApp ou do e-mail).</p>
       <input type="file" id="d3-file" accept=".json,application/json" hidden onchange="Forja3.importarExame(event)"><button type="button" class="f3-cta sec" onclick="document.getElementById('d3-file').click()">Escolher arquivo do exame</button></div>`;
 }
-async function salvarCampo(k,v){const d=await getJ('f3-dados',{});const n=parseFloat(String(v).replace(',','.'));d[k]=isNaN(n)?(String(v).trim()||null):n;await setJ('f3-dados',d);if(k==='tmbKcal'){const m=await loadMetas();m.tmb=d.tmbKcal;m.modo='dinamico';await setJ('f3-metas',m);}toast('Salvo ✓');renderDados();}
+async function salvarCampo(k,v){const d=await getJ('f3-dados',{});const n=parseFloat(String(v).replace(',','.'));d[k]=isNaN(n)?(String(v).trim()||null):n;await setJ('f3-dados',d);if(k==='tmbKcal'){const m=await loadMetas();m.tmb=d.tmbKcal;m.tmbEstimada=false;m.modo='dinamico';await setJ('f3-metas',m);}toast('Salvo ✓');renderDados();}
 async function metaStep(k,delta){tap();const m=await loadMetas();const base={deficit:300,water:2000,protein_g:100}[k];m[k]=Math.max(0,Math.round((m[k]??base)+delta));await setJ('f3-metas',m);await applyMetas();renderDados();root.renderDashboard?.();}
 async function aplicarExame(ex){
   if(!ex||typeof ex!=='object'||!(ex.pesoKg||ex.tmbKcal))throw Error('Esse arquivo não parece ser um exame do Forja.');
   await setJ('f3-dados',ex);
   const m=await loadMetas();
-  if(ex.tmbKcal){m.tmb=ex.tmbKcal;m.modo='dinamico';}
+  if(ex.tmbKcal){m.tmb=ex.tmbKcal;m.tmbEstimada=false;m.modo='dinamico';}
   if(!m.water&&ex.pesoKg)m.water=Math.round(ex.pesoKg*35/100)*100;
   if(!m.protein_g&&ex.pesoKg)m.protein_g=Math.round(ex.pesoKg*1.4/5)*5;
   if(!m.fat_g&&ex.pesoKg)m.fat_g=Math.round(ex.pesoKg*0.8/5)*5;
@@ -400,7 +404,8 @@ async function renderMetasCard(){
   const linha=(l,k,v,u,d)=>`<div class="meta3"><span>${l}</span><div class="mini-step"><button type="button" onclick="Forja3.metaFix('${k}',-${d})">−</button><b>${v} ${u}</b><button type="button" onclick="Forja3.metaFix('${k}',${d})">+</button></div></div>`;
   host.innerHTML=`<div class="f3-t">Minhas metas</div>
     ${linha('Treinos por semana','treinos',wk,'',1)}
-    ${linha('Comida por dia','kcal',nf(m.kcal||G.kcal),'kcal',50)}
+    ${m.modo==='dinamico'&&m.tmb?`<div class="meta3"><span>Comida por dia</span><b>automática</b></div><p class="f3-nota">Segue o plano da meta de peso: ${m.deficit>=0?'−':'+'}${nf(Math.abs(m.deficit))} kcal/dia, mais o que você gastar em atividade.</p>`:linha('Comida por dia','kcal',nf(m.kcal||G.kcal),'kcal',50)}
+    <button type="button" class="f3-cta sec" onclick="Forja3.go('meta')">🎯 Meta de peso e prazo</button>
     ${linha('Proteína','protein_g',nf(m.protein_g||G.protein_g),'g',5)}
     ${linha('Carboidrato','carbs_g',nf(m.carbs_g||G.carbs_g),'g',5)}
     ${linha('Gordura','fat_g',nf(m.fat_g||G.fat_g),'g',5)}
@@ -436,10 +441,11 @@ function montar(){
   const foot=doc.querySelector('main .fab-note');EXTRA_TABS.forEach(t=>{if(!$('tab-'+t)&&main){const d=doc.createElement('div');d.id='tab-'+t;d.style.display='none';d.className='tab3';if(foot)foot.before(d);else main.appendChild(d);}});
   if(isEss()&&tabs&&!tabs.querySelector('[data-tab="atividade"]')){
     const mk=(t,l)=>{const b=doc.createElement('button');b.className='tab';b.dataset.tab=t;b.textContent=l;b.onclick=()=>root.switchTab(t);return b;};
-    const mais=tabs.querySelector('[data-tab="mais"]');tabs.insertBefore(mk('atividade','🔥 Atividade'),mais);tabs.insertBefore(mk('dados','📋 Meus dados'),mais);
+    const mais=tabs.querySelector('[data-tab="mais"]');tabs.insertBefore(mk('atividade','🔥 Atividade'),mais);tabs.insertBefore(mk('meta','🎯 Meta'),mais);tabs.insertBefore(mk('dados','📋 Meus dados'),mais);
     const ren={dieta:'🍽 Comida',corpo:'⚖️ Peso',agua:'💧 Água'};Object.entries(ren).forEach(([k,v])=>{const b=tabs.querySelector(`[data-tab="${k}"]`);if(b)b.textContent=v;});
-    const order=['inicio','dieta','agua','atividade','corpo','dados','mais'];order.forEach(k=>{const b=tabs.querySelector(`[data-tab="${k}"]`);if(b)tabs.appendChild(b);});
+    const order=['inicio','dieta','agua','atividade','corpo','meta','dados','mais'];order.forEach(k=>{const b=tabs.querySelector(`[data-tab="${k}"]`);if(b)tabs.appendChild(b);});
   }
+  if(!isEss()&&tabs&&!tabs.querySelector('[data-tab="meta"]')){const b=doc.createElement('button');b.className='tab';b.dataset.tab='meta';b.textContent='🎯 Meta de peso';b.onclick=()=>root.switchTab('meta');const ref=tabs.querySelector('[data-tab="corpo"]');if(ref)ref.after(b);else tabs.appendChild(b);}
   doc.body.classList.add('f3');
 }
 async function autoFecharDias(){
@@ -453,7 +459,7 @@ async function init(){
 }
 root.Forja3={onSwitch,toggleTabs,go,NOMES,init,renderHome,renderWater,renderDiet,renderBody,renderDados,renderAtividade,activityKcal,dynamicGoal,goalParts,
   addWater,undoWater,outroAgua,toggleAjustarAgua,toggleSupl,editSupl,addSupl,removeSupl,abrirFolha,fecharFolha,abrirAdicionar,lancarRecente,metodo,
-  actSet,saveAct,delAct,salvarCampo,metaStep,metaFix,importarExame,aplicarExame,renderMetasCard,isEss};
+  actSet,saveAct,delAct,salvarCampo,metaStep,metaFix,applyMetas,importarExame,aplicarExame,renderMetasCard,isEss};
 // eslint-disable-next-line no-undef
 if(typeof forjaInitialization!=='undefined'&&forjaInitialization.then)forjaInitialization.then(init).catch(e=>console.error('Forja3:',e)); else root.addEventListener('load',init);
 })(typeof globalThis!=='undefined'?globalThis:this);
