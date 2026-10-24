@@ -41,18 +41,20 @@ const FULL=[
   ['dieta','#diet3 .ref3','Por refeição','Toque em "+ Adicionar" na refeição. Os recentes aparecem primeiro: um toque lança. Também dá para buscar, ler o código de barras, tirar foto ou colar o texto do Gemini.'],
   ['dieta','.diet-mais-btn','O dia fecha sozinho','Não precisa mais "concluir os lançamentos". À meia-noite o dia entra no balanço da semana. As formas antigas e o histórico ficam aqui.'],
   ['corpo','.peso3','Peso','Já vem com o último peso: ajuste com os botões e registre. Em cima aparece quanto mudou na semana.'],
-  ['mais','#metas3','Minhas metas','Treinos por semana, calorias, proteína, carboidrato, gordura e água, num lugar só. As outras telas só mostram o progresso.'],
+  ['meta','#tab-meta .f3-card','Minha meta','Peso que quer chegar, ritmo ou data e atividade por dia: tudo com − e + ou digitando o número. O app calcula quanto comer.'],
+  ['meta','#metas3','Metas do dia','Treinos por semana, calorias, proteína, carboidrato, gordura e água, num lugar só. As outras telas só mostram o progresso.'],
   ['mais','#tour-mais','Pronto!','Este tutorial fica aqui em Mais. Em qualquer seção, o "?" no topo explica só aquela tela.'],
 ];
 const ESS=[
   ['inicio','#hoje3 .hoje3-p','Seu dia em três anéis','Água, calorias comidas e calorias gastas em atividades. Eles fecham ao longo do dia.'],
   ['inicio','#hoje3 .kcal3','Quanto falta comer','A meta muda conforme você lança: o seu gasto basal + o dia a dia + as atividades, menos um pouco para emagrecer. A conta aparece aqui embaixo.'],
   ['inicio','#hoje3 .bento4','Atalhos','Lançar refeição, +250 ml de água, registrar atividade e anotar o peso. Um toque cada.'],
-  ['dados','#tab-dados .f3-card','Meus dados','Os números do seu exame e as metas. Na primeira vez, toque em "Escolher arquivo do exame" e escolha o arquivo que o Daniel mandou.'],
-  ['dados','#tab-dados .mini-step','Ajustar as metas','Com − e + você muda quanto tirar por dia, a água e a proteína. Se uma nutricionista passar outra meta, troque aqui.'],
-  ['atividade','#tab-atividade .chips-tipo','Registrar atividade','Escolha o tipo: academia, natação, spinning, caminhada…'],
+  ['dados','#tab-dados .f3-card','Meus dados','Os números do seu exame. Na primeira vez, toque em "Escolher arquivo do exame" e escolha o arquivo que o Daniel mandou.'],
+  ['meta','#tab-meta .f3-card','Minha meta','Você escolhe o peso, o ritmo ou a data e a atividade por dia, com − e + ou digitando. Embaixo aparece o que fazer hoje e o gráfico do previsto × realizado.'],
+  ['meta','#metas3','Metas do dia','Proteína e água também se ajustam aqui. Todas as metas ficam nesta aba.'],
+  ['atividade','#tab-atividade .chips-tipo','Registrar atividade','Musculação, natação ou spinning. À noite, toque em ⌚ Dia no relógio e lance o total de calorias perdidas que o relógio mostrou.'],
   ['atividade','#tab-atividade .num-big','Tempo e calorias','Ajuste os minutos. O app estima as calorias pelo seu peso; se o relógio ou a bike mostrou outro número, corrija com − e +.'],
-  ['atividade','#tab-atividade .f3-cta','Registrar','Um toque e a meta de comida do dia já aumenta. Errou? Toque em "Desfazer" no aviso.'],
+  ['atividade','#tab-atividade .f3-cta','Registrar','Um toque e a meta de comida do dia já aumenta. O total do relógio fica só como registro. Errou? Toque em "Desfazer" no aviso.'],
   ['dieta','#diet3 .ref3','Comida por refeição','Toque em "+ Adicionar" na refeição. O que você já lançou aparece primeiro: um toque e pronto. Também dá para buscar o alimento, ler o código de barras ou tirar foto.'],
   ['agua','#agua3 .copos3','Água','Copo, garrafa ou outro valor. Cada toque tem "Desfazer".'],
   ['corpo','.peso3','Peso','Já vem com o último peso: ajuste e registre. Em cima aparece quanto mudou na semana.'],
@@ -139,7 +141,7 @@ function montar(){
   if(mais&&!doc.getElementById('tour-mais')){
     const c=doc.createElement('div');c.id='tour-mais';c.className='f3-card tour-mais';
     c.innerHTML=`<div class="f3-t">Tutorial</div><p class="f3-nota">Uma volta rápida pelas telas novas, mostrando cada botão.</p><button type="button" class="f3-cta sec" id="tour-mais-btn">▶ Ver o tutorial</button>`;
-    const metas=doc.getElementById('metas3');if(metas)metas.after(c);else mais.prepend(c);
+    mais.prepend(c);
     c.querySelector('#tour-mais-btn').onclick=()=>iniciar();
   }
 }

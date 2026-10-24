@@ -25,6 +25,13 @@ const PRAZOS=[[1,'1 mês'],[3,'3 meses'],[6,'6 meses'],[12,'1 ano']];
 const ATIV=[0,150,250,400,600];
 
 let draft=null,editando=false,salvoCache=null; // edição em andamento (salva só no botão)
+let vista='peso'; // gráfico do acompanhamento: 'peso' ou 'kcal'
+const dec2=n=>(Math.round(n*100)/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const semanasAte=alvo=>Math.max(1,Math.round((pd(alvo)-pd(tk()))/864e5/7));
+// controle − valor +, com o valor digitável (ela define o número, os atalhos são só sugestão)
+const passo=(campo,valor,unid,rotulo)=>`<div class="mini-step"><button type="button" onclick="ForjaMeta.set('${campo}',-1)" aria-label="Diminuir ${rotulo}">−</button><b><input class="mt-peso" inputmode="decimal" value="${valor}" onchange="ForjaMeta.set('${campo}Txt',this.value)" aria-label="${rotulo}"> ${unid}</b><button type="button" onclick="ForjaMeta.set('${campo}',1)" aria-label="Aumentar ${rotulo}">+</button></div>`;
+const num=v=>{const n=parseFloat(String(v).replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n;};
+const numDec=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;};
 
 async function pesos(){
   const arr=await root.loadBody();
@@ -116,8 +123,9 @@ async function render(){
       <div class="mt-trio"><div><small>Comecei</small><b>${kg(ini)}</b></div><div class="agora"><small>Agora</small><b>${kg(b.atual)}</b></div><div><small>Meta</small><b>${kg(salvo.pesoMeta)}</b></div></div>
       <div class="mt-bar"><i style="width:${pct}%"></i></div>
       <p class="mt-frase">${Math.abs(falta)<=.2?'Meta alcançada 🎉':`${Math.round(pct)}% do caminho · faltam <b>${kg(Math.abs(falta))} kg</b>`}</p>
-      ${rr!=null?`<p class="f3-nota">Ritmo real (últimas 4 semanas): <b>${rr>0?'+':''}${kg(rr)} kg/semana</b>${prev?` · nesse ritmo você chega em <b>${dataCurta(prev)}</b>`:Math.abs(falta)>.2?' · ainda no sentido contrário da meta':''}.</p>`:`<p class="f3-nota">Pese-se ao menos 1 vez por semana para o app medir seu ritmo real.</p>`}
-      ${await grafico(b.ws,salvo)}</div>`;
+      ${rr!=null?`<p class="f3-nota">Ritmo real (últimas 4 semanas): <b>${rr>0?'+':''}${kg(rr)} kg/semana</b>${prev?` · nesse ritmo você chega em <b>${dataCurta(prev)}</b>`:Math.abs(falta)>.2?' · ainda no sentido contrário da meta':''}.</p>`:`<p class="f3-nota">Pese-se ao menos 1 vez por semana para o app medir seu ritmo real.</p>`}</div>`;
+    h+=await hojeCard(b,salvo);
+    h+=await acompanhamento(b,salvo);
   }
   // editor
   const ed=`<div class="f3-card"><div class="f3-t">${salvo?'Ajustar meta':'Quanto quero pesar'}</div>
@@ -127,11 +135,16 @@ async function render(){
     <div class="f3-lbl">Como quero chegar</div>
     <div class="tipo-seg mt-seg"><button type="button" class="${dr.modo==='ritmo'?'on':''}" onclick="ForjaMeta.set('modo','ritmo')">No meu ritmo</button><button type="button" class="${dr.modo==='data'?'on':''}" onclick="ForjaMeta.set('modo','data')">Até uma data</button></div>
     ${dr.modo==='ritmo'
-      ?`<div class="mt-ritmos">${RITMOS.map(r=>`<button type="button" class="${dr.ritmo===r.v?'on':''}" onclick="ForjaMeta.set('ritmo',${r.v})"><b>${String(r.v).replace('.',',')} kg</b><small>${r.l}</small></button>`).join('')}</div><p class="f3-nota">por semana</p>`
-      :`<div class="chips-min">${PRAZOS.map(([m,l])=>`<button type="button" class="${prazoOn(dr.dataAlvo,m)?'on':''}" onclick="ForjaMeta.set('prazo',${m})">${l}</button>`).join('')}</div>
-        <label class="mt-data"><span>Data</span><input type="date" id="mt-data" value="${dr.dataAlvo}" min="${tk(new Date(Date.now()+7*864e5))}" onchange="ForjaMeta.set('dataAlvo',this.value)"></label>`}
+      ?`<div class="meta3"><span>Perder/ganhar por semana</span>${passo('ritmo',dec2(dr.ritmo),'kg','quilos por semana')}</div>
+        <div class="f3-lbl">Sugestões</div>
+        <div class="mt-ritmos">${RITMOS.map(r=>`<button type="button" class="${dr.ritmo===r.v?'on':''}" onclick="ForjaMeta.set('ritmoAbs',${r.v})"><b>${String(r.v).replace('.',',')} kg</b><small>${r.l}</small></button>`).join('')}</div>`
+      :`<div class="meta3"><span>Chegar em</span>${passo('semanas',semanasAte(dr.dataAlvo),'sem.','semanas')}</div>
+        <label class="mt-data"><span>Ou escolha a data</span><input type="date" id="mt-data" value="${dr.dataAlvo}" min="${tk(new Date(Date.now()+7*864e5))}" onchange="ForjaMeta.set('dataAlvo',this.value)"></label>
+        <div class="f3-lbl">Sugestões</div>
+        <div class="chips-min">${PRAZOS.map(([m,l])=>`<button type="button" class="${prazoOn(dr.dataAlvo,m)?'on':''}" onclick="ForjaMeta.set('prazo',${m})">${l}</button>`).join('')}</div>`}
     <div class="f3-lbl">Atividade que pretendo fazer por dia</div>
-    <div class="chips-min">${ATIV.map(v=>`<button type="button" class="${dr.ativ===v?'on':''}" onclick="ForjaMeta.set('ativ',${v})">${v?nf(v)+' kcal':'Nenhuma'}</button>`).join('')}</div>
+    <div class="meta3"><span>Gastar em atividade</span>${passo('ativ',nf(dr.ativ),'kcal','calorias de atividade por dia')}</div>
+    <div class="chips-min">${ATIV.map(v=>`<button type="button" class="${dr.ativ===v?'on':''}" onclick="ForjaMeta.set('ativAbs',${v})">${v?nf(v):'Nenhuma'}</button>`).join('')}</div>
     <p class="f3-nota">${media?`Nos últimos 14 dias você gastou em média <b>${nf(media)} kcal/dia</b> em atividades.`:'Ex.: 30 min de caminhada ≈ 150 kcal · 45 min de academia ≈ 250 kcal · 45 min de spinning ≈ 400 kcal.'}</p>
   </div>`;
   h+=salvo&&!editando?`<button type="button" class="f3-cta sec mt-ajustar" onclick="ForjaMeta.editar()">Ajustar meta, prazo ou atividade</button>`:ed;
@@ -143,7 +156,9 @@ async function render(){
   }else if(p){
     h+=resultado(p,dr);
   }
+  h+=`<div id="metas3" class="f3-card metas3"></div>`;
   host.innerHTML=h;
+  try{await root.Forja3?.renderMetasCard?.();}catch(e){console.warn('metas do dia',e);}
 }
 function prazoOn(alvo,m){const d=new Date();d.setMonth(d.getMonth()+m);return tk(d)===alvo;}
 function resultado(p,dr){
@@ -168,19 +183,79 @@ function resultado(p,dr){
 }
 function botao(){return editando||!salvoCache?`<button type="button" class="f3-cta" onclick="ForjaMeta.salvar()">${salvoCache?'Salvar ajustes':'Salvar meta e usar este plano'}</button>`:'';}
 
-async function grafico(ws,o){
-  const ini=pd(o.dataInicio),fim=pd(o.dataFim||tk());const span=Math.max(14,(fim-ini)/864e5);
-  const pts=ws.filter(x=>x.d>=o.dataInicio);if(!pts.length)return '';
-  const W=320,H=110,pad=8;
-  const vals=[o.pesoInicial,o.pesoMeta,...pts.map(x=>x.v)];const mn=Math.min(...vals)-.5,mx=Math.max(...vals)+.5;
-  const X=d=>pad+Math.min(1,Math.max(0,(pd(d)-ini)/864e5/span))*(W-2*pad),Y=v=>pad+(mx-v)/(mx-mn)*(H-2*pad);
-  const real=pts.map(x=>`${X(x.d).toFixed(1)},${Y(x.v).toFixed(1)}`).join(' ');
-  const hojeX=X(tk());
-  return `<svg class="mt-graf" viewBox="0 0 ${W} ${H}" role="img" aria-label="Peso real comparado ao plano">
-    <line x1="${X(o.dataInicio)}" y1="${Y(o.pesoInicial)}" x2="${X(o.dataFim||tk())}" y2="${Y(o.pesoMeta)}" class="plano"/>
-    <line x1="${hojeX}" y1="${pad}" x2="${hojeX}" y2="${H-pad}" class="hoje"/>
-    <polyline points="${real}" class="real"/>${pts.slice(-1).map(x=>`<circle cx="${X(x.d)}" cy="${Y(x.v)}" r="3.5" class="real"/>`).join('')}
-    </svg><div class="mt-leg"><span class="pl">Plano</span><span class="re">Seu peso</span><span>${dataCurta(fim)}</span></div>`;
+// ---------- hoje: o que precisa ser feito no dia ----------
+async function hojeCard(b,o){
+  let s={};try{s=await root.computeDietDaySummary(tk());}catch{}
+  const goal=Math.round(s.goal||0),com=Math.round(s.comido||0),ex=Math.round(s.exercicio||0),A=o.ativ||0;
+  const ult=b.ws.length?b.ws[b.ws.length-1].d:null;const dias=ult?Math.round((pd(tk())-pd(ult))/864e5):null;
+  const linha=(ic,tit,det,ok)=>`<div class="mt-hj${ok?' ok':''}"><span class="ic">${ic}</span><span class="tx"><b>${tit}</b><small>${det}</small></span><span class="st">${ok?'✓':''}</span></div>`;
+  const comer=goal?linha('🍽',`Comer até ${nf(goal)} kcal`,com?(com>goal?`comeu ${nf(com)} · ${nf(com-goal)} kcal acima`:`comeu ${nf(com)} · faltam ${nf(goal-com)} kcal`):'nada lançado ainda',false):'';
+  const gastar=A?linha('🔥',`Gastar ${nf(A)} kcal em atividade`,ex>=A?`feito: ${nf(ex)} kcal`:ex?`feito ${nf(ex)} · faltam ${nf(A-ex)} kcal`:'nenhuma atividade lançada ainda',ex>=A):'';
+  const pesar=linha('⚖️',dias===0?'Pesou hoje':dias!=null&&dias<7?'Pesar 1 vez por semana':'Pesar hoje',dias===0?'o gráfico já usa esse peso':dias!=null?`última pesagem ${dias===1?'ontem':'há '+dias+' dias'}`:'nenhuma pesagem ainda',dias!=null&&dias<7);
+  const def=o.porDia?`<p class="f3-nota">O plano pede ${b.metas.deficit>=0?'déficit':'sobra'} de <b>${nf(o.porDia)} kcal por dia</b> (≈ ${kg(o.porDia*7/KCAL_KG)} kg por semana). A meta de comida já desconta isso.</p>`:'';
+  return `<div class="f3-card"><div class="f3-t">Hoje para a meta</div>${comer}${gastar}${pesar}${def}</div>`;
+}
+
+// ---------- acompanhamento: previsto × realizado ----------
+function planosDe(o){
+  const ps=o.planos&&o.planos.length?o.planos:[{de:o.dataInicio,p0:o.pesoInicial,meta:o.pesoMeta,ate:o.dataFim||tk()}];
+  return ps.filter(x=>x&&x.de&&x.ate);
+}
+function pesoPrev(s,k){const tot=pd(s.ate)-pd(s.de);const f=tot>0?Math.min(1,Math.max(0,(pd(k)-pd(s.de))/tot)):1;return s.p0+(s.meta-s.p0)*f;}
+async function acompanhamento(b,o){
+  const seg=`<div class="tipo-seg mt-seg"><button type="button" class="${vista==='peso'?'on':''}" onclick="ForjaMeta.vista('peso')">Peso</button><button type="button" class="${vista==='kcal'?'on':''}" onclick="ForjaMeta.vista('kcal')">Calorias por dia</button></div>`;
+  return `<div class="f3-card"><div class="f3-t">Acompanhamento <span>previsto × realizado</span></div>${seg}${vista==='peso'?graficoPeso(b.ws,o):await graficoKcal(b,o)}</div>`;
+}
+function graficoPeso(ws,o){
+  const ps=planosDe(o);if(!ps.length)return '';
+  const hoje=tk(),ini=ps[0].de,atual=ps[ps.length-1];
+  const fimK=[atual.ate,hoje].sort().pop();const span=Math.max(14,(pd(fimK)-pd(ini))/864e5);
+  const pts=ws.filter(x=>x.d>=ini);
+  const W=320,H=150,pl=34,pr=8,pt=10,pb=18;
+  const vals=[...ps.flatMap(s=>[s.p0,s.meta]),...pts.map(x=>x.v)];const mn=Math.floor(Math.min(...vals)-.5),mx=Math.ceil(Math.max(...vals)+.5);
+  const X=k=>pl+Math.min(1,Math.max(0,(pd(k)-pd(ini))/864e5/span))*(W-pl-pr),Y=v=>pt+(mx-v)/((mx-mn)||1)*(H-pt-pb);
+  const f=n=>n.toFixed(1);
+  // cada meta vale do dia em que foi salva até a próxima mudança; as antigas ficam apagadas
+  const linhas=ps.map((s,i)=>{const fimS=i<ps.length-1?ps[i+1].de:s.ate;return `<line x1="${f(X(s.de))}" y1="${f(Y(s.p0))}" x2="${f(X(fimS))}" y2="${f(Y(pesoPrev(s,fimS)))}" class="plano${i<ps.length-1?' velho':''}"/>`;}).join('');
+  const real=pts.length>1?`<polyline points="${pts.map(x=>`${f(X(x.d))},${f(Y(x.v))}`).join(' ')}" class="real"/>`:'';
+  const pontos=pts.map(x=>`<circle cx="${f(X(x.d))}" cy="${f(Y(x.v))}" r="${x===pts[pts.length-1]?4:2.5}" class="real"/>`).join('');
+  const muda=ps.slice(1).map(s=>`<line x1="${f(X(s.de))}" y1="${pt}" x2="${f(X(s.de))}" y2="${H-pb}" class="muda"/>`).join('');
+  const prevHoje=pesoPrev(atual,hoje<atual.de?atual.de:hoje);const ult=pts.length?pts[pts.length-1].v:null;
+  const dif=ult!=null?ult-prevHoje:null;const perder=atual.meta<atual.p0;
+  const adiant=dif!=null&&(perder?dif<=0:dif>=0);
+  const svg=`<svg class="mt-graf" viewBox="0 0 ${W} ${H}" role="img" aria-label="Peso previsto pela meta e peso real">
+    <text x="${pl-6}" y="${pt+4}" class="eixo" text-anchor="end">${mx}</text><text x="${pl-6}" y="${H-pb}" class="eixo" text-anchor="end">${mn}</text>
+    <line x1="${pl}" y1="${H-pb}" x2="${W-pr}" y2="${H-pb}" class="base"/>
+    ${muda}<line x1="${f(X(hoje))}" y1="${pt}" x2="${f(X(hoje))}" y2="${H-pb}" class="hoje"/>
+    ${linhas}<circle cx="${f(X(atual.ate))}" cy="${f(Y(atual.meta))}" r="4.5" class="alvo"/>${real}${pontos}
+    <text x="${pl}" y="${H-4}" class="eixo">${dataCurta(pd(ini))}</text><text x="${W-pr}" y="${H-4}" class="eixo" text-anchor="end">${dataCurta(pd(fimK))}</text></svg>`;
+  const frase=dif==null?'Pese-se para o app comparar com o previsto.':Math.abs(dif)<.2?`Hoje o previsto era <b>${kg(prevHoje)} kg</b> e você está com <b>${kg(ult)} kg</b>: no ritmo certo.`
+    :`Hoje o previsto era <b>${kg(prevHoje)} kg</b> e você está com <b>${kg(ult)} kg</b>: <b>${kg(Math.abs(dif))} kg ${adiant?'adiantada':'atrasada'}</b> no plano.`;
+  return `${svg}<div class="mt-leg"><span class="pl">Previsto</span><span class="re">Seu peso</span><span class="al">Meta</span></div>
+    <p class="f3-nota">${frase}${ps.length>1?' A linha apagada é a meta anterior; a linha vertical marca quando ela mudou.':''}</p>`;
+}
+async function graficoKcal(b,o){
+  const ini=planosDe(o)[0]?.de||o.dataInicio;const dias=[];
+  for(let i=13;i>=0;i--){const k=tk(new Date(Date.now()-i*864e5));if(k>=ini)dias.push(k);}
+  if(dias.length<1)return '';
+  const def=b.metas.deficit||0,hoje=tk();
+  const rows=[];for(const k of dias){let s={};try{s=await root.computeDietDaySummary(k);}catch{}rows.push({k,goal:Math.round(s.goal||0),com:Math.round(s.comido||0),reg:(s.entryCount||0)>0});}
+  const W=320,H=150,pl=8,pr=8,pt=10,pb=20;const n=Math.max(7,rows.length),bw=(W-pl-pr)/n;
+  const top=Math.max(1,...rows.map(r=>Math.max(r.goal,r.com)))*1.12;const Y=v=>pt+(1-v/top)*(H-pt-pb);
+  let dentro=0,acima=0,sem=0,real=0,prev=0;
+  const barras=rows.map((r,i)=>{const x=pl+i*bw+bw*.18,w=bw*.64,lb=pd(r.k).getDate();
+    const fechado=r.k!==hoje;let el;
+    if(!r.reg){if(fechado)sem++;el=`<rect x="${x.toFixed(1)}" y="${(H-pb-22).toFixed(1)}" width="${w.toFixed(1)}" height="22" rx="3" class="sem"/><text x="${(x+w/2).toFixed(1)}" y="${(H-pb-7).toFixed(1)}" class="eixo" text-anchor="middle">?</text>`;}
+    else{const ok=!r.goal||r.com<=r.goal*1.02;if(fechado){ok?dentro++:acima++;if(r.goal){real+=r.goal+def-r.com;prev+=def;}}
+      el=`<rect x="${x.toFixed(1)}" y="${Y(r.com).toFixed(1)}" width="${w.toFixed(1)}" height="${(H-pb-Y(r.com)).toFixed(1)}" rx="3" class="${ok?'ok':'acima'}${fechado?'':' parcial'}"/>`;}
+    const alvo=r.goal?`<line x1="${(x-2).toFixed(1)}" y1="${Y(r.goal).toFixed(1)}" x2="${(x+w+2).toFixed(1)}" y2="${Y(r.goal).toFixed(1)}" class="alvo-l"/>`:'';
+    return el+alvo+`<text x="${(x+w/2).toFixed(1)}" y="${H-6}" class="eixo${r.k===hoje?' hj':''}" text-anchor="middle">${r.k===hoje?'hoje':lb}</text>`;}).join('');
+  const svg=`<svg class="mt-graf" viewBox="0 0 ${W} ${H}" role="img" aria-label="Calorias comidas por dia comparadas à meta do dia"><line x1="${pl}" y1="${H-pb}" x2="${W-pr}" y2="${H-pb}" class="base"/>${barras}</svg>`;
+  const perder=def>0;
+  const resumo=`${dentro} ${dentro===1?'dia':'dias'} dentro da meta · ${acima} acima · ${sem} sem registro`;
+  const saldo=prev?`<p class="f3-nota">Nos dias registrados o plano previa ${perder?'déficit':'sobra'} de <b>${nf(Math.abs(prev))} kcal</b> (≈ ${kg(Math.abs(prev)/KCAL_KG)} kg). Você fez <b>${nf(Math.abs(real))} kcal</b> (≈ ${kg(Math.abs(real)/KCAL_KG)} kg)${Math.sign(real)!==Math.sign(prev)&&real?' no sentido contrário':''}.</p>`:'';
+  return `${svg}<div class="mt-leg"><span class="ok">Dentro</span><span class="ac">Acima</span><span class="sm">Sem registro</span><span class="ml">Meta do dia</span></div>
+    <p class="f3-nota">${resumo}. Dia sem comida lançada aparece com “?”.</p>${saldo}`;
 }
 
 async function set(k,v){
@@ -188,6 +263,13 @@ async function set(k,v){
   if(k==='pesoMeta')d.pesoMeta=Math.round(((d.pesoMeta||0)+v)*10)/10;
   else if(k==='pesoMetaTxt'){const n=parseFloat(String(v).replace(',','.'));if(n>25&&n<400)d.pesoMeta=n;}
   else if(k==='prazo'){const x=new Date();x.setMonth(x.getMonth()+v);d.dataAlvo=tk(x);d.modo='data';}
+  else if(k==='ritmo'){d.ritmo=Math.min(1.5,Math.max(.05,Math.round(((d.ritmo||.5)+v*.05)*100)/100));d.modo='ritmo';}
+  else if(k==='ritmoTxt'){const n=numDec(v);if(n>0&&n<=2)d.ritmo=Math.round(n*100)/100;}
+  else if(k==='ritmoAbs'){d.ritmo=v;d.modo='ritmo';}
+  else if(k==='semanas'||k==='semanasTxt'){const w=k==='semanas'?semanasAte(d.dataAlvo)+v:Math.round(num(v)||0);if(w>=1&&w<=260){d.dataAlvo=tk(new Date(Date.now()+w*7*864e5));d.modo='data';}}
+  else if(k==='ativ'){d.ativ=Math.min(3000,Math.max(0,(d.ativ||0)+v*10));}
+  else if(k==='ativTxt'){const n=num(v);if(n!=null&&n>=0&&n<=5000)d.ativ=Math.round(n);}
+  else if(k==='ativAbs')d.ativ=v;
   else if(k==='alturaCm'||k==='idade'){const n=parseFloat(String(v).replace(',','.'));d[k]=isNaN(n)?null:n;const dados=await getJ('f3-dados',{});dados[k]=d[k];await setJ('f3-dados',dados);}
   else if(k==='sexo'){d.sexo=v;const dados=await getJ('f3-dados',{});dados.sexo=v;await setJ('f3-dados',dados);}
   else d[k]=v;
@@ -200,6 +282,10 @@ async function salvar(){
     pesoInicial:antigo&&antigo.pesoMeta===draft.pesoMeta?antigo.pesoInicial:b.atual,
     dataInicio:antigo&&antigo.pesoMeta===draft.pesoMeta?antigo.dataInicio:tk(),
     dataFim:tk(p.dataFim),porDia:p.porDia,atualizado:new Date().toISOString()};
+  // histórico das metas para o gráfico: cada ajuste começa uma linha nova a partir de hoje
+  const planos=(antigo?planosDe(antigo):[]).filter(x=>x.de<tk());
+  planos.push({de:tk(),p0:b.atual,meta:draft.pesoMeta,ate:tk(p.dataFim)});
+  o.planos=planos.slice(-20);
   await setJ('f3-objetivo',o);
   const m=await getJ('f3-metas',{});m.modo='dinamico';m.tmb=p.tmb;m.tmbEstimada=p.tmbEstimada;m.deficit=p.deficit;m.ativMeta=draft.ativ;
   if(!m.protein_g)m.protein_g=Math.round(b.atual*(p.dir<0?1.6:1.8)/5)*5;
@@ -224,5 +310,5 @@ async function homeCard(){
 }
 async function ativMeta(){const m=await getJ('f3-metas',{});return m.ativMeta||0;}
 
-root.ForjaMeta={editar:()=>{tap();editando=true;render();},render,set,salvar,apagar,homeCard,ativMeta,plano,mifflin,_reset:()=>{draft=null;}};
+root.ForjaMeta={editar:()=>{tap();editando=true;render();},vista:v=>{tap();vista=v;render();},render,set,salvar,apagar,homeCard,ativMeta,plano,mifflin,_reset:()=>{draft=null;}};
 })(window);

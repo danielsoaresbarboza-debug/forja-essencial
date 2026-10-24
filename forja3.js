@@ -33,7 +33,6 @@ function onSwitch(tab){
   if(tab==='dados')renderDados();
   if(tab==='atividade')renderAtividade();
   if(tab==='meta')root.ForjaMeta?.render?.();
-  if(tab==='mais')renderMetasCard();
   try{root.scrollTo({top:0});}catch{}
 }
 function toggleTabs(){const on=doc.body.classList.toggle('tabs-open');const b=$('sb-trocar');if(b)b.setAttribute('aria-expanded',String(on));}
@@ -74,30 +73,59 @@ const ATIVIDADES=[
   {k:'academia',l:'Academia',met:4.5,ic:'🏋️'},{k:'musculacao',l:'Musculação',met:4,ic:'💪'},{k:'natacao',l:'Natação',met:6,ic:'🏊'},
   {k:'spinning',l:'Spinning',met:7,ic:'🚴'},{k:'caminhada',l:'Caminhada',met:3.5,ic:'🚶'},{k:'corrida',l:'Corrida',met:8.5,ic:'🏃'},
   {k:'funcional',l:'Funcional',met:6,ic:'🔥'},{k:'outro',l:'Outro',met:4.5,ic:'✳️'}];
+// Essencial: só as atividades que a Pietra faz + o gasto total do dia lido no relógio (lançado à noite).
+const ESS_ATIV=['musculacao','natacao','spinning'];
+const RELOGIO={k:'relogio',l:'Dia no relógio',ic:'⌚'};
+const ativLista=()=>isEss()?ATIVIDADES.filter(a=>ESS_ATIV.includes(a.k)):ATIVIDADES;
+const ativInfo=k=>k==='relogio'?RELOGIO:(ATIVIDADES.find(y=>y.k===k)||{l:k,ic:'✳️'});
 async function loadAct(){return await getJ('f3-activities',[]);}
-async function activityKcal(date){const a=await loadAct();return a.filter(x=>x.date===date).reduce((s,x)=>s+(x.kcal||0),0);}
+// O total do relógio é só registro: não entra na soma de atividades nem muda a meta de comida.
+async function activityKcal(date){const a=await loadAct();return a.filter(x=>x.date===date&&x.tipo!=='relogio').reduce((s,x)=>s+(x.kcal||0),0);}
 let actDraft={tipo:'academia',min:45,kcal:null};
 async function pesoAtual(){let w=null;try{w=await root.getLastWeightValue?.();}catch{}return Number(w)>25?Number(w):70;}
 async function estimaKcal(tipo,min){const a=ATIVIDADES.find(x=>x.k===tipo)||ATIVIDADES[0];return Math.round(a.met*(await pesoAtual())*min/60);}
 async function renderAtividade(){
   const host=$('tab-atividade');if(!host)return;
-  const est=await estimaKcal(actDraft.tipo,actDraft.min);const kcal=actDraft.kcal??est;
+  const lista=ativLista();
+  if(actDraft.tipo!=='relogio'&&!lista.some(a=>a.k===actDraft.tipo))actDraft.tipo=lista[0].k;
   const all=await loadAct();const hoje=tk();
-  const today=all.filter(x=>x.date===hoje);const tot=today.reduce((s,x)=>s+x.kcal,0);
+  const today=all.filter(x=>x.date===hoje);const tot=today.filter(x=>x.tipo!=='relogio').reduce((s,x)=>s+x.kcal,0);
   const hist=[...all].sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time)).filter(x=>x.date!==hoje).slice(0,20);
-  const row=x=>{const a=ATIVIDADES.find(y=>y.k===x.tipo)||{l:x.tipo,ic:'✳️'};return `<div class="act-row"><span class="act-ic">${a.ic}</span><span class="act-tx"><b>${esc(a.l)}</b><small>${x.min} min${x.date!==hoje?' · '+esc(diaRel(x.date)):''}</small></span><span class="act-k">${nf(x.kcal)} kcal</span><button type="button" class="act-x" aria-label="Apagar" onclick="Forja3.delAct('${x.id}')">✕</button></div>`;};
+  const row=x=>{const a=ativInfo(x.tipo);const det=x.tipo==='relogio'?'gasto total do dia':`${x.min} min`;return `<div class="act-row${x.tipo==='relogio'?' rel':''}"><span class="act-ic">${a.ic}</span><span class="act-tx"><b>${esc(a.l)}</b><small>${det}${x.date!==hoje?' · '+esc(diaRel(x.date)):''}</small></span><span class="act-k">${nf(x.kcal)} kcal</span><button type="button" class="act-x" aria-label="Apagar" onclick="Forja3.delAct('${x.id}')">✕</button></div>`;};
+  const chips=[...lista,...(isEss()?[RELOGIO]:[])];
+  const chipsHtml=`<div class="chips-tipo">${chips.map(a=>`<button type="button" class="${actDraft.tipo===a.k?'on':''}${a.k==='relogio'?' rel':''}" onclick="Forja3.actSet('tipo','${a.k}')"><span>${a.ic}</span>${a.l}</button>`).join('')}</div>`;
+  const listas=`<div class="f3-card"><div class="f3-t">Hoje <span>${nf(tot)} kcal</span></div>${today.length?today.map(row).join(''):'<p class="f3-vazio">Nenhuma atividade hoje. O que você registrar aqui aumenta a meta de comida do dia.</p>'}</div>
+    ${hist.length?`<div class="f3-card"><div class="f3-t">Anteriores</div>${hist.map(row).join('')}</div>`:''}`;
+  if(actDraft.tipo==='relogio'){
+    const ja=today.find(x=>x.tipo==='relogio');
+    host.innerHTML=`<div class="f3-card">
+    <div class="f3-t">Registrar atividade</div>${chipsHtml}
+    <div class="f3-lbl">Total de calorias perdidas no dia</div>
+    <label class="rel-in"><input id="rel-kcal" type="number" inputmode="numeric" placeholder="0" value="${ja?ja.kcal:''}"><small>kcal</small></label>
+    <p class="f3-nota">No app do relógio: <b>Atividade diária → Total de calorias perdidas</b>. É o basal (o que o corpo gasta parado) somado ao tempo ativo e aos passos. Lance à noite, como último registro do dia. Fica só como registro: não muda a meta de comida.</p>
+    <button type="button" class="f3-cta" onclick="Forja3.saveRelogio()">✓ ${ja?'Atualizar':'Registrar'} gasto do dia</button></div>${listas}`;
+    return;
+  }
+  const est=await estimaKcal(actDraft.tipo,actDraft.min);const kcal=actDraft.kcal??est;
   host.innerHTML=`<div class="f3-card">
-    <div class="f3-t">Registrar atividade</div>
-    <div class="chips-tipo">${ATIVIDADES.map(a=>`<button type="button" class="${actDraft.tipo===a.k?'on':''}" onclick="Forja3.actSet('tipo','${a.k}')"><span>${a.ic}</span>${a.l}</button>`).join('')}</div>
+    <div class="f3-t">Registrar atividade</div>${chipsHtml}
     <div class="f3-lbl">Quanto tempo?</div>
     <div class="num-big"><button type="button" onclick="Forja3.actSet('min',-5)" aria-label="Menos 5 minutos">−</button><b>${actDraft.min}<small>min</small></b><button type="button" onclick="Forja3.actSet('min',5)" aria-label="Mais 5 minutos">+</button></div>
     <div class="chips-min">${[20,30,45,60,90].map(v=>`<button type="button" class="${actDraft.min===v?'on':''}" onclick="Forja3.actSet('minAbs',${v})">${v}</button>`).join('')}</div>
     <div class="f3-lbl">Calorias gastas</div>
     <div class="num-big k"><button type="button" onclick="Forja3.actSet('kcal',-10)" aria-label="Menos 10 kcal">−</button><b>${nf(kcal)}<small>kcal</small></b><button type="button" onclick="Forja3.actSet('kcal',10)" aria-label="Mais 10 kcal">+</button></div>
     <p class="f3-nota">${actDraft.kcal==null?'Estimativa pelo tipo, tempo e seu peso. Se o relógio ou a máquina mostrou outro número, ajuste com − e +.':`Ajustado por você · estimativa era ${nf(est)} kcal · <button type="button" class="lnk" onclick="Forja3.actSet('reset')">usar estimativa</button>`}</p>
-    <button type="button" class="f3-cta" onclick="Forja3.saveAct()">✓ Registrar ${nf(kcal)} kcal</button></div>
-    <div class="f3-card"><div class="f3-t">Hoje <span>${nf(tot)} kcal</span></div>${today.length?today.map(row).join(''):'<p class="f3-vazio">Nenhuma atividade hoje. O que você registrar aqui aumenta a meta de comida do dia.</p>'}</div>
-    ${hist.length?`<div class="f3-card"><div class="f3-t">Anteriores</div>${hist.map(row).join('')}</div>`:''}`;
+    <button type="button" class="f3-cta" onclick="Forja3.saveAct()">✓ Registrar ${nf(kcal)} kcal</button></div>${listas}`;
+}
+async function saveRelogio(){
+  tap();const v=Math.round(Number(String($('rel-kcal')?.value||'').replace(/\D/g,'')));
+  if(!(v>0)){toast('Digite o total de calorias que o relógio mostrou.');return;}
+  const hoje=tk();const a=(await loadAct()).filter(x=>!(x.date===hoje&&x.tipo==='relogio')); // um por dia: substitui
+  const id=root.cid?root.cid():String(Date.now());
+  a.push({id,date:hoje,time:root.nowTime?root.nowTime():'',tipo:'relogio',min:0,kcal:v});
+  await setJ('f3-activities',a);
+  toast(`Gasto do dia registrado: ${nf(v)} kcal`,{label:'Desfazer',onClick:()=>delAct(id,true)});
+  await renderAtividade();
 }
 async function actSet(campo,v){
   tap();
@@ -113,7 +141,7 @@ async function saveAct(){
   const a=await loadAct();const id=root.cid?root.cid():String(Date.now());
   a.push({id,date:tk(),time:root.nowTime?root.nowTime():'',tipo:actDraft.tipo,min:actDraft.min,kcal});
   await setJ('f3-activities',a);actDraft.kcal=null;
-  const nm=(ATIVIDADES.find(x=>x.k===actDraft.tipo)||{}).l;
+  const nm=ativInfo(actDraft.tipo).l;
   toast(`${nm} registrada: ${nf(kcal)} kcal`,{label:'Desfazer',onClick:()=>delAct(id,true)});
   await renderAtividade();await root.renderDashboard?.();
 }
@@ -362,14 +390,8 @@ async function renderDados(){
   host.innerHTML=`${tem?`<div class="f3-card dados-topo"><div class="f3-t">${esc(d.apelido||d.nome||'Meus dados')}<span>${d.data?'exame de '+esc(d.data.split('-').reverse().join('/')):''}</span></div>
       <div class="dados-hero"><div><b>${fmtN(d.pesoKg)}</b><small>kg</small></div><div><b>${fmtN(d.gorduraPct)}</b><small>% gordura</small></div><div><b>${fmtN(d.tmbKcal)}</b><small>kcal basal</small></div></div>
       ${d.fonte?`<p class="f3-nota">${esc(d.fonte)}</p>`:''}</div>`:`<div class="f3-card"><div class="f3-t">Meus dados</div><p class="f3-nota">Importe o arquivo do exame (bioimpedância) que o Daniel mandou ou preencha os campos abaixo.</p></div>`}
-    <div class="f3-card"><div class="f3-t">Minhas metas</div>
-      <div class="meta3"><span>Comida por dia</span><b>${parts?`${nf(parts.total)} kcal hoje`:m.kcal?`${nf(m.kcal)} kcal`:'—'}</b></div>
-      ${parts?`<p class="f3-nota">Muda conforme você lança: basal ${nf(parts.base)} + dia a dia ${nf(parts.dia)} + atividades do dia − ${nf(parts.def)} para emagrecer.</p>`:''}
-      <div class="meta3"><span>Para emagrecer, tirar por dia</span><div class="mini-step"><button type="button" onclick="Forja3.metaStep('deficit',-50)">−</button><b>${nf(m.deficit)} kcal</b><button type="button" onclick="Forja3.metaStep('deficit',50)">+</button></div></div>
-      <div class="meta3"><span>Água por dia</span><div class="mini-step"><button type="button" onclick="Forja3.metaStep('water',-100)">−</button><b>${((m.water||2000)/1000).toFixed(1).replace('.',',')} L</b><button type="button" onclick="Forja3.metaStep('water',100)">+</button></div></div>
-      <div class="meta3"><span>Proteína por dia</span><div class="mini-step"><button type="button" onclick="Forja3.metaStep('protein_g',-5)">−</button><b>${nf(m.protein_g||0)} g</b><button type="button" onclick="Forja3.metaStep('protein_g',5)">+</button></div></div>
-      <p class="f3-nota">Ponto de partida calculado pelo app a partir do exame. Se uma nutricionista passar outra meta, troque aqui.</p>
-      <button type="button" class="f3-cta sec" onclick="Forja3.go('meta')">🎯 Meta de peso e prazo</button></div>
+    <div class="f3-card"><div class="f3-t">Metas</div><p class="f3-nota">Peso, prazo, comida, água e proteína ficam todos na aba Meta.${parts?` Comida de hoje: <b>${nf(parts.total)} kcal</b>.`:''}</p>
+      <button type="button" class="f3-cta sec" onclick="Forja3.go('meta')">🎯 Abrir minhas metas</button></div>
     ${CAMPOS.map(([g,fs])=>`<div class="f3-card"><div class="f3-t">${g}</div><div class="campos3">${fs.map(([k,l,u])=>`<label class="c3"><span>${l}</span><span class="c3v"><input id="d3-${k}" inputmode="decimal" value="${d[k]!=null?String(d[k]).replace('.',','):''}" placeholder="—" onchange="Forja3.salvarCampo('${k}',this.value)"><em>${u}</em></span></label>`).join('')}</div></div>`).join('')}
     <div class="f3-card"><div class="f3-t">Importar exame</div><p class="f3-nota">Escolha o arquivo <b>.json</b> do exame. No iPhone ele fica em Arquivos (salve do WhatsApp ou do e-mail).</p>
       <input type="file" id="d3-file" accept=".json,application/json" hidden onchange="Forja3.importarExame(event)"><button type="button" class="f3-cta sec" onclick="document.getElementById('d3-file').click()">Escolher arquivo do exame</button></div>`;
@@ -395,22 +417,22 @@ async function importarExame(ev){
   ev.target.value='';
 }
 
-// ===================== metas (Mais, versão completa) =====================
+// ===================== metas do dia (só na aba Meta, nas duas versões) =====================
 async function renderMetasCard(){
-  const host=$('metas3');if(!host||isEss())return;
+  const host=$('metas3');if(!host)return;const ess=isEss();
   const m=await loadMetas();const G=(typeof NUTRITION_GOAL!=='undefined'?NUTRITION_GOAL:{}); // eslint-disable-line no-undef
   let wk=3;try{wk=(await root.ForjaGymTraining.loadGoalCache()).weeklyTarget;}catch{}
   const W=(typeof waterDailyGoal!=='undefined'?waterDailyGoal:2000); // eslint-disable-line no-undef
   const linha=(l,k,v,u,d)=>`<div class="meta3"><span>${l}</span><div class="mini-step"><button type="button" onclick="Forja3.metaFix('${k}',-${d})">−</button><b>${v} ${u}</b><button type="button" onclick="Forja3.metaFix('${k}',${d})">+</button></div></div>`;
-  host.innerHTML=`<div class="f3-t">Minhas metas</div>
-    ${linha('Treinos por semana','treinos',wk,'',1)}
-    ${m.modo==='dinamico'&&m.tmb?`<div class="meta3"><span>Comida por dia</span><b>automática</b></div><p class="f3-nota">Segue o plano da meta de peso: ${m.deficit>=0?'−':'+'}${nf(Math.abs(m.deficit))} kcal/dia, mais o que você gastar em atividade.</p>`:linha('Comida por dia','kcal',nf(m.kcal||G.kcal),'kcal',50)}
-    <button type="button" class="f3-cta sec" onclick="Forja3.go('meta')">🎯 Meta de peso e prazo</button>
+  const temPlano=!!(await getJ('f3-objetivo',null))?.pesoMeta;
+  host.innerHTML=`<div class="f3-t">Metas do dia</div>
+    ${ess?'':linha('Treinos por semana','treinos',wk,'',1)}
+    ${temPlano&&m.modo==='dinamico'&&m.tmb?`<div class="meta3"><span>Comida por dia</span><b>pelo plano acima</b></div>`:linha('Comida por dia','kcal',nf(m.kcal||G.kcal),'kcal',50)}
     ${linha('Proteína','protein_g',nf(m.protein_g||G.protein_g),'g',5)}
-    ${linha('Carboidrato','carbs_g',nf(m.carbs_g||G.carbs_g),'g',5)}
-    ${linha('Gordura','fat_g',nf(m.fat_g||G.fat_g),'g',5)}
+    ${ess?'':linha('Carboidrato','carbs_g',nf(m.carbs_g||G.carbs_g),'g',5)}
+    ${ess?'':linha('Gordura','fat_g',nf(m.fat_g||G.fat_g),'g',5)}
     ${linha('Água','water',(W/1000).toFixed(1).replace('.',','),'L',100)}
-    <p class="f3-nota">As abas mostram só o progresso. Mude as metas aqui.</p>`;
+    <p class="f3-nota">Todas as metas do app ficam aqui. As outras telas só mostram o progresso.</p>`;
 }
 async function metaFix(k,delta){
   tap();
@@ -435,7 +457,6 @@ function montar(){
   if(peso&&!$('turno3')){const card=peso.closest('.card');card?.classList.add('peso3');const sel=$('body-period');if(sel){const s=doc.createElement('div');s.id='turno3';s.className='turno3';sel.after(s);}
     const t=doc.createElement('p');t.id='peso-tend3';t.className='peso-tend3';card?.querySelector('.card-head')?.after(t);}
   const mais=$('tab-mais');
-  if(mais&&!$('metas3')&&!isEss()){const d=doc.createElement('div');d.id='metas3';d.className='f3-card metas3';mais.prepend(d);}
   // abas extras
   const tabs=doc.querySelector('.tabs');const main=doc.querySelector('main');
   const foot=doc.querySelector('main .fab-note');EXTRA_TABS.forEach(t=>{if(!$('tab-'+t)&&main){const d=doc.createElement('div');d.id='tab-'+t;d.style.display='none';d.className='tab3';if(foot)foot.before(d);else main.appendChild(d);}});
@@ -459,7 +480,7 @@ async function init(){
 }
 root.Forja3={onSwitch,toggleTabs,go,NOMES,init,renderHome,renderWater,renderDiet,renderBody,renderDados,renderAtividade,activityKcal,dynamicGoal,goalParts,
   addWater,undoWater,outroAgua,toggleAjustarAgua,toggleSupl,editSupl,addSupl,removeSupl,abrirFolha,fecharFolha,abrirAdicionar,lancarRecente,metodo,
-  actSet,saveAct,delAct,salvarCampo,metaStep,metaFix,applyMetas,importarExame,aplicarExame,renderMetasCard,isEss};
+  actSet,saveAct,saveRelogio,delAct,salvarCampo,metaStep,metaFix,applyMetas,importarExame,aplicarExame,renderMetasCard,isEss};
 // eslint-disable-next-line no-undef
 if(typeof forjaInitialization!=='undefined'&&forjaInitialization.then)forjaInitialization.then(init).catch(e=>console.error('Forja3:',e)); else root.addEventListener('load',init);
 })(typeof globalThis!=='undefined'?globalThis:this);

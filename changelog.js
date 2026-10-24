@@ -1,8 +1,9 @@
 (function(root,factory){const api=factory(root);if(typeof module==='object'&&module.exports)module.exports=api;root.ForjaChangelog=api;})(typeof globalThis!=='undefined'?globalThis:this,function(root){
 'use strict';
-const CURRENT_VERSION='3.1.0';
+const CURRENT_VERSION='3.2.0';
 
 const HISTORY=[
+  {v:'3.2.0',date:'2026-10-23',items:['Meta: peso, ritmo por semana, prazo em semanas ou data e atividade por dia ajustáveis com − e + ou digitando','Cartão "Hoje para a meta": quanto ainda comer, quanto falta gastar em atividade e quando se pesar','Gráficos previsto × realizado: peso (mostra quando a meta mudou) e calorias por dia (dentro, acima e dias sem registro)','Todas as metas (comida, proteína, água e, no Treino, treinos, carboidrato e gordura) ficam só na aba Meta','Essencial: Atividade com Musculação, Natação, Spinning e "Dia no relógio" para lançar à noite o total de calorias perdidas (só registro, não muda a meta)']},
   {v:'3.1.0',date:'2026-10-23',items:['Nova tela Meta de peso: quanto quer pesar, no seu ritmo ou até uma data','Mostra quando você chega, quanto comer e quanto gastar por dia, com etapas mês a mês','Compara seu peso real com o plano e calcula o ritmo das últimas 4 semanas','A meta de comida do dia passa a seguir o plano e as atividades lançadas']},
   {v:'3.0.1',date:'2026-10-23',items:['Liga o "Entrar com Google" (planilha e backup no seu Drive) e atualiza os arquivos guardados no celular']},
   {v:'3.0.0',date:'2026-10-23',items:[
