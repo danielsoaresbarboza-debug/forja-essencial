@@ -105,7 +105,6 @@ const SHELL_FILES = [
   'estimates-ui.js',
   'strava-core.js',
   'strava-ui.js',
-  'health-connect.js',
   'diet-core.js',
   'diet-flow.js',
   'routine-diet.js',

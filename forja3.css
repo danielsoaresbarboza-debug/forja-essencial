@@ -622,3 +622,80 @@ body[data-forja-variant="essencial"] #strava-card,body[data-forja-variant="essen
 .mt-seg{display:grid!important;grid-template-columns:1fr 1fr;width:100%}
 .mt-seg button{white-space:nowrap}
 .mt-ajustar{width:100%;margin:0 0 12px}
+
+/* 3.3 apagar série */
+.sheet.v3 .stab .ck.del{cursor:pointer;transition:background .15s}
+.sheet.v3 .stab .rw.f .ck.del.armado{background:var(--f3-treino);color:#fff;font-size:18px;animation:del-pulse .9s ease-in-out infinite alternate}
+@keyframes del-pulse{from{box-shadow:0 0 0 0 rgba(255,42,70,.5)}to{box-shadow:0 0 0 6px rgba(255,42,70,0)}}
+.sheet.v3 .del-dica{margin:6px 4px 0;font-size:13px;color:var(--f3-tx-3)}
+@media (prefers-reduced-motion:reduce){.sheet.v3 .stab .rw.f .ck.del.armado{animation:none}}
+.sheet.v3 .mais-chips .rm-ex{color:var(--f3-tx-3)}
+.sheet.v3 .mais-chips .rm-ex.armado{background:var(--f3-treino);border-color:var(--f3-treino);color:#fff}
+
+/* ================= G2 (3.3): visual novo em todos os menus antigos =================
+   Mesmos tokens das telas novas: cartões carvão com borda fina, títulos em frase,
+   textos de apoio maiores e sem caixinha, botões com a mesma altura e cantos. */
+body.f3 main .card{background:var(--f3-carvao-2)!important;border:1px solid var(--f3-aresta)!important;border-radius:20px!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:14px;margin-bottom:12px;color:var(--f3-tx);font-family:var(--f3-ui)}
+/* cartão que só repete o nome da aba (a barra da seção já mostra) */
+body.f3 main .card:has(> .card-head:only-child){display:none}
+body.f3 main .card-head h2{font-family:var(--f3-ui);font-size:17px;font-weight:800;text-transform:none;letter-spacing:.02em;text-shadow:none;color:var(--f3-tx)}
+/* faixas abre/fecha: título em frase, como .f3-t */
+body.f3 .import-section-header,body.f3 .cc-card>.cc-head{text-transform:none!important;letter-spacing:.01em!important;font-size:17px!important;font-weight:800!important;min-height:56px;padding:0 16px!important;border-radius:20px!important;border:1px solid var(--f3-aresta)!important;background:var(--f3-carvao-2)!important;color:var(--f3-tx)!important;font-style:normal!important;box-shadow:none!important}
+body.f3 .cc-card>.cc-head{border:0!important;border-radius:0!important;margin:-14px -14px 12px;width:calc(100% + 28px);border-bottom:1px solid var(--f3-aresta)!important}
+body.f3 .cc-card.collapsed>.cc-head,body.f3 .cc-card[data-collapsed="true"]>.cc-head{margin-bottom:-14px;border-bottom:0!important}
+body.f3 .import-section-header.integracoes::before{background:var(--f3-agua)} body.f3 .import-section-header.settings::before{background:var(--f3-corpo)}
+body.f3 .import-section-header.privacy::before{background:var(--f3-treino)} body.f3 .import-section-header.sobre::before{background:var(--f3-tx-3)}
+/* texto de apoio: maior, sem caixa */
+body.f3 main .calc-formula-note{font-size:14px!important;line-height:1.45;color:var(--f3-tx-3);background:none!important;padding:0!important;margin:6px 0 12px;font-weight:600;border:0!important}
+body.f3 main .empty{font-size:15px;color:var(--f3-tx-3);text-align:center;padding:18px 8px;background:var(--f3-vidro);border:1px dashed var(--f3-borda);border-radius:14px}
+/* rótulos e campos */
+body.f3 main label{font-size:12px;letter-spacing:.1em;color:var(--f3-tx-3);font-weight:800;font-family:var(--f3-ui)}
+body.f3 main input:not([type=checkbox]):not([type=radio]):not([type=range]),body.f3 main select,body.f3 main textarea{min-height:48px;font-size:16px;border-radius:12px;background:var(--f3-chapa);border:1px solid var(--f3-aresta);color:var(--f3-tx);font-family:var(--f3-ui)}
+body.f3 main input:focus,body.f3 main select:focus,body.f3 main textarea:focus{border-color:var(--f3-treino);outline:0}
+/* botões: principal igual ao .f3-cta, secundário igual ao .f3-cta.sec */
+body.f3 main button.primary{min-height:52px;border-radius:16px;font-family:var(--f3-ui);font-style:normal;font-weight:800;font-size:16px;letter-spacing:.03em;background:linear-gradient(145deg,#ff2a46,#a5001a);box-shadow:0 8px 18px rgba(176,0,28,.28),inset 0 1px 0 rgba(255,255,255,.25);padding:0 16px}
+body.f3 main button.primary.secondary-btn,body.f3 main button.secondary-btn{background:var(--f3-vidro-2)!important;color:var(--f3-tx)!important;border:1px solid var(--f3-borda)!important;box-shadow:none!important;text-transform:none;font-size:16px}
+body.f3 main button.primary:disabled{opacity:.45;box-shadow:none}
+/* números de destaque e grades antigas */
+body.f3 main .calorie-result-card{background:var(--f3-chapa)!important;border:1px solid var(--f3-aresta)!important;border-radius:16px!important;box-shadow:none!important;padding:14px!important;text-align:center}
+body.f3 main .calorie-result-card .lbl{font-size:12px;letter-spacing:.1em;color:var(--f3-tx-3);text-transform:uppercase;font-weight:800}
+body.f3 main .calorie-result-card .val{font-family:var(--f3-num);font-size:40px;color:var(--f3-supl);text-shadow:none}
+body.f3 main .goal-grid{gap:8px}
+body.f3 main .goal-cell{background:var(--f3-vidro)!important;border:1px solid var(--f3-borda)!important;border-radius:14px!important;padding:10px 12px!important}
+body.f3 main .goal-cell .glbl{font-size:13px;color:var(--f3-tx-3);text-transform:none;letter-spacing:0}
+body.f3 main .goal-cell .gval{font-family:var(--f3-num);font-size:22px}
+/* recompensas: nome + custo à esquerda, botões compactos à direita */
+body.f3 .reward-item{display:grid;grid-template-columns:1fr auto 44px;gap:8px;align-items:center;background:var(--f3-chapa);border:1px solid var(--f3-aresta);border-radius:14px;padding:10px 10px 10px 14px}
+body.f3 .reward-info b{font-size:16px;line-height:1.25}
+body.f3 .reward-info span{font-family:var(--f3-num);font-size:13px;color:var(--f3-supl)}
+body.f3 .reward-item button.primary{width:auto;min-height:44px;margin:0;padding:0 14px;font-size:15px}
+body.f3 .reward-item .ex-remove-btn{width:44px;height:44px;border-radius:12px;border:1px solid var(--f3-aresta);background:transparent;color:var(--f3-tx-3)}
+/* calendários e listas de dias */
+body.f3 main .weekly-card-row>*{border-radius:10px}
+body.f3 .wk-dia{display:grid;grid-template-columns:52px 1fr auto;gap:8px;align-items:center;margin:0;padding:10px 0;border-top:1px solid var(--f3-aresta);font-size:15px}
+body.f3 .wk-dia:first-child{border-top:0}
+body.f3 .wk-dia b{font-family:var(--f3-num)} body.f3 .wk-dia span{color:var(--f3-tx-2)}
+body.f3 .wk-dia em{font-style:normal;font-family:var(--f3-num);font-weight:700;color:var(--f3-tx-3)}
+body.f3 .wk-dia em.ok{color:var(--f3-comida)} body.f3 .wk-dia em.acima{color:var(--f3-treino)}
+body.f3 #weekly-calorie-value{font-family:var(--f3-num);font-size:20px;font-weight:800;line-height:1.25}
+body.f3 #weekly-calorie-card[data-tone="green"] #weekly-calorie-value{color:var(--f3-comida)}
+body.f3 #weekly-calorie-card[data-tone="red"] #weekly-calorie-value{color:var(--f3-treino)}
+/* textos longos soltos dentro dos cartões antigos */
+body.f3 main .card p:not(.calc-formula-note):not(.f3-nota){font-size:15px;line-height:1.45;color:var(--f3-tx-2)}
+body.f3 main details>summary{font-size:15px;font-weight:700;color:var(--f3-tx-2);min-height:44px;display:flex;align-items:center;cursor:pointer}
+body.f3 main .photo-btn{min-height:52px;display:flex!important;align-items:center;justify-content:center;gap:6px;border-radius:14px;border:1px dashed var(--f3-borda);background:var(--f3-vidro);color:var(--f3-tx);font-family:var(--f3-ui);font-size:16px;font-weight:700;text-transform:none;letter-spacing:0;padding:0 12px}
+body.f3 main .ex-chip-grid>.empty{grid-column:1/-1}
+body.f3 main .card .row{gap:8px}
+body.f3 .visibility-switch{text-transform:none!important;letter-spacing:0!important;font-size:15px!important;font-weight:700!important;color:var(--f3-tx)!important;background:var(--f3-chapa)!important;border:1px solid var(--f3-aresta)!important;border-radius:14px!important;font-family:var(--f3-ui)}
+body.f3 .visibility-switch input:checked + .switch-track{background:var(--f3-treino);box-shadow:none}
+body.f3 main .calorie-result-card .val{font-size:30px;line-height:1.15}
+body.f3 main .empty{display:block;width:100%;box-sizing:border-box}
+body.f3 main .stepper-row button{color:var(--f3-tx)!important;background:var(--f3-chapa)!important;border:1px solid var(--f3-aresta)!important;border-radius:12px!important;font-family:var(--f3-num);font-weight:700}
+/* G2 tema claro: textos que eram brancos fixos no visual antigo */
+body.f3[data-theme="light"] main .goal-cell .gval,body.f3[data-theme="light"] main .st-title{color:var(--f3-tx)!important}
+body.f3[data-theme="light"] main .corrida-status-chip{color:var(--f3-tx)!important;background:var(--f3-chapa)!important}
+body.f3[data-theme="light"] main .photo-reminder-banner{color:var(--f3-tx)!important;background:#ffe4e8!important;border-color:#ff8fa0!important}
+body.f3[data-theme="light"] main .calorie-result-card .val,body.f3[data-theme="light"] main .reward-info span{color:#a85f00!important}
+body.f3[data-theme="light"] main .backup-status-warn{color:#8a5a00!important}
+body.f3[data-theme="light"] main .gym-status.pending{color:#7a0014!important}
+body.f3[data-theme="light"] main .angle-btn.active{color:#7a0014!important}

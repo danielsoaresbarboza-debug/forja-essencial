@@ -10,52 +10,52 @@
   // elemento quando self:true. title/cls: texto e cor da faixa. open: aberto por padrão?
   const RULES=[
     // Início
-    {id:'ini-creatina',find:'#creatine-week-card',self:true,title:'⚡ CREATINA DA SEMANA',cls:'recursos',open:false},
-    {id:'ini-atalhos',find:'#home-health-status',title:'⚡ ATALHOS DO DIA',cls:'treino',open:true},
-    {id:'ini-meta',find:'#weekly-goal-card',self:true,title:'🎯 META SEMANAL',cls:'treino',open:true},
-    {id:'ini-balanco',find:'#weekly-calorie-card',self:true,title:'🥗 BALANÇO CALÓRICO DA SEMANA',cls:'comida',open:false},
-    {id:'ini-comparacao',find:'#weekly-report-card',self:true,title:'📊 COMPARAÇÃO SEMANAL',cls:'corpo',open:false},
+    {id:'ini-creatina',find:'#creatine-week-card',self:true,title:'⚡ Creatina da semana',cls:'recursos',open:false},
+    {id:'ini-atalhos',find:'#home-health-status',title:'⚡ Atalhos do dia',cls:'treino',open:true},
+    {id:'ini-meta',find:'#weekly-goal-card',self:true,title:'🎯 Meta semanal',cls:'treino',open:true},
+    {id:'ini-balanco',find:'#weekly-calorie-card',self:true,title:'🥗 Balanço calórico da semana',cls:'comida',open:false},
+    {id:'ini-comparacao',find:'#weekly-report-card',self:true,title:'📊 Comparação semanal',cls:'corpo',open:false},
     // Corrida / Natação / CrossFit
-    {id:'cor-registrar',find:'#corrida-print-file',title:'📷 REGISTRAR CORRIDA',cls:'treino',open:true},
-    {id:'cor-graficos',find:'#corrida-charts',self:true,title:'📈 GRÁFICOS',cls:'corpo',open:false},
-    {id:'nat-registrar',find:'#natacao-print-file',title:'📷 REGISTRAR NATAÇÃO',cls:'treino',open:true},
-    {id:'nat-graficos',find:'#natacao-charts',self:true,title:'📈 GRÁFICOS',cls:'corpo',open:false},
-    {id:'cf-wods',find:'#wod-library-card',self:true,title:'📚 MEUS WODS',cls:'treino',open:true},
-    {id:'cf-registrar',find:'#crossfit-print-card',self:true,title:'📷 REGISTRAR CROSSFIT',cls:'treino',open:true},
-    {id:'cf-graficos',find:'#crossfit-charts',self:true,title:'📈 GRÁFICOS',cls:'corpo',open:false},
-    {id:'cf-ciencia',find:'#crossfit-science-card',self:true,title:'📚 CIÊNCIA DO CROSSFIT',cls:'sobre',open:false},
+    {id:'cor-registrar',find:'#corrida-print-file',title:'📷 Registrar corrida',cls:'treino',open:true},
+    {id:'cor-graficos',find:'#corrida-charts',self:true,title:'📈 Gráficos',cls:'corpo',open:false},
+    {id:'nat-registrar',find:'#natacao-print-file',title:'📷 Registrar natação',cls:'treino',open:true},
+    {id:'nat-graficos',find:'#natacao-charts',self:true,title:'📈 Gráficos',cls:'corpo',open:false},
+    {id:'cf-wods',find:'#wod-library-card',self:true,title:'📚 Meus WODs',cls:'treino',open:true},
+    {id:'cf-registrar',find:'#crossfit-print-card',self:true,title:'📷 Registrar CrossFit',cls:'treino',open:true},
+    {id:'cf-graficos',find:'#crossfit-charts',self:true,title:'📈 Gráficos',cls:'corpo',open:false},
+    {id:'cf-ciencia',find:'#crossfit-science-card',self:true,title:'📚 Ciência do CrossFit',cls:'sobre',open:false},
     // Academia (os cartões dos exercícios do treino NÃO entram: ficam sempre abertos)
-    {id:'ac-hoje',find:'#today-list',title:'📝 TREINO DE HOJE',cls:'treino',open:true},
-    {id:'ac-evolucao',find:'#gym-sessions-chart-card',self:true,title:'📈 EVOLUÇÃO DOS TREINOS',cls:'corpo',open:false},
-    {id:'ac-meta',find:'#gym-weekly-goal-card',self:true,title:'🎯 META SEMANAL',cls:'corpo',open:false},
-    {id:'ac-prontos',find:'#ready-workouts-card',self:true,title:'✨ TREINOS PRONTOS',cls:'recursos',open:false},
-    {id:'ac-grupos',find:'#workout-groups-card',self:true,title:'📋 MEUS TREINOS',cls:'recursos',open:false},
+    {id:'ac-hoje',find:'#today-list',title:'📝 Treino de hoje',cls:'treino',open:true},
+    {id:'ac-evolucao',find:'#gym-sessions-chart-card',self:true,title:'📈 Evolução dos treinos',cls:'corpo',open:false},
+    {id:'ac-meta',find:'#gym-weekly-goal-card',self:true,title:'🎯 Meta semanal',cls:'corpo',open:false},
+    {id:'ac-prontos',find:'#ready-workouts-card',self:true,title:'✨ Treinos prontos',cls:'recursos',open:false},
+    {id:'ac-grupos',find:'#workout-groups-card',self:true,title:'📋 Meus treinos',cls:'recursos',open:false},
     // Biblioteca
-    {id:'bib-meus',find:'#lib-mine-list',title:'📸 MEUS EXERCÍCIOS',cls:'treino',open:true},
-    {id:'bib-completa',find:'#lib-catalog-list',title:'🏋️ BIBLIOTECA COMPLETA',cls:'corpo',open:true},
+    {id:'bib-meus',find:'#lib-mine-list',title:'📸 Meus exercícios',cls:'treino',open:true},
+    {id:'bib-completa',find:'#lib-catalog-list',title:'🏋️ Biblioteca completa',cls:'corpo',open:true},
     // Recompensas / Relatórios / Progresso
-    {id:'rec-fichas',find:'#gym-rewards-card',self:true,title:'🪙 RECOMPENSAS',cls:'recursos',open:true},
-    {id:'rel-calendario',find:'#gym-calendar-card',self:true,title:'📅 CALENDÁRIO',cls:'treino',open:true},
-    {id:'rel-recordes',find:'#gym-records-card',self:true,title:'🏆 RECORDES (1RM ESTIMADO)',cls:'recursos',open:false},
-    {id:'rel-volume',find:'#gym-volume-card',self:true,title:'📊 VOLUME TOTAL LEVANTADO',cls:'corpo',open:false},
-    {id:'rel-duracao',find:'#gym-duration-card',self:true,title:'⏱ DURAÇÃO DOS TREINOS',cls:'corpo',open:false},
-    {id:'pro-calendario',find:'#progress-month',title:'📅 PROGRESSO',cls:'treino',open:true},
-    {id:'pro-musculos',find:'#progress-muscle-card',self:true,title:'💪 MÚSCULOS DO DIA',cls:'corpo',open:false},
+    {id:'rec-fichas',find:'#gym-rewards-card',self:true,title:'🪙 Recompensas',cls:'recursos',open:true},
+    {id:'rel-calendario',find:'#gym-calendar-card',self:true,title:'📅 Calendário',cls:'treino',open:true},
+    {id:'rel-recordes',find:'#gym-records-card',self:true,title:'🏆 Recordes (1RM estimado)',cls:'recursos',open:false},
+    {id:'rel-volume',find:'#gym-volume-card',self:true,title:'📊 Volume total levantado',cls:'corpo',open:false},
+    {id:'rel-duracao',find:'#gym-duration-card',self:true,title:'⏱ Duração dos treinos',cls:'corpo',open:false},
+    {id:'pro-calendario',find:'#progress-month',title:'📅 Progresso',cls:'treino',open:true},
+    {id:'pro-musculos',find:'#progress-muscle-card',self:true,title:'💪 Músculos do dia',cls:'corpo',open:false},
     // Importar
-    {id:'imp-comparar',find:'#photo-compare-card',self:true,title:'🔄 COMPARAR EVOLUÇÃO',cls:'corpo',open:false},
+    {id:'imp-comparar',find:'#photo-compare-card',self:true,title:'🔄 Comparar evolução',cls:'corpo',open:false},
     // Dieta (as faixas "DIETA DE HOJE" e "LANÇAMENTO RÁPIDO" já existem no HTML e viram botões abaixo)
-    {id:'die-refeicoes',find:'#diet-today-list',title:'📋 REFEIÇÕES DE HOJE',cls:'comida',open:true},
-    {id:'die-historico',find:'#diet-history-list',title:'🗓 HISTÓRICO',cls:'sobre',open:false},
+    {id:'die-refeicoes',find:'#diet-today-list',title:'📋 Refeições de hoje',cls:'comida',open:true},
+    {id:'die-historico',find:'#diet-history-list',title:'🗓 Histórico',cls:'sobre',open:false},
     // Cardápio
-    {id:'car-semana',find:'#tab-cardapio > .card:first-child',self:true,title:'📋 CARDÁPIO DA SEMANA',cls:'comida',open:true},
-    {id:'car-compras',find:'#shopping-list-card',self:true,title:'🛒 LISTA DE COMPRAS',cls:'recursos',open:false},
+    {id:'car-semana',find:'#tab-cardapio > .card:first-child',self:true,title:'📋 Cardápio da semana',cls:'comida',open:true},
+    {id:'car-compras',find:'#shopping-list-card',self:true,title:'🛒 Lista de compras',cls:'recursos',open:false},
     // Corpo
-    {id:'cor-peso',find:'#weight-current',title:'⚖️ PESO CORPORAL',cls:'corpo',open:true},
-    {id:'cor-calc',find:'#calorie-calc-card',self:true,title:'🔥 CALCULADORA DE CALORIAS',cls:'recursos',open:false},
-    {id:'cor-registros',find:'#body-list',title:'📋 ÚLTIMOS REGISTROS',cls:'sobre',open:false},
+    {id:'cor-peso',find:'#weight-current',title:'⚖️ Peso corporal',cls:'corpo',open:true},
+    {id:'cor-calc',find:'#calorie-calc-card',self:true,title:'🔥 Calculadora de calorias',cls:'recursos',open:false},
+    {id:'cor-registros',find:'#body-list',title:'📋 Últimos registros',cls:'sobre',open:false},
   ];
   // Faixas que já existiam no HTML (sem clique): viram botões. Padrão: fechadas, exceto as listadas.
-  const HEADER_OPEN=['DIETA DE HOJE','LANÇAMENTO RÁPIDO'];
+  const HEADER_OPEN=['Dieta de hoje','Lançamento rápido'];
   const slug=(s)=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 
   function enhanceStaticHeaders(){

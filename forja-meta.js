@@ -47,7 +47,7 @@ function ritmoReal(ws){
   let num=0,den=0;xs.forEach((x,i)=>{num+=(x-mx)*(ys[i]-my);den+=(x-mx)**2;});
   return den?num/den*7:null; // kg por semana
 }
-// Média de atividade dos últimos 14 dias (kcal/dia) — treinos, Garmin, atividades lançadas
+// Média de atividade dos últimos 14 dias (kcal/dia) — treinos, Strava, atividades lançadas
 async function ativMedia(){
   let s=0;const d=new Date();
   for(let i=1;i<=14;i++){const x=new Date(d);x.setDate(d.getDate()-i);try{s+=(await root.computeDietDaySummary(tk(x))).exercicio||0;}catch{}}

@@ -14,7 +14,6 @@
   {id:'gym-duration-card',label:'⏱ Duração dos treinos',group:'Academia'},
   {id:'sync-center-card',label:'🔄 Central de sincronização',group:'Mais'},
   {id:'strava-card',label:'🔗 Conectar ao Strava',group:'Mais'},
-  {id:'health-connect-card',label:'⌚ Garmin pelo Health Connect',group:'Mais'},
   {id:'dash-gym-card',label:'💳 Pagamento do CrossFit',group:'Mais'},
   {id:'gdrive-card',label:'☁️ Backup automático no Google Drive',group:'Mais'},
   {id:'gemini-key-card',label:'✨ Chave do Gemini (foto da comida)',group:'Mais'},

@@ -362,6 +362,24 @@ async function createNewExercise(){
 }
 
 
+// Excluir o exercício inteiro do treino de hoje (com as séries): 2 toques + Desfazer
+let rmArmado=null,rmTimer=null;
+function askRemoveExercise(idx){
+  tapFeedback();const b=$('rmex-'+idx);
+  if(rmArmado===idx){clearTimeout(rmTimer);rmArmado=null;removeExerciseWithSets(idx);return;}
+  rmArmado=idx;if(b){b.classList.add('armado');b.textContent='Toque de novo para excluir';}
+  clearTimeout(rmTimer);rmTimer=setTimeout(()=>{const x=$('rmex-'+idx);if(x){x.classList.remove('armado');x.textContent='🗑 Excluir exercício';}rmArmado=null;},3500);
+}
+async function removeExerciseWithSets(idx){
+  const t=T();const ex=sessionExercises[idx];if(!ex)return;
+  const arr=await t.loadWorkouts();const entry=ex.workoutId?arr.find(e=>e.id===ex.workoutId):null;
+  if(entry)await t.saveWorkouts(arr.filter(e=>e.id!==ex.workoutId));
+  if(sheetIdx!==null)await closeExSheet();
+  sessionExercises.splice(idx,1);renderSessionStack();refreshTreinoTabVisibility();await renderMuscleOverview();await renderTodayList();renderHeroStats();
+  showToast(`${dn(ex.name)} excluído do treino`,{label:'Desfazer',onClick:async()=>{
+    if(entry){const a=await t.loadWorkouts();a.push(entry);await t.saveWorkouts(a);}
+    sessionExercises.splice(idx,0,ex);renderSessionStack();refreshTreinoTabVisibility();await renderMuscleOverview();await renderTodayList();renderHeroStats();}});
+}
 function removeExerciseCard(idx){
   const ex=sessionExercises[idx];if(!ex||ex.sets.length>0)return;
   tapFeedback();if(sheetIdx!==null)closeExSheet();sessionExercises.splice(idx,1);renderSessionStack();refreshTreinoTabVisibility();
@@ -914,7 +932,7 @@ async function buildSheetHtml(idx){
     const isLast=i===ex.sets.length-1;
     const prev=st.warmup?'':(lw[wi]?fmtSetValue(lw[wi],ex.weightMode):'—');
     const label=st.warmup?'A':String(++wi);
-    rows+=`<div class="rw f"><span class="sn${st.warmup?' a':''}">${label}</span><span class="ant">${t.escapeHtml(prev)}</span>${showKg?`<span class="cx">${fw(st.weight)}</span>`:''}<span class="cx">${m==='time'?fmtSecs(st.reps):st.reps}</span><button type="button" class="ck" ${isLast?`aria-label="Desfazer esta série" onclick="ForjaGymUI.undoLastSetForCard(${idx})"`:'tabindex="-1" aria-hidden="true"'}>✓</button></div>`;
+    rows+=`<div class="rw f"><span class="sn${st.warmup?' a':''}">${label}</span><span class="ant">${t.escapeHtml(prev)}</span>${showKg?`<span class="cx">${fw(st.weight)}</span>`:''}<span class="cx">${m==='time'?fmtSecs(st.reps):st.reps}</span><button type="button" class="ck del" id="del-${idx}-${i}" aria-label="Apagar a série ${label}" onclick="ForjaGymUI.askDeleteSet(${idx},${i})">✓</button></div>`;
   });
   for(let k=done;k<plan;k++){
     const cur=k===done;
@@ -942,17 +960,19 @@ async function buildSheetHtml(idx){
   if(!allDone)chips.push(`<button type="button" class="${ex.warmupMode?'on':''}" onclick="ForjaGymUI.toggleWarmupMode(${idx})">${ex.warmupMode?'✓ ':''}Aquecimento</button>`);
   if(m!=='normal'&&ex.weightMode!=='bodyweight')chips.push(`<button type="button" class="${ex.showExtra||ex.weight>0?'on':''}" onclick="ForjaGymUI.toggleExtraWeight(${idx})">+ Peso extra</button>`);
   chips.push(`<button type="button" onclick="ForjaGymUI.cycleRestPreset()">Descanso ${fmtSecs(restDurationSeconds)}</button>`);
+  chips.push(`<button type="button" class="rm-ex" id="rmex-${idx}" onclick="ForjaGymUI.askRemoveExercise(${idx})">🗑 Excluir exercício</button>`);
   let cta;
   if(allDone)cta=`<button type="button" class="cta" onclick="ForjaGymUI.finishExercise(${idx})">✓ Finalizar exercício</button>`;
   else if(m==='time')cta=ex.timerStart?`<button type="button" class="cta stop" onclick="ForjaGymUI.stopTimeSet(${idx})">■ Parar e registrar</button>`:`<button type="button" class="cta" onclick="ForjaGymUI.startTimeSet(${idx})">▶ Começar série ${done+1}</button>`;
   else cta=`<button type="button" class="cta" onclick="ForjaGymUI.logSetForCard(${idx})">✓ Concluir série ${done+1}${ex.warmupMode?' (aquecimento)':''}</button>`;
   const fin=!allDone&&done?`<button type="button" class="link-fin" onclick="ForjaGymUI.finishExercise(${idx})">Terminar com ${done} série${done>1?'s':''}</button>`:'';
-  return `<div class="ex-card open sheet v3" id="ex-card-${idx}">${head}${sgHtml}${timer}<div class="stab ${cols}">${rows}</div>${ajuste}<div class="mais-chips">${chips.join('')}</div>${await buildMorePanel(idx)}<div class="sheet-cta">${fin}${cta}</div></div>`;
+  const dica=ex.sets.length?`<p class="del-dica">Errou uma série? Toque no ✓ dela e depois em 🗑.</p>`:'';
+  return `<div class="ex-card open sheet v3" id="ex-card-${idx}">${head}${sgHtml}${timer}<div class="stab ${cols}">${rows}</div>${dica}${ajuste}<div class="mais-chips">${chips.join('')}</div>${await buildMorePanel(idx)}<div class="sheet-cta">${fin}${cta}</div></div>`;
 }
 function buildCardioBody(idx){
   const ex=sessionExercises[idx];
   const label=s=>{const p=[];if(s.cardioMin)p.push(`${s.cardioMin} min`);if(s.cardioKm)p.push(`${s.cardioKm} km`);if(s.cardioKcal)p.push(`${s.cardioKcal} kcal`);return p.join(' · ')||'registro';};
-  const list=ex.sets.length?`<div class="stab stab-r">${ex.sets.map((s,i)=>`<div class="rw f"><span class="sn">${i+1}</span><span class="ant" style="grid-column:span 2">${label(s)}</span><span class="ck">✓</span></div>`).join('')}</div>`:'';
+  const list=ex.sets.length?`<div class="stab stab-r">${ex.sets.map((s,i)=>`<div class="rw f"><span class="sn">${i+1}</span><span class="ant" style="grid-column:span 2">${label(s)}</span><button type="button" class="ck del" id="del-${idx}-${i}" aria-label="Apagar o registro ${i+1}" onclick="ForjaGymUI.askDeleteSet(${idx},${i})">✓</button></div>`).join('')}</div><p class="del-dica">Errou? Toque no ✓ e depois em 🗑.</p>`:'';
   return `<div class="cardio-input-row">
       <div><label for="cardio-min-${idx}">Minutos</label><input type="number" inputmode="decimal" id="cardio-min-${idx}" placeholder="20"></div>
       <div><label for="cardio-km-${idx}">km</label><input type="number" inputmode="decimal" step="0.1" id="cardio-km-${idx}" placeholder="3"></div>
@@ -1006,6 +1026,23 @@ async function undoLastSetForCard(idx){
   if(sessionRecordList.length&&sessionRecordList[sessionRecordList.length-1].startsWith(dn(ex.name)+' ·'))sessionRecordList.pop();
   await persistCardSets(idx);await renderCard(idx);await renderTodayList();renderHeroStats();
   showToast('Série desfeita.');
+}
+// Apagar qualquer série: 1º toque arma (vira 🗑), 2º toque apaga. Sempre com Desfazer.
+let delArmado=null,delTimer=null;
+function askDeleteSet(idx,i){
+  tapFeedback();const key=idx+'-'+i;
+  if(delArmado===key){clearTimeout(delTimer);delArmado=null;deleteSetForCard(idx,i);return;}
+  if(delArmado){const old=$('del-'+delArmado);if(old){old.classList.remove('armado');old.textContent='✓';}}
+  delArmado=key;const b=$('del-'+key);if(b){b.classList.add('armado');b.textContent='🗑';b.setAttribute('aria-label','Toque de novo para apagar');}
+  clearTimeout(delTimer);delTimer=setTimeout(()=>{const x=$('del-'+key);if(x){x.classList.remove('armado');x.textContent='✓';}delArmado=null;},3500);
+}
+async function deleteSetForCard(idx,i){
+  const ex=sessionExercises[idx];if(!ex||!ex.sets[i])return;
+  const st=ex.sets.splice(i,1)[0];
+  const nome=st.warmup?'Aquecimento apagado':`Série ${ex.sets.slice(0,i).filter(x=>!x.warmup).length+1} apagada`;
+  if(ex.finished&&!ex.sets.length)ex.finished=false;
+  await persistCardSets(idx);await renderCard(idx);await renderMuscleOverview();await renderTodayList();renderHeroStats();
+  showToast(segMode(ex.weightMode)==='cardio'?'Registro de cardio apagado':`${nome}: ${fmtSetValue(st,ex.weightMode)}`,{label:'Desfazer',onClick:async()=>{ex.sets.splice(i,0,st);await persistCardSets(idx);await renderCard(idx);await renderMuscleOverview();await renderTodayList();renderHeroStats();}});
 }
 async function finishExercise(idx){
   tapFeedback();const ex=sessionExercises[idx];if(!ex||!ex.sets.length)return;ex.finished=true;stopTimeTick(ex);
@@ -1690,7 +1727,7 @@ return{
   startWorkoutSession,endWorkoutSession,openPickerForAdd,closePicker,selectPickerFilter,showNewExerciseForm,selectMuscle,createNewExercise,
   searchCatalog,addCatalogExercise,addFreeExercise,addCardioEquipment,runRemapHistory,renderReadyWorkouts,useReadyWorkout,suggestMuscleFromName,setMuscleForNew,
   renderWorkoutGroups,showNewGroupForm,closeGroupForm,toggleGroupExercise,editWorkoutGroup,saveWorkoutGroup,deleteWorkoutGroup,loadWorkoutGroupToSession,
-  addExerciseToSession,removeExerciseCard,toggleBodyCard,applyBodyCardState,toggleRestPop,openExSheet,closeExSheet,setSessionsMetric,showSummary,toggleMoreOpen,openExercisePhotoPopup,pickExercisePhoto,adjustCardWeight,cycleWeightMode,adjustPendingReps,logSetForCard,logCardioSetForCard,toggleWarmupMode,setCardRir,undoLastSetForCard,finishExercise,reopenExercise,
+  askDeleteSet,deleteSetForCard,askRemoveExercise,addExerciseToSession,removeExerciseCard,toggleBodyCard,applyBodyCardState,toggleRestPop,openExSheet,closeExSheet,setSessionsMetric,showSummary,toggleMoreOpen,openExercisePhotoPopup,pickExercisePhoto,adjustCardWeight,cycleWeightMode,adjustPendingReps,logSetForCard,logCardioSetForCard,toggleWarmupMode,setCardRir,undoLastSetForCard,finishExercise,reopenExercise,
   toggleProgressionAnalysis,toggleCardTipEdit,saveCardTip,toggleLibraryOpen,
   adjustRestDuration,toggleCustomRest,adjustCustomRestMin,adjustCustomRestSec,applyCustomRest,startRestTimer,adiarRest,pularRest,openRestModal,closeRestModal,
   selectRpe,saveSessionRpe,skipSessionRpe,

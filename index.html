@@ -54,7 +54,7 @@
 
     <section class="card" id="first-run-guide" hidden>
       <div class="card-head"><h2>👋 Comece do seu jeito</h2></div>
-      <p>Seus registros começam vazios. Você pode usar treino, dieta e cartões sem conectar contas. Em <strong>Mais</strong>, escolha se quer configurar seu próprio Strava, autorizar Garmin ou cadastrar um cardápio.</p>
+      <p>Seus registros começam vazios. Você pode usar treino, dieta e cartões sem conectar contas. Em <strong>Mais</strong>, escolha se quer configurar seu próprio Strava ou cadastrar um cardápio.</p>
       <div class="row"><button type="button" class="primary" id="first-run-open-settings">Ver opções em Mais</button><button type="button" id="first-run-dismiss">Entendi</button></div>
     </section>
 
@@ -109,15 +109,6 @@
         <div class="dash-stat-lbl">🔥 gasto em exercício</div>
       </div>
       <div class="dash-stat" data-home-card="ingestao"><div class="dash-stat-num" id="dash-intake">–</div><div class="dash-stat-lbl">🍴 ingestão hoje</div></div>
-      <div class="dash-stat" data-home-card="repouso"><div class="dash-stat-num" id="dash-resting">–</div><div class="dash-stat-lbl">🫀 calorias de repouso</div></div>
-      <div class="dash-stat" data-home-card="passos">
-        <div class="dash-stat-num" id="dash-steps">–</div>
-        <div class="dash-stat-lbl">👟 passos hoje</div>
-      </div>
-      <div class="dash-stat" data-home-card="gasto-total">
-        <div class="dash-stat-num" id="dash-garmin-total">–</div>
-        <div class="dash-stat-lbl">⌚ gasto Garmin + CrossFit avulso</div>
-      </div>
       <div class="dash-stat" data-home-card="dieta-dias">
         <div class="dash-stat-num" id="dash-deficit-streak">0</div>
         <div class="dash-stat-lbl">🥗 dias com dieta concluída</div>
@@ -167,7 +158,7 @@
       <div class="card-head"><h2>🥗 Balanço calórico da semana</h2></div>
       <div class="weekly-calorie-value" id="weekly-calorie-value">Calculando…</div>
       <p class="calc-formula-note" id="weekly-calorie-detail" role="status" aria-live="polite"></p>
-      <p id="weekly-range" class="calc-formula-note"></p><p id="weekly-goal" class="calc-formula-note"></p><details><summary>Ver dias e entender o saldo</summary><div id="weekly-days"></div><p class="calc-formula-note">Saldo energético = gasto total do Garmin + CrossFit registrado à parte − consumo registrado. Só entram dias concluídos com gasto disponível. Atividades já ligadas ao Garmin ou Strava não são somadas novamente.</p><p class="weekly-calorie-legend">Verde: saldo positivo · Laranja: perto de zero ou saldo muito elevado para revisar · Vermelho: consumo acima do gasto. As cores descrevem o saldo, não são uma recomendação para comer menos.</p></details>
+      <p id="weekly-range" class="calc-formula-note"></p><p id="weekly-goal" class="calc-formula-note"></p><details><summary>Ver os dias</summary><div id="weekly-days"></div><p class="calc-formula-note">Meta do dia = gasto do corpo + atividades lançadas − o que você tira para a meta de peso. Verde: abaixo da meta · Vermelho: acima.</p></details>
     </div>
     <div class="card" id="weekly-report-card" data-home-card="comparacao-semanal" data-module-card="weekly-report-card"><div class="card-head"><h2>📊 Comparação semanal</h2></div><div id="weekly-report-content">O relatório será preenchido conforme seus registros e sincronizações.</div></div>
     <div data-home-card="atualizar"><button type="button" class="primary" id="home-refresh" onclick="ForjaSyncCenter.refreshAll()">Atualizar</button>
@@ -535,7 +526,7 @@
 
   <div id="tab-progresso" style="display:none">
     <div class="card"><div class="card-head"><h2>📅 Progresso</h2></div>
-      <p class="calc-formula-note">Toque em um dia para ver o que foi registrado e o que já foi concluído. Ponto claro: em andamento; ponto preenchido: meta cumprida. Os gastos do Garmin aparecem somente quando esse dado foi sincronizado.</p>
+      <p class="calc-formula-note">Toque em um dia para ver o que foi registrado e o que já foi concluído. Ponto claro: em andamento; ponto preenchido: meta cumprida.</p>
       <div class="progress-month-nav"><button type="button" id="progress-prev-month" aria-label="Mês anterior">‹</button><strong id="progress-month"></strong><button type="button" id="progress-next-month" aria-label="Próximo mês">›</button></div>
       <p id="progress-month-summary" class="calc-formula-note"></p>
       <div id="progress-calendar-grid" class="progress-calendar-grid" aria-label="Calendário de registros"></div>
@@ -591,13 +582,13 @@
   </div>
 
   <div class="section-block" data-section-id="mais-integracoes" data-default-collapsed="true">
-    <div class="import-section-header integracoes" onclick="toggleSection('mais-integracoes')">🔗 INTEGRAÇÕES E CONEXÕES <span class="section-chevron">▾</span></div>
+    <div class="import-section-header integracoes" onclick="toggleSection('mais-integracoes')">🔗 Integrações e conexões <span class="section-chevron">▾</span></div>
     <div class="section-body">
     <div class="card" id="sync-center-card" data-module-card="sync-center-card">
       <div class="card-head"><h2>🔄 Central de sincronização</h2></div>
       <p class="calc-formula-note">Atualiza as fontes autorizadas e preserva os últimos dados se algum serviço estiver indisponível.</p>
       <p id="sync-center-status" class="calc-formula-note" role="status">Ainda não houve sincronização neste aparelho.</p>
-      <button type="button" class="primary" onclick="ForjaSyncCenter.refreshAll()">Atualizar Garmin e Strava</button>
+      <button type="button" class="primary" onclick="ForjaSyncCenter.refreshAll()">Atualizar Strava</button>
     </div>
     <div class="card" id="strava-card" data-module-card="strava-card">
       <div class="card-head"><h2>🔗 Conectar ao Strava</h2></div>
@@ -620,18 +611,6 @@
       </div>
       <p id="strava-status" role="status" aria-live="polite" class="calc-formula-note">Aguardando configuração.</p>
       <p class="calc-formula-note">Treinos manuais são mantidos. Calorias podem não estar disponíveis na importação; nesse caso, confira e preencha manualmente.</p>
-    </div>
-    <div class="card" id="health-connect-card" data-module-card="health-connect-card">
-      <div class="card-head"><h2>⌚ Garmin pelo Health Connect</h2></div>
-      <p id="health-connect-status" role="status" class="calc-formula-note">Verificando compatibilidade…</p>
-      <details class="routine-panel"><summary>Conexão e dados do Garmin</summary>
-      <p class="calc-formula-note">Leia passos e calorias ativas enviados pelo Garmin Connect. Os dados permanecem neste aparelho e não são enviados ao nosso serviço.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button type="button" class="primary" id="health-connect-connect" onclick="ForjaHealthConnect.connect()">Autorizar acesso</button>
-        <button type="button" class="primary secondary-btn" id="health-connect-sync" onclick="ForjaHealthConnect.sync()">Sincronizar</button>
-      </div>
-      <div id="health-connect-days"></div>
-      </details>
     </div>
     <div class="card" id="dash-gym-card" data-module-card="dash-gym-card">
       <div class="card-head"><h2>💳 Pagamento do CrossFit</h2></div>
@@ -674,7 +653,7 @@
   </div>
 
   <div class="section-block" data-section-id="mais-config" data-default-collapsed="true">
-    <div class="import-section-header settings" onclick="toggleSection('mais-config')">⚙️ CONFIGURAÇÕES E PREFERÊNCIAS <span class="section-chevron">▾</span></div>
+    <div class="import-section-header settings" onclick="toggleSection('mais-config')">⚙️ Configurações e preferências <span class="section-chevron">▾</span></div>
     <div class="section-body">
     <div class="card">
       <label>Abas visíveis</label>
@@ -688,7 +667,6 @@
       <details class="routine-panel" style="margin-top:16px"><summary>Começar a usar o Forja</summary>
         <p>Você pode usar registros de treino, dieta e hábitos neste aparelho sem conectar contas. As opções abaixo são independentes.</p>
         <p><strong>Strava e foto com IA:</strong> se quiser, crie sua aplicação Strava e seu serviço Cloudflare; informe o endereço do seu serviço na área Strava abaixo e autorize sua própria conta. Nunca use o serviço de outra pessoa.</p>
-        <p><strong>Garmin:</strong> se quiser, sincronize o relógio no Garmin Connect e permita compartilhar passos e calorias com o Health Connect deste celular. Depois autorize o Forja na área Garmin abaixo.</p>
         <p><strong>Cardápio:</strong> preencha o seu na seção Meu cardápio ou importe um arquivo de cardápio. É opcional; a aba Dieta funciona sem ele.</p>
       </details>
 
@@ -766,21 +744,21 @@
   </div>
 
   <div class="section-block" data-section-id="mais-recursos" data-default-collapsed="true">
-    <div class="import-section-header recursos" onclick="toggleSection('mais-recursos')">🎛️ PERSONALIZAR RECURSOS <span class="section-chevron">▾</span></div>
+    <div class="import-section-header recursos" onclick="toggleSection('mais-recursos')">🎛️ Personalizar recursos <span class="section-chevron">▾</span></div>
     <div class="section-body">
     <div class="card">
-      <p class="calc-formula-note">Desative cartões que você não usa (ex: integrações do CrossFit, Strava, Garmin). Eles somem das abas, mas os dados continuam salvos — é só reativar aqui se mudar de ideia.</p>
+      <p class="calc-formula-note">Desative cartões que você não usa (ex: integrações do CrossFit, Strava). Eles somem das abas, mas os dados continuam salvos — é só reativar aqui se mudar de ideia.</p>
       <div id="module-toggle-list"></div>
     </div>
     </div>
   </div>
 
   <div class="section-block" data-section-id="mais-privacidade" data-default-collapsed="true">
-    <div class="import-section-header privacy" onclick="toggleSection('mais-privacidade')">🔒 PRIVACIDADE E DADOS <span class="section-chevron">▾</span></div>
+    <div class="import-section-header privacy" onclick="toggleSection('mais-privacidade')">🔒 Privacidade e dados <span class="section-chevron">▾</span></div>
     <div class="section-body">
     <div class="card" id="privacy-card">
       <div class="card-head"><h2>🔒 Privacidade e acesso</h2></div>
-      <p class="calc-formula-note">Seus registros ficam no aparelho. Strava usa o serviço Cloudflare configurado; Garmin é lido pelo Health Connect. Tokens e sessões não entram no backup.</p>
+      <p class="calc-formula-note">Seus registros ficam no aparelho. Strava usa o serviço Cloudflare configurado. Tokens e sessões não entram no backup.</p>
       <p id="privacy-lock-status" class="calc-formula-note">Verificando bloqueio…</p>
       <label for="privacy-new-pin">PIN de 4 a 8 números</label><input id="privacy-new-pin" type="password" inputmode="numeric" maxlength="8" autocomplete="new-password">
       <div class="settings-btn-row"><button type="button" class="settings-btn" onclick="ForjaPrivacyLock.configureFromUI()">Ativar ou trocar PIN</button><button type="button" class="settings-btn" onclick="ForjaPrivacyLock.disableFromUI()">Desativar PIN</button></div>
@@ -819,7 +797,7 @@
   </div>
 
   <div class="section-block" data-section-id="mais-sobre" data-default-collapsed="true">
-    <div class="import-section-header sobre" onclick="toggleSection('mais-sobre')">ℹ️ SOBRE O APP <span class="section-chevron">▾</span></div>
+    <div class="import-section-header sobre" onclick="toggleSection('mais-sobre')">ℹ️ Sobre o app <span class="section-chevron">▾</span></div>
     <div class="section-body">
     <div class="card" id="changelog-card">
       <div class="card-head"><h2>📋 Versão do app</h2><span class="count">v<span id="changelog-current-version">–</span></span></div>
@@ -845,7 +823,7 @@
 
   <!-- IMPORTAR TAB — every "send a screenshot" feature lives here, in one place -->
   <div id="tab-importar" style="display:none">
-    <div class="import-section-header treino">🏋️ TREINO / CARDIO — print do relógio</div>
+    <div class="import-section-header treino">🏋️ Treino / cardio — print do relógio</div>
     <div class="card" id="watch-ocr-card" data-module-card="watch-ocr-card">
       <p class="calc-formula-note">Manda o print da tela de detalhe do treino no Zepp — o app lê duração, frequência cardíaca, zonas, efeito e RPE automaticamente. Confira antes de salvar, a leitura pode errar.</p>
       <label>Associar a qual treino?</label>
@@ -857,7 +835,7 @@
       <div id="watch-ocr-history" style="margin-top:14px;"></div>
     </div>
 
-    <div class="import-section-header corpo">⚖️ BALANÇA — bioimpedância (OKOK)</div>
+    <div class="import-section-header corpo">⚖️ Balança — bioimpedância (OKOK)</div>
     <div class="card" id="scale-import-card" data-module-card="scale-import-card">
       <p class="calc-formula-note">Manda o print da tela "Detalhes" do app OKOK — lê peso, % gordura, massa muscular, água, gordura visceral, metabolismo e mais.</p>
       <label for="scale-import-file" class="photo-btn" style="display:block; margin-bottom:10px;">📷 Escolher print da balança</label>
@@ -867,7 +845,7 @@
       <div id="scale-import-history" style="margin-top:14px;"></div>
     </div>
 
-    <div class="import-section-header corpo">📸 CORPO — foto de evolução física</div>
+    <div class="import-section-header corpo">📸 Corpo — foto de evolução física</div>
     
 
     <div class="card" id="progress-photo-card">
@@ -904,7 +882,7 @@
       </div>
     </div>
 
-    <div class="import-section-header comida">🍽️ DIETA DE HOJE</div>
+    <div class="import-section-header comida">🍽️ Dieta de hoje</div>
     <div class="card" id="diet-summary-card">
       <div class="card-head"><h2 id="diet-summary-title">🍽 Hoje</h2></div>
       <div id="diet-rings"></div>
@@ -912,7 +890,7 @@
       <div id="deficit-streak-label" class="water-streak-label"></div>
     </div>
 
-    <div class="import-section-header comida">⚡ LANÇAMENTO RÁPIDO</div>
+    <div class="import-section-header comida">⚡ Lançamento rápido</div>
     <div class="card" id="quick-diet-card">
       <div id="quick-shortcuts"></div>
 
@@ -947,7 +925,7 @@
     </div>
 
     <div class="section-block" data-section-id="dieta-avancado" data-default-collapsed="true">
-    <div class="import-section-header comida" onclick="toggleSection('dieta-avancado')">🔧 LANÇAMENTO DETALHADO (AVANÇADO, RARAMENTE NECESSÁRIO) <span class="section-chevron">▾</span></div>
+    <div class="import-section-header comida" onclick="toggleSection('dieta-avancado')">🔧 Lançamento detalhado (avançado, raramente necessário) <span class="section-chevron">▾</span></div>
     <div class="section-body">
     <div class="card">
       <div class="card-head"><h2>➕ Adicionar refeição</h2></div>
@@ -1307,8 +1285,8 @@
 <script src="ui-collapsible.js"></script>
 <script src="install-app.js"></script>
 <script src="home-hero.js"></script>
-<script src="google-config.js?v=3.1.0"></script>
-<script src="google-direct.js?v=3.1.0"></script>
+<script src="google-config.js?v=3.3.0"></script>
+<script src="google-direct.js?v=3.3.0"></script>
 <script src="sheet-sync-script.js"></script>
 <script src="sheet-sync.js"></script>
 <script src="backup-status.js"></script>
@@ -1329,7 +1307,6 @@
 <script src="estimates-ui.js"></script>
 <script src="strava-core.js"></script>
 <script src="strava-ui.js"></script>
-<script src="health-connect.js"></script>
 <script src="diet-core.js"></script>
 <script src="diet-flow.js"></script>
 <script src="routine-diet.js"></script>
@@ -1343,7 +1320,6 @@
 <script>forjaInitialization.then(()=>ForjaEstimateUI.init()).catch(e=>console.error('Referências:',e));</script>
 <script>forjaInitialization.then(()=>ForjaPersonalization.init()).then(()=>ForjaDietFlow.init()).then(()=>ForjaRoutineDiet.init()).catch(e=>console.error('Dieta:',e));</script>
 <script>forjaInitialization.then(()=>ForjaWodLibrary.init()).catch(e=>console.error('WODs:',e));</script>
-<script>forjaInitialization.then(()=>ForjaHealthConnect.init()).catch(e=>console.error('Health Connect:',e));</script>
 <script>forjaInitialization.then(()=>ForjaEnhancements.init()).catch(e=>console.error('Aprimoramentos:',e));</script>
 <script>forjaInitialization.then(()=>ForjaDataFoundation.migrate()).then(()=>Promise.all([ForjaSyncCenter.render(),ForjaDashboardLayout.apply(),ForjaDashboardLayout.renderSettings(),ForjaFeatureToggle.apply(),ForjaFeatureToggle.renderSettings(),ForjaWeeklyReport.render(),ForjaGymTraining.init().then(()=>ForjaGymUI.init()),ForjaPrivacyLock.init(),ForjaUpdateCheck.render(),ForjaCustomWeekCards.init()])).then(()=>ForjaSheetSync.init()).then(()=>ForjaHomeHero.init()).then(()=>ForjaCollapsible.enhanceTabs()).then(()=>ForjaUiSections.applyCollapsedState()).then(()=>ForjaBackupStatus.render()).catch(e=>console.error('Modernização:',e));</script>
 <script>forjaInitialization.then(()=>ForjaOnboarding.init()).catch(e=>console.error('Primeiros passos:',e));</script>

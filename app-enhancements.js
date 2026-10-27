@@ -66,29 +66,28 @@
     await root.ForjaStorage?.set(STORAGE_KEY,JSON.stringify(visible));
   }
   async function renderWeeklyBalance(dateKey){
+    // Saldo da semana = meta do dia (gasto do corpo + atividades − déficit) − o que foi comido, só em dias com refeições.
     const card=root.document&&root.document.getElementById('weekly-calorie-card');
     if(!card||typeof root.computeDietDaySummary!=='function')return;
-    const days=[],closed=await closedDays(),range=weekDates(dateKey||localDateKey(new Date()));
+    const days=[],range=weekDates(dateKey||localDateKey(new Date())),hoje=localDateKey(new Date());
     for(const date of range){
-      const summary=await root.computeDietDaySummary(date);
-      days.push({date,eaten:summary.comido,exercise:summary.exercicio,goal:summary.goal,totalBurn:summary.garminTotal,hasEntries:summary.entryCount>0,complete:!!closed[date],energyComplete:energyIsComplete(date,summary.garminSyncedAt)});
+      const s=await root.computeDietDaySummary(date);
+      days.push({date,eaten:Math.round(s.comido||0),exercise:Math.round(s.exercicio||0),goal:s.goal?Math.round(s.goal):null,hasEntries:s.entryCount>0,today:date===hoje,future:date>hoje});
     }
-    const result=summarizeWeek(days);
-    const value=root.document.getElementById('weekly-calorie-value');
-    const detail=root.document.getElementById('weekly-calorie-detail');
-    card.dataset.tone=result.tone;
-    value.textContent=result.balance!=null?`${result.balance>=0?'+':''}${result.balance} kcal`:'Saldo ainda incompleto';
-    detail.textContent=`${result.closedDays}/7 dias alimentares concluídos · ${result.measuredDays} com gasto Garmin disponível · ${result.partialDays} em preenchimento. Gastos parciais ou consultados antes de terminar o dia ficam de fora.`;
+    const contam=days.filter(d=>d.hasEntries&&d.goal&&!d.today);
+    const saldo=contam.reduce((t,d)=>t+d.goal-d.eaten,0);
+    const value=root.document.getElementById('weekly-calorie-value'),detail=root.document.getElementById('weekly-calorie-detail');
+    card.dataset.tone=!contam.length?'empty':saldo<0?'red':'green';
+    value.textContent=contam.length?`${saldo>=0?saldo.toLocaleString('pt-BR')+' kcal abaixo':Math.abs(saldo).toLocaleString('pt-BR')+' kcal acima'} da meta`:'Sem dias completos ainda';
+    detail.textContent=contam.length?`${contam.length} dia${contam.length>1?'s':''} completo${contam.length>1?'s':''} na semana (hoje entra amanhã). ≈ ${(Math.abs(saldo)/7700).toLocaleString('pt-BR',{maximumFractionDigits:2})} kg ${saldo>=0?'a menos':'a mais'} no ritmo da meta.`:'Lance as refeições do dia; ele entra no saldo no dia seguinte.';
     const $=id=>root.document.getElementById(id);
     if($('weekly-range'))$('weekly-range').textContent=`${range[0].split('-').reverse().join('/')} a ${range[6].split('-').reverse().join('/')} · segunda a domingo`;
-    if($('weekly-goal'))$('weekly-goal').textContent=result.closedDays?`Meta alimentar dos ${result.closedDays} dias concluídos: ${result.goalBalance>=0?result.goalBalance+' kcal abaixo':Math.abs(result.goalBalance)+' kcal acima'} da meta. Esse valor é separado do saldo energético.`:'Conclua os lançamentos na aba Dieta para acompanhar a semana.';
-    if($('weekly-days')){$('weekly-days').replaceChildren();days.forEach(d=>{
-      const line=root.document.createElement('details'),heading=root.document.createElement('summary'),info=root.document.createElement('p');
-      heading.textContent=d.date.split('-').reverse().join('/')+' · '+(!d.hasEntries?'sem refeições':!d.complete?'em preenchimento':!d.energyComplete?'aguardando gasto final':!d.totalBurn?'sem gasto Garmin':`${Math.round(d.totalBurn-d.eaten)} kcal de saldo`);
-      const eaten=d.hasEntries?`${Math.round(d.eaten)} kcal`:'sem registro';
-      const spent=d.totalBurn?`${Math.round(d.totalBurn)} kcal`:'indisponível';
-      info.textContent=`Consumido: ${eaten} · Gasto total: ${spent} · Exercício: ${Math.round(d.exercise||0)} kcal. O exercício já faz parte do gasto total quando vem do Garmin.`;
-      line.append(heading,info);$('weekly-days').append(line);
+    if($('weekly-goal'))$('weekly-goal').textContent='';
+    if($('weekly-days')){$('weekly-days').replaceChildren();days.filter(d=>!d.future).forEach(d=>{
+      const line=root.document.createElement('p');line.className='wk-dia';
+      const dif=d.goal?d.goal-d.eaten:null;
+      line.innerHTML=`<b>${d.date.split('-').reverse().slice(0,2).join('/')}</b><span>${!d.hasEntries?'sem refeições':`comeu ${d.eaten.toLocaleString('pt-BR')}${d.goal?' de '+d.goal.toLocaleString('pt-BR'):''} kcal`}${d.exercise?` · atividade ${d.exercise.toLocaleString('pt-BR')}`:''}</span><em class="${dif==null||!d.hasEntries?'':dif<0?'acima':'ok'}">${!d.hasEntries||dif==null?'—':(dif>=0?'−':'+')+Math.abs(dif).toLocaleString('pt-BR')}${d.today?' (hoje)':''}</em>`;
+      $('weekly-days').append(line);
     });}
   }
   async function closedDays(){try{const r=await root.ForjaStorage?.get('diet-closed-days');return r?JSON.parse(r.value):{};}catch{return {};}}
@@ -99,12 +98,11 @@
   async function refreshAll(){
     const button=root.document?.getElementById('home-refresh'),status=root.document?.getElementById('home-refresh-status');
     if(button){button.disabled=true;button.setAttribute('aria-busy','true');}
-    if(status)status.textContent='Atualizando Garmin, Strava e resumos…';
+    if(status)status.textContent='Atualizando Strava e resumos…';
     const integrations=await Promise.allSettled([
-      root.ForjaHealthConnect?.sync?.()??Promise.resolve(false),
       root.ForjaStravaUI?.sync?.(true)??Promise.resolve(false)
     ]);
-    await root.renderDashboard?.();await root.renderDietTab?.();await renderWeeklyBalance();await root.ForjaHealthConnect?.showHome?.();
+    await root.renderDashboard?.();await root.renderDietTab?.();await renderWeeklyBalance();
     const partial=integrations.some(r=>r.status==='rejected');
     if(status)status.textContent=partial?'Atualização concluída parcialmente. Os dados anteriores foram preservados.':'Informações atualizadas.';
     if(button){button.disabled=false;button.removeAttribute('aria-busy');}

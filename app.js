@@ -1961,6 +1961,8 @@ async function loadCrossfitUntrackedCalories(dateStr){
 }
 
 async function loadHealthConnectDay(dateStr){
+  return null; // Garmin removido (3.3.0)
+
   try{
     const stored=await window.storage.get('health-connect-daily');
     const rows=stored?.value?JSON.parse(stored.value):[];
@@ -3312,7 +3314,7 @@ function corridaDetailHtml(c){
   if(c.fc_media) rows.push(`❤️ FC média ${Math.round(c.fc_media)}${c.fc_max?` · máx ${Math.round(c.fc_max)}`:''}`);
   if(c.elevacao_m) rows.push(`⛰️ ${Math.round(c.elevacao_m)}m de subida`);
   if(c.cadencia) rows.push(`👟 cadência ${Math.round(c.cadencia)}`);
-  const origemLabel = {print:'print do Garmin', push_garmin:'push (Garmin)', strava:'Strava', manual:'digitado manualmente'}[c.origem] || c.origem;
+  const origemLabel = {print:'print do relógio', push_garmin:'push (relógio)', strava:'Strava', manual:'digitado manualmente'}[c.origem] || c.origem;
   rows.push(`fonte: ${origemLabel}`);
   return rows.join(' · ') + activityActionsHtml('corridas', c.id);
 }
@@ -3344,7 +3346,7 @@ async function handleCorridaPrintFile(e){
   statusEl.innerHTML = '🤖 Lendo o print...';
   try{
     const data = await sample.json(
-      'Essa imagem é o print da tela de detalhe de uma corrida (Garmin Connect ou app similar). Leia os dados visíveis e responda ESTRITAMENTE em JSON, sem markdown, neste formato exato: {"distancia_km": <número ou null>, "duracao_min": <número, duração total em minutos, ou null>, "calorias": <número ou null>, "fc_media": <número ou null>, "fc_max": <número ou null>, "data": <"YYYY-MM-DD" se a data estiver visível, senão null>}. Nunca invente um valor que não estiver visível — use null.',
+      'Essa imagem é o print da tela de detalhe de uma corrida (Samsung Health ou app similar). Leia os dados visíveis e responda ESTRITAMENTE em JSON, sem markdown, neste formato exato: {"distancia_km": <número ou null>, "duracao_min": <número, duração total em minutos, ou null>, "calorias": <número ou null>, "fc_media": <número ou null>, "fc_max": <número ou null>, "data": <"YYYY-MM-DD" se a data estiver visível, senão null>}. Nunca invente um valor que não estiver visível — use null.',
       {images: file, modelTier: 'quick'}
     );
     statusEl.innerHTML = '';
@@ -3500,7 +3502,7 @@ function natacaoDetailHtml(c){
   const rows = [`🔥 ${Math.round(c.calorias||0)} kcal`];
   if(c.fc_media) rows.push(`❤️ FC média ${Math.round(c.fc_media)}${c.fc_max?` · máx ${Math.round(c.fc_max)}`:''}`);
   if(c.training_effect_label) rows.push(`🎯 ${NATACAO_EFFECT_PT[c.training_effect_label]||c.training_effect_label.toLowerCase()}`);
-  const origemLabel = {print:'print do Garmin', push_garmin:'push (Garmin)', strava:'Strava', manual:'digitado manualmente'}[c.origem] || c.origem;
+  const origemLabel = {print:'print do relógio', push_garmin:'push (relógio)', strava:'Strava', manual:'digitado manualmente'}[c.origem] || c.origem;
   rows.push(`fonte: ${origemLabel}`);
   return rows.join(' · ') + activityActionsHtml('natacao', c.id);
 }
@@ -3594,7 +3596,7 @@ async function handleNatacaoPrintFile(e){
   statusEl.innerHTML = '🤖 Lendo o print...';
   try{
     const data = await sample.json(
-      'Essa imagem é o print da tela de detalhe de uma sessão de natação (Garmin Connect ou app similar). Leia os dados visíveis e responda ESTRITAMENTE em JSON, sem markdown, neste formato exato: {"distancia_m": <número ou null>, "duracao_min": <número, duração total em minutos, ou null>, "calorias": <número ou null>, "fc_media": <número ou null>, "fc_max": <número ou null>, "data": <"YYYY-MM-DD" se a data estiver visível, senão null>}. Nunca invente um valor que não estiver visível — use null.',
+      'Essa imagem é o print da tela de detalhe de uma sessão de natação (Samsung Health ou app similar). Leia os dados visíveis e responda ESTRITAMENTE em JSON, sem markdown, neste formato exato: {"distancia_m": <número ou null>, "duracao_min": <número, duração total em minutos, ou null>, "calorias": <número ou null>, "fc_media": <número ou null>, "fc_max": <número ou null>, "data": <"YYYY-MM-DD" se a data estiver visível, senão null>}. Nunca invente um valor que não estiver visível — use null.',
       {images: file, modelTier: 'quick'}
     );
     statusEl.innerHTML = '';
@@ -3765,7 +3767,7 @@ function crossfitDetailHtml(c){
   const rows = [`🔥 ${Math.round(c.calorias||0)} kcal`];
   if(c.fc_media) rows.push(`❤️ FC média ${Math.round(c.fc_media)}${c.fc_max?` · máx ${Math.round(c.fc_max)}`:''}`);
   if(c.training_effect_label) rows.push(`🎯 ${NATACAO_EFFECT_PT[c.training_effect_label]||c.training_effect_label.toLowerCase()}`);
-  const origemLabel = {print:'print do Tecnofit', push_garmin:'push (Garmin)', manual:'digitado manualmente', 'push_garmin+print':'Garmin + Tecnofit', 'push_garmin+manual':'Garmin + digitado'}[c.origem] || c.origem;
+  const origemLabel = {print:'print do Tecnofit', push_garmin:'push (relógio)', manual:'digitado manualmente', 'push_garmin+print':'relógio + Tecnofit', 'push_garmin+manual':'Garmin + digitado'}[c.origem] || c.origem;
   rows.push(`fonte: ${origemLabel}`);
   let html = rows.join(' · ');
   if(c.wod_formato) html += `<div style="margin-top:6px;"><b>${escapeHtml(c.wod_formato)}</b>${c.scale?` · ${escapeHtml(String(c.scale).toUpperCase())}`:''}</div>`;
@@ -4352,13 +4354,9 @@ async function renderDashboard(){
   const balance = (comido!==null) ? Math.round(garminTotal>0?garminTotal-comido:(goal!==null?goal-comido:0)) : null;
   document.getElementById('dash-cal-balance').textContent = balance!==null ? balance+'kcal' : '–';
   document.getElementById('dash-cal-balance').nextElementSibling.textContent=garminTotal>0?'🍽 saldo parcial do gasto':'🍽 saldo da meta alimentar';
-  await window.ForjaHealthConnect?.showHome();
   document.getElementById('dash-cal-exercise').textContent = exercicio>0 ? exercicio+'kcal' : '–';
   document.getElementById('dash-intake').textContent = comido>0 ? Math.round(comido)+'kcal' : '–';
   const energyParts=window.ForjaSyncCenter?.dailyEnergy?.({intake:comido,totalBurn:garminTotal,activeKcal:exercicio});
-  document.getElementById('dash-resting').textContent = energyParts?.restingKcal!=null ? energyParts.restingKcal+'kcal' : '–';
-  document.getElementById('dash-steps').textContent = garminSteps!=null ? Math.round(garminSteps).toLocaleString('pt-BR') : '–';
-  document.getElementById('dash-garmin-total').textContent = garminTotal>0 ? Math.round(garminTotal)+'kcal' : '–';
   document.getElementById('dash-deficit-streak').textContent = await computeDeficitStreak();
 
   await renderGymStatus();
